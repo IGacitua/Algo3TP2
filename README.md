@@ -1,5 +1,5 @@
 
-![TP2](https://github.com/IGacitua/Algo3TP2/actions/workflows/build.yml/badge.svg) [![codecov](https://codecov.io/gh/IGacitua/Algo3TP2/branch/master/graph/badge.svg)](https://codecov.io/gh/IGacitua/Algo3TP2)
+![tp2](https://github.com/IGacitua/Algo3TP2/actions/workflows/build.yml/badge.svg) [![codecov](https://codecov.io/gh/IGacitua/Algo3TP2/branch/master/graph/badge.svg)](https://codecov.io/gh/IGacitua/Algo3TP2)
 
 # TP2 Algoritmos 3: {nombre} 
 
