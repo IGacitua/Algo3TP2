@@ -1,0 +1,43 @@
+@startuml CondicionesDeVictoria
+
+skinparam classAttributeIconSize 0
+
+package "TP2 - Game End Conditions" {
+
+    class GameEndChecker {
+        + GameEndChecker(conditions: List<EndCondition>)
+        + checkGameCondition(game: Game, turn: Turn): GameResult
+    }
+
+    interface EndCondition {
+        + evaluate(game: Game, turn: Turn): GameResult
+    }
+
+    class ElectricalNetworkDestroyed {
+        + evaluate(game: Game, turn: Turn): GameResult
+    }
+
+    class AllMechsDestroyed {
+        + evaluate(game: Game, turn: Turn): GameResult
+    }
+
+    class TurnsSurvived {
+        - {static} MAX_TURNS: int
+        + evaluate(game: Game, turn: Turn): GameResult
+    }
+
+    enum GameResult {
+        ONGOING
+        VICTORY
+        DEFEAT
+    }
+
+    GameEndChecker "1" *-- "1..n" EndCondition
+    EndCondition <|.. ElectricalNetworkDestroyed
+    EndCondition <|.. AllMechsDestroyed
+    EndCondition <|.. TurnsSurvived
+    GameEndChecker ..> GameResult
+
+}
+
+@enduml

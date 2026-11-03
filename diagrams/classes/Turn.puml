@@ -1,0 +1,43 @@
+@startuml Turno
+
+skinparam classAttributeIconSize 0
+
+package "TP2 - Turn" {
+
+    class Turn {
+        - turnCounter: int
+        + nextPhase()
+    }
+
+    interface Phase {
+        + execute()
+    }
+
+    class PlayerPhase {
+        - movementUndone: boolean
+        - canUndoMovement(): boolean
+        + undoMovement()
+        + execute()
+    }
+
+    class VekPhase {
+        + execute()
+    }
+
+    class ResolutionPhase {
+        + execute()
+    }
+
+    class EmergencyPhase {
+        + execute()
+    }
+
+    Turn *-- Phase
+    Phase <|.. PlayerPhase
+    Phase <|.. VekPhase
+    Phase <|.. ResolutionPhase
+    Phase <|.. EmergencyPhase
+
+}
+
+@enduml
