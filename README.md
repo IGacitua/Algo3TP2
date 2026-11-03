@@ -9,8 +9,8 @@ Trabajo Práctico número 2 de la materia Algoritmos y Programación III de FIUB
 
 * **Ezequiel Gacitua** - [IGacitua](https://github.com/IGacitua)
 * **Fabri (Reemplazar por nombre completo)** - [fabriciogarcia00](https://github.com/fabriciogarcia00)
-* **Basse (Reemplazar por nombre completo)** - [basse20](https://github.com/basse20)
-* **Tomas (Reemplazar por nombre completo)** - [Tomyirib](https://github.com/Tomyirib)
+* **Santiago Bassedas** - [basse20](https://github.com/basse20)
+* **Tomas Agustín Irigoyen Barrone** - [Tomyirib](https://github.com/Tomyirib)
 * **Frann (Reemplazar por nombre completo)** - [russofran](https://github.com/russofran)
 
 Corrector: **TBD**
