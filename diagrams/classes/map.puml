@@ -1,0 +1,136 @@
+@startuml
+
+package Game
+{
+interface FileManager
+{
++ saveFile(data: String, path: String)
++ loadFile(path: String) : String
+}
+}
+
+package Game.UI
+{
+
+interface VisualElement
+{
++ TODO
+}
+}
+
+package Game.Units
+{
+class Combatant
+{
++ TODO
+}
+
+interface CombatantFactory
+{
+}
+
+}
+
+package Game.Map
+{
+
+class MapManager
+{
++ MapManager(fileManager: FileManager)
+
++ isFree(pos: Position): Boolean
++ tryMove(combatant: Combatant, pos: Position): Boolean
+
++ getMapVisuals(): VisualElement[][]
+}
+
+class MapExporter
+{
++ MapExporter(fileManager: FileManager)
+
++ saveData(map: GameMap)
++ loadData(path: String, tileFactory: TileFactory) : GameMap
+}
+
+class GameMap
+{
++ GameMap(tiles: Tile[][])
+
+- getTile(pos: Position) : Tile
+
++ isFree(pos: Position): Boolean
++ tryMove(combatant: Combatant, pos: Position): Boolean
+
++ getVisuals(): VisualElement[][]
++ getTileIDs(): String[][]
+}
+
+class Tile
+{
++ Tile(id: String, behaviors: TileBehavior[], unitSlot: UnitSlot, visuals: VisualElement)
+
++ getID(): String
++ getVisuals(): VisualElement
++ isFree(): Boolean
+}
+
+interface TileBehavior
+{
++ TODO
+}
+
+class UnitSlot
+{
+- capacity: Integer
+
++ UnitSlot(capacity: Integer)
+
++ isFree(): Boolean
++ tryAdd(combatant: Combatant): Boolean
+}
+
+class TileFactory
+{
++ createTile(tileID: String): Tile
+}
+
+class MapData
+{
++ toMap(tileFactory: TileFactory) : GameMap
+}
+
+class TileData
+{
+- tileID: String
+
++ toTile(tileFactory: TileFactory) : Tile
+}
+
+class MechSpawn
+{
+- mechID: String
+
++ fill(factory: CombatantFactory)
+}
+}
+
+
+MapManager --> GameMap
+MapManager --> MapExporter
+
+MapExporter -left-> FileManager
+MapExporter --> MapData
+
+GameMap "1"o--"*" Tile
+MapData "1"o--"*" TileData
+
+Tile "1"*--"*" TileBehavior
+Tile --> UnitSlot
+TileData --> TileFactory
+MechSpawn --> CombatantFactory
+
+MechSpawn -left-|> TileData
+Tile --> VisualElement
+
+UnitSlot --> Combatant
+@enduml
