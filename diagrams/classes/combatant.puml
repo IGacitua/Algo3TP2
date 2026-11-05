@@ -1,0 +1,79 @@
+
+@startuml Combatant
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package Game.Units {
+
+    class Combatant {
+        - health: int
+        - contaminated: boolean
+
+        + receiveDamage(amount: int)
+        + isAlive(): boolean
+        + attack(target: Position)
+        + contaminate()
+    }
+
+    interface CombatantFactory {
+        + create(id: String): Combatant
+    }
+
+    interface Weapon {
+        + attack(origin: Position, target: Position)
+    }
+
+    class Punch
+    class Cannon
+    class Artillery
+    class Bite
+    class AcidShot
+    class Sting
+
+    class Knockback {
+        + push(target: Combatant, direction: Direction)
+    }
+
+    interface Movement {
+        + canMove(distance: int): boolean
+    }
+
+    class GroundMovement {
+        - range: int
+    }
+
+    class FlyingMovement {
+        - range: int
+    }
+
+    class ForcedMovement {
+        + move(target: Combatant, direction: Direction)
+    }
+
+    Combatant --> Weapon
+    Combatant --> Movement
+    Combatant --> VisualElement
+
+    Weapon <|.. Punch
+    Weapon <|.. Cannon
+    Weapon <|.. Artillery
+    Weapon <|.. Bite
+    Weapon <|.. AcidShot
+    Weapon <|.. Sting
+
+    Weapon --> Knockback
+
+    Movement <|.. GroundMovement
+    Movement <|.. FlyingMovement
+    Movement <|.. ForcedMovement
+
+    Knockback --> ForcedMovement
+}
+
+package Game.UI {
+    interface VisualElement
+}
+
+@enduml
+
