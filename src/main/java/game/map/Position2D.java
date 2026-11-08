@@ -1,4 +1,5 @@
 package game.map;
+import org.jetbrains.annotations.NotNull;
 
 public class Position2D {
     private int x;
@@ -22,7 +23,7 @@ public class Position2D {
         this.y = y;
     }
 
-    public double getDistance(Position2D other) {
+    public double getDistance(@NotNull Position2D other) {
         return other.getDistance(this.x, this.y);
     }
 
