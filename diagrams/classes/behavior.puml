@@ -1,0 +1,75 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide empty members
+
+package Behavior {
+	interface Behavior <<interface>> {
+		+ executePhase(map: GameMap)
+	}
+
+	class VekBehavior {
+		- rules: List<BehaviorRules>
+		+ executePhase(map: GameMap)
+		- evaluatePriorityRules(): Action
+	}
+
+	class PlayerBehavior {
+		- previousMovement: Move
+		- hasAttacked: boolean
+		- hasMoved: boolean
+		+ executePhase(map: GameMap)
+		+ executeAction(action: Action)
+		+ movementUndone()
+	}
+
+	interface Action <<interface>> {
+		+ execute()
+	}
+
+	class Move {
+		- unit: Unit
+		- origin: Tile
+		- destination: Tile
+		+ execute()
+		+ undone()
+	}
+
+	class Attack {
+		- weapon: Weapon
+		- objective: Tile
+		+ execute()
+	}
+
+	interface BehaviorRules <<interface>> {
+		+ evaluate(unity: Vek, map: GameMap): Action
+	}
+
+	class BuildingAttackRule {
+		+ evaluate(unit: Vek, map: GameMap): Action
+	}
+
+	class MechAttackRule {
+		+ evaluate(unit: Vek, map: GameMap): Action
+	}
+
+	class ApproachingBuildingRule {
+		+ evaluate(unit: Vek, map: GameMap): Action
+	}
+
+	Behavior <|.. VekBehavior
+	Behavior <|.. PlayerBehavior
+
+	Action <|.. Move
+	Action <|.. Attack
+
+	BehaviorRules <|.. BuildingAttackRule
+	BehaviorRules <|.. MechAttackRule
+	BehaviorRules <|.. ApproachingBuildingRule
+
+	PlayerBehavior "1"o-->"0..1" Action
+	VekBehavior "1"*-->"3" BehaviorRules
+	VekBehavior ..> Action
+
+}
+
+@enduml
