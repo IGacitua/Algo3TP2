@@ -84,7 +84,7 @@
     </profile>
   </profiles>
   <build>
-    <testSourceDirectory>samples/samples main/test</testSourceDirectory>
+    <testSourceDirectory>src/main/test</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.pitest</groupId>
