@@ -1,5 +1,8 @@
 package game.map;
-import org.jetbrains.annotations.NotNull;
+
+import game.map.direction.East;
+import game.map.direction.NoDirection;
+import game.map.direction.OrthogonalDirection;
 
 public class Position2D {
     private int x;
@@ -23,13 +26,44 @@ public class Position2D {
         this.y = y;
     }
 
-    public double getDistance(@NotNull Position2D other) {
-        return other.getDistance(this.x, this.y);
+    public void moveDelta(int x, int y) {
+        this.x += x;
+        this.y += y;
+    }
+
+    public double getDistance(Position2D other) {
+        return other.getDistance(getX(), getY());
     }
 
     public double getDistance(int x, int y) {
-        int dx = this.x - x;
-        int dy = this.y - y;
+        int dx = getX() - x;
+        int dy = getY() - y;
         return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+
+    public OrthogonalDirection getDirectionTo(Position2D other) {
+        return other.getDirectionTo(getX(), getY()).invert();
+    }
+
+    public OrthogonalDirection getDirectionTo(int x, int y) {
+        int dx = x - getX();
+        int dy = y - getY();
+
+        if (dx > 0 && dy == 0) {
+            return new East();
+        }
+        if (dx < 0 && dy == 0) {
+            return new game.map.direction.West();
+        }
+
+        if (dx == 0 && dy > 0) {
+            return new game.map.direction.South();
+        }
+
+        if (dx == 0 && dy < 0) {
+            return new game.map.direction.North();
+        }
+
+        return new NoDirection();
     }
 }
