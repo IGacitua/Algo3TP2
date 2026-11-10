@@ -1,6 +1,5 @@
-package game.map.test;
+package game.map;
 
-import game.map.Position2D;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,17 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Position2DTest {
 
     @Test
-    public void testPositionCreatedWithCorrectXYZeroZero(){
+    public void testPositionCreatedWithCorrectXYZeroZero() {
         testPositionCreatedWithCorrectXY(0, 0);
     }
 
     @Test
-    public void testPositionCreatedWithCorrectXYPositiveNegative(){
+    public void testPositionCreatedWithCorrectXYPositiveNegative() {
         testPositionCreatedWithCorrectXY(5, -3);
     }
 
     @Test
-    public void testPositionCreatedWithCorrectXYMinMaxValues(){
+    public void testPositionCreatedWithCorrectXYMinMaxValues() {
         testPositionCreatedWithCorrectXY(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
@@ -30,17 +29,17 @@ public class Position2DTest {
     }
 
     @Test
-    public void testPositionMovedToCorrectXYZeroZero(){
+    public void testPositionMovedToCorrectXYZeroZero() {
         testPositionMovedToCorrectXY(0, 0);
     }
 
     @Test
-    public void testPositionMovedToCorrectXYPositiveNegative(){
+    public void testPositionMovedToCorrectXYPositiveNegative() {
         testPositionMovedToCorrectXY(5, -3);
     }
 
     @Test
-    public void testPositionMovedToCorrectXYMinMaxValues(){
+    public void testPositionMovedToCorrectXYMinMaxValues() {
         testPositionMovedToCorrectXY(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
@@ -53,17 +52,17 @@ public class Position2DTest {
     }
 
     @Test
-    public void testPositionDistanceCorrectZeroZero(){
+    public void testPositionDistanceCorrectZeroZero() {
         testPositionDistanceCorrect(0, 0, 0, 0);
     }
 
     @Test
-    public void testPositionDistanceCorrectPositiveNegative(){
+    public void testPositionDistanceCorrectPositiveNegative() {
         testPositionDistanceCorrect(5, -3, -3, 4);
     }
 
     @Test
-    public void testPositionDistanceCorrectMinMaxValues(){
+    public void testPositionDistanceCorrectMinMaxValues() {
         testPositionDistanceCorrect(Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE);
     }
 
