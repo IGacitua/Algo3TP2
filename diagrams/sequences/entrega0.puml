@@ -1,0 +1,90 @@
+@startuml
+title Sequence Diagram: Artillery Mech Attack with Loop (Adjacent Push) and Alt (Building Collision)
+
+autonumber
+skinparam maxMessageSize 150
+
+actor "Player" as Player
+participant "playerBehavior:PlayerBehavior" as PB
+participant "attackAction:Attack" as Attack
+participant "artilleryWeapon:Artillery" as Artillery
+participant "targetVek:Combatant" as TargetVek
+participant "adjacentVek:Combatant" as AdjacentVek
+participant "knockback:Knockback" as Knockback
+participant "forcedMovement:ForcedMovement" as ForcedMove
+participant "mapManager:MapManager" as MapMgr
+participant "gameMap:GameMap" as GameMap
+participant "buildingTile:Tile" as BuildingTile
+participant "electricalNetwork:ElectricalNetwork" as PowerGrid
+
+Player -> PB : executeAction(attackAction)
+activate PB
+
+PB -> Attack : execute()
+activate Attack
+
+Attack -> Artillery : attack(origin, target)
+activate Artillery
+
+Note over Artillery, TargetVek: 1. Direct damage to the main target cell
+Artillery -> TargetVek : receiveDamage(1)
+activate TargetVek
+TargetVek -> TargetVek : isAlive()
+deactivate TargetVek
+
+Note over Artillery: 2. Loop over 4 adjacent tiles for Knockback effect
+loop 4 Adjacent Positions
+    
+    opt If adjacent position has a Unit (e.g., adjacentVek)
+        Artillery -> Knockback : push(adjacentVek, direction)
+        activate Knockback
+
+        Knockback -> ForcedMove : move(adjacentVek, direction)
+        activate ForcedMove
+
+        ' Movement validation & Obstacle Check
+        ForcedMove -> MapMgr : tryMove(adjacentVek, buildingPosition)
+        activate MapMgr
+
+        MapMgr -> GameMap : tryMove(adjacentVek, buildingPosition)
+        activate GameMap
+
+        GameMap -> BuildingTile : isFree()
+        activate BuildingTile
+        BuildingTile -->> GameMap : false
+        deactivate BuildingTile
+
+        GameMap -->> MapMgr : false
+        deactivate GameMap
+
+        MapMgr -->> ForcedMove : false
+        deactivate MapMgr
+
+        ' Collision resolution logic
+        alt Destination is occupied by a Building (Collision Detected)
+            Note over ForcedMove, PowerGrid: 3. Collision Damage & Grid Discount
+            ForcedMove -> AdjacentVek : receiveDamage(1)
+            activate AdjacentVek
+            AdjacentVek -> AdjacentVek : isAlive()
+            deactivate AdjacentVek
+
+            ' Building taking damage conceptually reduces the power grid
+            ForcedMove -> PowerGrid : reducePower(1)
+            activate PowerGrid
+            PowerGrid -->> ForcedMove : currentPower
+            deactivate PowerGrid
+            
+        else Destination is Free
+            Note over ForcedMove: Execute normal movement logic
+        end
+
+        deactivate ForcedMove
+        deactivate Knockback
+    end
+end
+
+deactivate Artillery
+deactivate Attack
+deactivate PB
+
+@enduml
