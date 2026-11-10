@@ -1,4 +1,4 @@
-name: Run tests and upload coverage
+name: "Codecov Analysis"
 
 on: [ push, pull_request, workflow_dispatch ]
 
@@ -15,8 +15,8 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
 
-      - name: Install dependencies
-        run: npm install
+      #- name: Install dependencies
+      #  run: npm install
 
       - name: Run tests
         run: npx jest --coverage
