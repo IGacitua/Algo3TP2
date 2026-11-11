@@ -1,43 +1,40 @@
-name: Codecov
+name: Java CI with coverage
 
-on: [ push, pull_request, workflow_dispatch ]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
 
 jobs:
   test:
-    name: Test python API
+    name: Test and upload coverage
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # full history helps Codecov map commits correctly
+          fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          python-version: "3.12"
-          cache: pip
+          distribution: temurin
+          java-version: 27
+          cache: maven
 
-      - name: Install requirements
-        run: |
-          pip install -r requirements.txt
-          pip install pytest pytest-cov
-
-      - name: Run tests and collect coverage
-        run: pytest --cov=. --cov-report=xml:coverage-service.xml
+      - name: Build, run tests and generate JaCoCo report
+        run: mvn -B verify
 
       - name: Check coverage file exists
         if: ${{ !cancelled() }}
-        run: ls -la coverage-service.xml
+        run: ls -la target/site/jacoco/jacoco.xml
 
       - name: Upload coverage reports to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage-service.xml
-          flags: service
-          name: service-${{ github.run_id }}
+          files: target/site/jacoco/jacoco.xml
           fail_ci_if_error: true
           verbose: true
