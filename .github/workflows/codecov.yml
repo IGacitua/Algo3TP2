@@ -1,19 +1,43 @@
-name: API workflow
+name: Codecov
 
-on: [ push, pull_request,workflow_dispatch ]
+on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
     name: Test python API
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history helps Codecov map commits correctly
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
       - name: Install requirements
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
       - name: Run tests and collect coverage
         run: pytest --cov=. --cov-report=xml:coverage-service.xml
+
+      - name: Check coverage file exists
+        if: ${{ !cancelled() }}
+        run: ls -la coverage-service.xml
+
       - name: Upload coverage reports to Codecov
-        run: |
-          curl -Os https://cli.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov --verbose upload-process --fail-on-error -t ${{ secrets.CODECOV_TOKEN }} -n 'service'-${{ github.run_id }} -F service -f coverage-service.xml
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage-service.xml
+          flags: service
+          name: service-${{ github.run_id }}
+          fail_ci_if_error: true
+          verbose: true
