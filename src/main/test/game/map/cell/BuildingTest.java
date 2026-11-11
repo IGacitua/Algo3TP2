@@ -178,4 +178,17 @@ public class BuildingTest {
         Assertions.assertEquals(initialPower, finalPower, "Damaging a destroyed building should not reduce power.");
     }
 
+
+    @Test
+    public void testHasPositionReturnsTrueForMatchingPosition() {
+        // Arrange
+        Position2D position = new Position2D(1, 1);
+        GenericCell cell = new Building(position);
+
+        // Act
+        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+
+        // Assert
+        Assertions.assertTrue(hasPosition, "Building should return true for matching position.");
+    }
 }

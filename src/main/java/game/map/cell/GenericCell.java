@@ -54,8 +54,7 @@ public class GenericCell {
         containedUnit = null;
         return unit;
     }
-
-
+    
     public boolean hasPosition(Position2D position) {
         return this.position.getDistance(position) == 0;
     }

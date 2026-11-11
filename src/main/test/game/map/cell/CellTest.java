@@ -82,7 +82,7 @@ public class CellTest {
     }
 
     @Test
-    public void testcellWithoutUnitCannotBeDamaged() {
+    public void testCellWithoutUnitCannotBeDamaged() {
         // Arrange
         GenericCell cell = new GenericCell(null);
 
@@ -94,7 +94,7 @@ public class CellTest {
     }
 
     @Test
-    public void testcellWithUnitCanBeDamaged() {
+    public void testCellWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
         GenericCell cell = new GenericCell(new Position2D(0, 0));
@@ -108,7 +108,7 @@ public class CellTest {
     }
 
     @Test
-    public void testcellDamagesUnitWhenDamaged() {
+    public void testCellDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
         GenericCell cell = new GenericCell(new Position2D(0, 0));
@@ -119,5 +119,18 @@ public class CellTest {
 
         // Assert
         Mockito.verify(unit).damage();
+    }
+
+    @Test
+    public void testHasPositionReturnsTrueForMatchingPosition() {
+        // Arrange
+        Position2D position = new Position2D(1, 1);
+        GenericCell cell = new GenericCell(position);
+
+        // Act
+        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+
+        // Assert
+        Assertions.assertTrue(hasPosition, "Cell should return true for matching position.");
     }
 }

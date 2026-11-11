@@ -48,4 +48,17 @@ public class MountainTest {
         // Assert
         Assertions.assertFalse(canDamage, "Mountain cell should not be able to be damaged.");
     }
+
+    @Test
+    public void testHasPositionReturnsTrueForMatchingPosition() {
+        // Arrange
+        Position2D position = new Position2D(1, 1);
+        GenericCell cell = new Mountain(position);
+
+        // Act
+        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+
+        // Assert
+        Assertions.assertTrue(hasPosition, "Mountain should return true for matching position.");
+    }
 }

@@ -157,4 +157,17 @@ public class WaterTest {
         // Assert
         Mockito.verify(unit).damage();
     }
+
+    @Test
+    public void testHasPositionReturnsTrueForMatchingPosition() {
+        // Arrange
+        Position2D position = new Position2D(1, 1);
+        GenericCell cell = new Water(position);
+
+        // Act
+        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+
+        // Assert
+        Assertions.assertTrue(hasPosition, "Water should return true for matching position.");
+    }
 }

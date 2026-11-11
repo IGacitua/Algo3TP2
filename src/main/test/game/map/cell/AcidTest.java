@@ -133,4 +133,17 @@ public class AcidTest {
         // Assert
         Mockito.verify(unit).contaminate();
     }
+
+    @Test
+    public void testHasPositionReturnsTrueForMatchingPosition() {
+        // Arrange
+        Position2D position = new Position2D(1, 1);
+        GenericCell cell = new Acid(position);
+
+        // Act
+        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+
+        // Assert
+        Assertions.assertTrue(hasPosition, "Acid should return true for matching position.");
+    }
 }
