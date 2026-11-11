@@ -13,6 +13,10 @@ public class ElectricalNetwork {
         return instance;
     }
 
+    public void reset() {
+        power = 5;
+    }
+
     public int getPower() {
         return power;
     }

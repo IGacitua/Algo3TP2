@@ -151,6 +151,7 @@ public class BuildingTest {
     public void testDestroyingBuildingReducesElectricalNetwork() {
         // Arrange
         Building building = new Building(new Position2D(0, 0));
+        ElectricalNetwork.getInstance().reset();
 
         // Act
         int initialPower = ElectricalNetwork.getInstance().getPower();
@@ -166,6 +167,7 @@ public class BuildingTest {
         // Arrange
         Building building = new Building(new Position2D(0, 0));
         building.tryDamage(); // Destroy the building
+        ElectricalNetwork.getInstance().reset();
 
         // Act
         int initialPower = ElectricalNetwork.getInstance().getPower();

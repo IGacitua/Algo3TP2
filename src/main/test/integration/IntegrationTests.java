@@ -28,6 +28,8 @@ public class IntegrationTests {
     @Test
     public void TestArtilleryShootsVek() {
         // Arrange
+        ElectricalNetwork.getInstance().reset();
+
         Weapon artillery = new Artillery();
         Unit mecha = new Unit(new Position2D(-10, -10), artillery);
 
