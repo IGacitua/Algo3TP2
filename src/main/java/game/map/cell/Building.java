@@ -4,7 +4,7 @@ import game.electricalNetwork.ElectricalNetwork;
 import game.map.Position2D;
 import game.units.Unit;
 
-public class Building extends Cell {
+public class Building extends GenericCell {
 
     private static final int DAMAGE_POWER_REDUCTION = 1;
 
@@ -43,7 +43,4 @@ public class Building extends Cell {
         destroyBuilding();
     }
 
-    @Override
-    protected void onUnitRemoved(Unit unit) {
-    }
 }

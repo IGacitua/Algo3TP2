@@ -11,7 +11,7 @@ public class MountainTest {
     @Test
     public void testCannotPlaceUnitInMountainCell() {
         // Arrange
-        Cell mountain = new Mountain(new Position2D(0, 0));
+        GenericCell mountain = new Mountain(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -24,7 +24,7 @@ public class MountainTest {
     @Test // Just in case first placement has unexpected consequences.
     public void testCannotPlaceMultipleUnitsInMountainCell() {
         // Arrange
-        Cell mountain = new Mountain(new Position2D(0, 0));
+        GenericCell mountain = new Mountain(new Position2D(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -40,7 +40,7 @@ public class MountainTest {
     @Test
     public void testMountainCannotBeDamaged() {
         // Arrange
-        Cell mountain = new Mountain(null);
+        GenericCell mountain = new Mountain(null);
 
         // Act
         boolean canDamage = mountain.canDamage();

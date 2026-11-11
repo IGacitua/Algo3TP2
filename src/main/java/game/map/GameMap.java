@@ -1,8 +1,7 @@
 package game.map;
 
 import game.map.cell.Building;
-import game.map.cell.Cell;
-import game.map.cell.Ground;
+import game.map.cell.GenericCell;
 import game.units.Unit;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 public class GameMap {
     private static final GameMap instance = new GameMap();
 
-    private List<Cell> cells;
+    private List<GenericCell> cells;
 
     private GameMap() {
         Initialize();
@@ -24,15 +23,15 @@ public class GameMap {
     private void Initialize() {
         cells = new ArrayList<>();
 
-        cells.add(new Ground(new Position2D(0, 0)));
-        cells.add(new Ground(new Position2D(0, 1)));
-        cells.add(new Ground(new Position2D(0, 2)));
-        cells.add(new Ground(new Position2D(1, 0)));
-        cells.add(new Ground(new Position2D(2, 0)));
+        cells.add(new GenericCell(new Position2D(0, 0)));
+        cells.add(new GenericCell(new Position2D(0, 1)));
+        cells.add(new GenericCell(new Position2D(0, 2)));
+        cells.add(new GenericCell(new Position2D(1, 0)));
+        cells.add(new GenericCell(new Position2D(2, 0)));
     }
 
     public boolean placeUnit(Unit unit, Position2D position) {
-        Cell cell = getCell(position);
+        GenericCell cell = getCell(position);
         if (cell != null) {
             return cell.tryPlaceUnit(unit, false);
         }
@@ -40,15 +39,15 @@ public class GameMap {
     }
 
     public void placeBuilding(Position2D position) {
-        Cell cell = getCell(position);
+        GenericCell cell = getCell(position);
         if (cell != null) {
             cells.remove(cell);
         }
         cells.add(new Building(position));
     }
 
-    public Cell getCell(Position2D position) {
-        for (Cell cell : cells) {
+    public GenericCell getCell(Position2D position) {
+        for (GenericCell cell : cells) {
             if (cell.hasPosition(position)) {
                 return cell;
             }
@@ -57,15 +56,15 @@ public class GameMap {
     }
 
     public void damage(Position2D target) {
-        Cell cell = getCell(target);
+        GenericCell cell = getCell(target);
         if (cell != null) {
             cell.tryDamage();
         }
     }
 
     public void push(Position2D from, Position2D to) {
-        Cell fromCell = getCell(from);
-        Cell toCell = getCell(to);
+        GenericCell fromCell = getCell(from);
+        GenericCell toCell = getCell(to);
 
         if (fromCell != null && toCell != null) {
             Unit unitToPush = fromCell.popUnit();

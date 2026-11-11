@@ -3,7 +3,7 @@ package game.map.cell;
 import game.map.Position2D;
 import game.units.Unit;
 
-public class Water extends Cell {
+public class Water extends GenericCell {
 
     public Water(Position2D position) {
         super(position);
@@ -19,11 +19,4 @@ public class Water extends Cell {
         return super.canPlaceUnit(unit, pushed) && unit.canMoveToWater() || pushed;
     }
 
-    @Override
-    protected void onUnitPlaced(Unit unit, boolean pushed) {
-    }
-
-    @Override
-    protected void onUnitRemoved(Unit unit) {
-    }
 }

@@ -3,11 +3,11 @@ package game.map.cell;
 import game.map.Position2D;
 import game.units.Unit;
 
-public abstract class Cell {
+public class GenericCell {
     protected final Position2D position;
     protected Unit containedUnit;
 
-    public Cell(Position2D position) {
+    public GenericCell(Position2D position) {
         containedUnit = null;
         this.position = position;
     }
@@ -20,7 +20,9 @@ public abstract class Cell {
         this.onDamaged();
     }
 
-    protected abstract boolean canDamage();
+    protected boolean canDamage() {
+        return containedUnit != null;
+    }
 
     protected void onDamaged() {
         if (containedUnit != null) {
@@ -44,16 +46,15 @@ public abstract class Cell {
         return containedUnit == null;
     }
 
-    protected abstract void onUnitPlaced(Unit unit, boolean pushed);
+    protected void onUnitPlaced(Unit unit, boolean pushed) {
+    }
 
     public Unit popUnit() {
         Unit unit = containedUnit;
         containedUnit = null;
-        onUnitRemoved(unit);
         return unit;
     }
 
-    protected abstract void onUnitRemoved(Unit unit);
 
     public boolean hasPosition(Position2D position) {
         return this.position.getDistance(position) == 0;

@@ -6,31 +6,31 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class GroundTest {
+public class CellTest {
 
     @Test
-    public void testCanPlaceOneUnitInGroundCell() {
+    public void testCanPlaceOneUnitInCell() {
         // Arrange
-        Cell ground = new Ground(new Position2D(0, 0));
+        GenericCell cell = new GenericCell(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
-        boolean result = ground.tryPlaceUnit(unit, false);
+        boolean result = cell.tryPlaceUnit(unit, false);
 
         // Assert
         Assertions.assertTrue(result, "Unit should be able to be placed.");
     }
 
     @Test
-    public void testCannotPlaceMultipleUnitsInGroundCell() {
+    public void testCannotPlaceMultipleUnitsInCell() {
         // Arrange
-        Cell ground = new Ground(new Position2D(0, 0));
+        GenericCell cell = new GenericCell(new Position2D(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
         // Act
-        boolean mainResult = ground.tryPlaceUnit(mainUnit, false);
-        boolean secondaryResult = ground.tryPlaceUnit(secondaryUnit, false);
+        boolean mainResult = cell.tryPlaceUnit(mainUnit, false);
+        boolean secondaryResult = cell.tryPlaceUnit(secondaryUnit, false);
 
         // Assert
         Assertions.assertTrue(mainResult, "Main unit should be placed successfully.");
@@ -41,11 +41,11 @@ public class GroundTest {
     public void testPlacingUnitMovesItToPosition() {
         // Arrange
         Position2D position = new Position2D(0, 0);
-        Cell ground = new Ground(position);
+        GenericCell cell = new GenericCell(position);
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
-        ground.tryPlaceUnit(unit, false);
+        cell.tryPlaceUnit(unit, false);
 
         // Assert
         Mockito.verify(unit).moveTo(position);
@@ -54,12 +54,12 @@ public class GroundTest {
     @Test
     public void testPopUnitReturnsCorrectUnit() {
         // Arrange
-        Cell ground = new Ground(new Position2D(0, 0));
+        GenericCell cell = new GenericCell(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        ground.tryPlaceUnit(unit, false);
+        cell.tryPlaceUnit(unit, false);
 
         // Act
-        Unit poppedUnit = ground.popUnit();
+        Unit poppedUnit = cell.popUnit();
 
         // Assert
         Assertions.assertEquals(unit, poppedUnit, "Popped unit should be the same as the placed unit.");
@@ -68,54 +68,54 @@ public class GroundTest {
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
-        Cell ground = new Ground(new Position2D(0, 0));
+        GenericCell cell = new GenericCell(new Position2D(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
 
         // Act
-        ground.tryPlaceUnit(firstUnit, false);
-        ground.popUnit();
-        boolean canPlaceSecondUnit = ground.tryPlaceUnit(secondUnit, false);
+        cell.tryPlaceUnit(firstUnit, false);
+        cell.popUnit();
+        boolean canPlaceSecondUnit = cell.tryPlaceUnit(secondUnit, false);
 
         // Assert
         Assertions.assertTrue(canPlaceSecondUnit, "Should be able to place a new unit after popping the first one.");
     }
 
     @Test
-    public void testGroundWithoutUnitCannotBeDamaged() {
+    public void testcellWithoutUnitCannotBeDamaged() {
         // Arrange
-        Cell ground = new Ground(null);
+        GenericCell cell = new GenericCell(null);
 
         // Act
-        boolean canDamage = ground.canDamage();
+        boolean canDamage = cell.canDamage();
 
         // Assert
-        Assertions.assertFalse(canDamage, "Ground cell should not be able to be damaged.");
+        Assertions.assertFalse(canDamage, "GenericCell cell should not be able to be damaged.");
     }
 
     @Test
-    public void testGroundWithUnitCanBeDamaged() {
+    public void testcellWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell ground = new Ground(new Position2D(0, 0));
+        GenericCell cell = new GenericCell(new Position2D(0, 0));
 
         // Act
-        ground.tryPlaceUnit(unit, false);
-        boolean canDamage = ground.canDamage();
+        cell.tryPlaceUnit(unit, false);
+        boolean canDamage = cell.canDamage();
 
         // Assert
-        Assertions.assertTrue(canDamage, "Ground cell should be able to be damaged when a unit is present.");
+        Assertions.assertTrue(canDamage, "GenericCell cell should be able to be damaged when a unit is present.");
     }
 
     @Test
-    public void testGroundDamagesUnitWhenDamaged() {
+    public void testcellDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell ground = new Ground(new Position2D(0, 0));
-        ground.tryPlaceUnit(unit, false);
+        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        cell.tryPlaceUnit(unit, false);
 
         // Act
-        ground.tryDamage();
+        cell.tryDamage();
 
         // Assert
         Mockito.verify(unit).damage();

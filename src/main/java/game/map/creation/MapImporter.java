@@ -1,6 +1,6 @@
 package game.map.creation;
 
-import game.map.cell.Cell;
+import game.map.cell.GenericCell;
 import game.utils.FileHandler;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class MapImporter {
         this.cellFactory = cellFactory;
     }
 
-    public Cell[][] importMap(String filePath) throws NoMapFileException, InvalidMapFileException {
+    public GenericCell[][] importMap(String filePath) throws NoMapFileException, InvalidMapFileException {
         try {
             String mapData = fileHandler.readFile(filePath);
             return parseData(mapData);
@@ -23,12 +23,12 @@ public class MapImporter {
         }
     }
 
-    private Cell[][] parseData(String mapData) throws InvalidMapFileException {
+    private GenericCell[][] parseData(String mapData) throws InvalidMapFileException {
         String[] rows = mapData.split("\n");
         int rowCount = rows.length;
         int colCount = getColumnCount(rows);
 
-        Cell[][] map = new Cell[rowCount][colCount];
+        GenericCell[][] map = new GenericCell[rowCount][colCount];
 
         for (int i = 0; i < rowCount; i++) {
             String row = rows[i];
