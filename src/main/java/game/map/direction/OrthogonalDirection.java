@@ -5,9 +5,9 @@ import game.map.Position2D;
 public interface OrthogonalDirection {
     void movePosition(Position2D position);
 
-    int deltaX();
+    int getDeltaX();
 
-    int deltaY();
+    int getDeltaY();
 
     OrthogonalDirection invert();
 }

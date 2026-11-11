@@ -7,11 +7,11 @@ public class NoDirection implements OrthogonalDirection {
     public void movePosition(Position2D position) {
     }
 
-    public int deltaX() {
+    public int getDeltaX() {
         return 0;
     }
 
-    public int deltaY() {
+    public int getDeltaY() {
         return 0;
     }
 

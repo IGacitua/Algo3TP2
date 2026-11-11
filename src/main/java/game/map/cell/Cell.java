@@ -3,11 +3,11 @@ package game.map.cell;
 import game.map.Position2D;
 import game.units.Unit;
 
-public class GenericCell {
+public class Cell {
     protected final Position2D position;
     protected Unit containedUnit;
 
-    public GenericCell(Position2D position) {
+    public Cell(Position2D position) {
         containedUnit = null;
         this.position = position;
     }
@@ -54,7 +54,7 @@ public class GenericCell {
         containedUnit = null;
         return unit;
     }
-    
+
     public boolean hasPosition(Position2D position) {
         return this.position.getDistance(position) == 0;
     }

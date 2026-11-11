@@ -12,7 +12,7 @@ public class BuildingTest {
     @Test
     public void testCanPlaceOneUnitInBuildingCell() {
         // Arrange
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -25,7 +25,7 @@ public class BuildingTest {
     @Test
     public void testCannotPlaceMultipleUnitsInBuildingCell() {
         // Arrange
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -42,7 +42,7 @@ public class BuildingTest {
     public void testPlacingUnitMovesItToPosition() {
         // Arrange
         Position2D position = new Position2D(0, 0);
-        GenericCell building = new Building(position);
+        Cell building = new Building(position);
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -55,7 +55,7 @@ public class BuildingTest {
     @Test
     public void testPopUnitReturnsCorrectUnit() {
         // Arrange
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         building.tryPlaceUnit(unit, false);
 
@@ -69,7 +69,7 @@ public class BuildingTest {
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
 
@@ -85,7 +85,7 @@ public class BuildingTest {
     @Test
     public void testNotDestroyedBuildingWithoutUnitCanBeDamaged() {
         // Arrange
-        GenericCell building = new Building(null);
+        Cell building = new Building(null);
 
         // Act
         boolean canDamage = building.canDamage();
@@ -97,7 +97,7 @@ public class BuildingTest {
     @Test
     public void testDestroyedBuildingWithoutUnitCannotBeDamaged() {
         // Arrange
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
 
         // Act
         building.tryDamage(); // This destroys the building
@@ -111,7 +111,7 @@ public class BuildingTest {
     public void testBuildingWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
 
         // Act
         building.tryPlaceUnit(unit, false);
@@ -125,7 +125,7 @@ public class BuildingTest {
     public void testBuildingDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position2D(0, 0));
         building.tryPlaceUnit(unit, false);
 
         // Act
@@ -183,7 +183,7 @@ public class BuildingTest {
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
         Position2D position = new Position2D(1, 1);
-        GenericCell cell = new Building(position);
+        Cell cell = new Building(position);
 
         // Act
         boolean hasPosition = cell.hasPosition(new Position2D(1, 1));

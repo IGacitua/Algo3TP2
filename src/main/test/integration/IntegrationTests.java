@@ -4,11 +4,15 @@ import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.Position2D;
 import game.map.cell.Building;
+import game.map.cell.Cell;
+import game.map.creation.InvalidMapFileException;
+import game.map.creation.MapImporter;
 import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.weapons.Artillery;
 import game.units.weapons.Weapon;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,20 +30,38 @@ public class IntegrationTests {
      *   Descuento de la Red Eléctrica.
      */
     @Test
-    public void TestArtilleryShootsVek() {
-        // Arrange
+    public void TestArtilleryShootsVek() throws InvalidMapFileException {
+        // Arrange: Network
+
         ElectricalNetwork.getInstance().reset();
 
-        Weapon artillery = new Artillery();
-        Unit mecha = new Unit(new Position2D(-10, -10), artillery);
+        // Arrange: Map (5x5, (0,0) is top-left, Position2D is (x, y))
 
-        Unit vekCentro = new Unit(new Position2D(0, 0), null);
-        Unit vekNorte = new Unit(new Position2D(0, 1), null);
-        Unit vekEste = new Unit(new Position2D(1, 0), null);
+        MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
+        Cell[][] mockCells = new Cell[5][5];
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                mockCells[x][y] = new Cell(new Position2D(x, y));
+            }
+        }
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
+
+        final int targetX = 2;
+        final int targetY = 2;
+        final Position2D buildingPosition = new Position2D(targetX, targetY - 2); // where the north unit lands
 
         GameMap map = GameMap.getInstance();
+        map.Initialize(mockMapImporter, "");
+        map.placeBuilding(buildingPosition);
 
-        map.placeBuilding(new Position2D(0, 2));
+        // Arrange: Units
+
+        Weapon artillery = new Artillery();
+        Unit mecha = new Unit(new Position2D(targetX, targetY + 2), artillery);   // South of target (y grows downward)
+
+        Unit vekCentro = new Unit(new Position2D(targetX, targetY), null);        // Target
+        Unit vekNorte = new Unit(new Position2D(targetX, targetY - 1), null);    // North of target
+        Unit vekEste = new Unit(new Position2D(targetX + 1, targetY), null);    // East of target
 
         // Act
 
@@ -47,16 +69,14 @@ public class IntegrationTests {
         action.execute();
 
         // Assert
-        assertTrue("Expected the unit at (0,0) to be damaged after the attack.", vekCentro.isDamaged());
 
-        double distanceCentro = vekCentro.getPosition().getDistance(0, 0);
-        double distanceNorte = vekNorte.getPosition().getDistance(0, 2);
-        double distanceEste = vekEste.getPosition().getDistance(2, 0);
-        assertEquals("Expected the unit at (0,0) to NOT have moved after the attack.", 0, distanceCentro, DELTA);
-        assertEquals("Expected the unit at (0,1) to have moved after the attack.", 0, distanceNorte, DELTA);
-        assertEquals("Expected the unit at (1,0) to have moved after the attack.", 0, distanceEste, DELTA);
+        assertTrue("Expected the unit at the target to be damaged after the attack.", vekCentro.isDamaged());
 
-        assertTrue(((Building) map.getCell(new Position2D(0, 2))).isDestroyed());
+        assertEquals("Expected the center unit NOT to have moved.", new Position2D(targetX, targetY), vekCentro.getPosition());
+        assertEquals("Expected the north unit to be pushed north.", new Position2D(targetX, targetY - 2), vekNorte.getPosition());
+        assertEquals("Expected the east unit to be pushed east.", new Position2D(targetX + 2, targetY), vekEste.getPosition());
+
+        assertTrue(((Building) map.getCell(buildingPosition)).isDestroyed());
         assertEquals(4, ElectricalNetwork.getInstance().getPower());
     }
 }

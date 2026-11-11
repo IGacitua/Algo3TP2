@@ -11,7 +11,7 @@ public class WaterTest {
     @Test
     public void testCanPlaceOneWaterUnitInWaterCell() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
 
@@ -25,7 +25,7 @@ public class WaterTest {
     @Test
     public void testCannotPlaceNonWaterUnitInWaterCell() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(false);
 
@@ -39,7 +39,7 @@ public class WaterTest {
     @Test
     public void testCanForceNonWaterUnitPlacementInWaterCell() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(false);
 
@@ -53,7 +53,7 @@ public class WaterTest {
     @Test
     public void testCannotPlaceMultipleWaterUnitsInWaterCell() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
         Mockito.when(mainUnit.canMoveToWater()).thenReturn(true);
@@ -72,7 +72,7 @@ public class WaterTest {
     public void testPlacingWaterUnitMovesItToPosition() {
         // Arrange
         Position2D position = new Position2D(0, 0);
-        GenericCell water = new Water(position);
+        Cell water = new Water(position);
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
 
@@ -86,7 +86,7 @@ public class WaterTest {
     @Test
     public void testPopWaterUnitReturnsCorrectUnit() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
         water.tryPlaceUnit(unit, false);
@@ -101,7 +101,7 @@ public class WaterTest {
     @Test
     public void testPopWaterUnitAllowsNewWaterUnitPlacement() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
         Mockito.when(firstUnit.canMoveToWater()).thenReturn(true);
@@ -119,7 +119,7 @@ public class WaterTest {
     @Test
     public void testWaterWithoutUnitCannotBeDamaged() {
         // Arrange
-        GenericCell water = new Water(null);
+        Cell water = new Water(null);
 
         // Act
         boolean canDamage = water.canDamage();
@@ -131,7 +131,7 @@ public class WaterTest {
     @Test
     public void testWaterWithUnitCanBeDamaged() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
 
@@ -146,7 +146,7 @@ public class WaterTest {
     @Test
     public void testWaterDamagesUnitWhenDamaged() {
         // Arrange
-        GenericCell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
         water.tryPlaceUnit(unit, false);
@@ -162,7 +162,7 @@ public class WaterTest {
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
         Position2D position = new Position2D(1, 1);
-        GenericCell cell = new Water(position);
+        Cell cell = new Water(position);
 
         // Act
         boolean hasPosition = cell.hasPosition(new Position2D(1, 1));

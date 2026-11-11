@@ -4,7 +4,7 @@ import game.electricalNetwork.ElectricalNetwork;
 import game.map.Position2D;
 import game.units.Unit;
 
-public class Building extends GenericCell {
+public class Building extends Cell {
 
     private static final int DAMAGE_POWER_REDUCTION = 1;
 

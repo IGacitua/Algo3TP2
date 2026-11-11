@@ -3,7 +3,7 @@ package game.map.cell;
 import game.map.Position2D;
 import game.units.Unit;
 
-public class Mountain extends GenericCell {
+public class Mountain extends Cell {
 
     public Mountain(Position2D position) {
         super(position);

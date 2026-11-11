@@ -1,34 +1,33 @@
 package game.map.creation;
 
-import game.map.cell.GenericCell;
-
-import java.util.Dictionary;
+import game.map.Position2D;
+import game.map.cell.*;
 
 public class CellFactory {
 
-    // Could be replaced by a switch in createFromId, but I like this way.
-    private final Dictionary<String, Class<? extends GenericCell>> cellIDs;
+    // I could use a Dictionary<ID, Class> and use reflection to get the constructor... but that's overkill.
+    // These could be instance variables, and initialized in the class, but again, no reason to.
+    // I could also set the IDs in the Cell class as static, but I prefer having everything in one place.
+    private static final String ACID_ID = "A";
+    private static final String BUILDING_ID = "B";
+    private static final String GROUND_ID = "G";
+    private static final String MOUNTAIN_ID = "M";
+    private static final String WATER_ID = "W";
 
-    public CellFactory() {
-        cellIDs = new java.util.Hashtable<>();
-        cellIDs.put("ACID", game.map.cell.Acid.class); // Probably never in a map file, no reason not to add it tho.
-        cellIDs.put("BUILDING", game.map.cell.Building.class);
-        cellIDs.put("GROUND", GenericCell.class);
-        cellIDs.put("MOUNTAIN", game.map.cell.Mountain.class);
-        cellIDs.put("WATER", game.map.cell.Water.class);
-    }
-
-    public GenericCell createFromId(String cellID) throws InvalidMapFileException {
-        Class<? extends GenericCell> cellClass = cellIDs.get(cellID);
-        if (cellClass != null) {
-            try {
-                return cellClass.getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
-                throw new InvalidMapFileException(
-                        "Error creating cell instance for ID: " + cellID + "\n" +
-                                "Error: " + e.getMessage());
-            }
+    public Cell createFromId(String cellID, Position2D cellPosition) throws InvalidMapFileException {
+        switch (cellID) {
+            case ACID_ID:
+                return new Acid(cellPosition);
+            case BUILDING_ID:
+                return new Building(cellPosition);
+            case GROUND_ID:
+                return new Cell(cellPosition);
+            case MOUNTAIN_ID:
+                return new Mountain(cellPosition);
+            case WATER_ID:
+                return new Water(cellPosition);
+            default:
+                throw new InvalidMapFileException("Invalid cell ID: " + cellID);
         }
-        throw new InvalidMapFileException("Invalid cell ID: " + cellID);
     }
 }

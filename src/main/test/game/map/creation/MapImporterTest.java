@@ -1,5 +1,6 @@
 package game.map.creation;
 
+import game.map.Position2D;
 import game.utils.FileHandler;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -88,7 +89,7 @@ public class MapImporterTest {
     }
 
     @Test
-    public void validMapFileCallsCellFactoryOne() throws IOException, InvalidMapFileException {
+    public void validMapFileCallsWithCorrectIdsAndPositionsA() throws IOException, InvalidMapFileException {
         // Arrange
         String map = "A B C";
         FileHandler fileHandler = Mockito.mock(FileHandler.class);
@@ -105,13 +106,13 @@ public class MapImporterTest {
         }
 
         // Assert
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("A");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("B");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("C");
+        Mockito.verify(cellFactory).createFromId("A", new Position2D(0, 0));
+        Mockito.verify(cellFactory).createFromId("B", new Position2D(1, 0));
+        Mockito.verify(cellFactory).createFromId("C", new Position2D(2, 0));
     }
 
     @Test
-    public void validMapFileCallsCellFactoryTwo() throws IOException, InvalidMapFileException {
+    public void validMapFileCallsWithCorrectIdsAndPositionsB() throws IOException, InvalidMapFileException {
         // Arrange
         String map = "A B C" + "\n" + "D E F";
         FileHandler fileHandler = Mockito.mock(FileHandler.class);
@@ -128,11 +129,11 @@ public class MapImporterTest {
         }
 
         // Assert
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("A");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("B");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("C");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("D");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("E");
-        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("F");
+        Mockito.verify(cellFactory).createFromId("A", new Position2D(0, 0));
+        Mockito.verify(cellFactory).createFromId("B", new Position2D(1, 0));
+        Mockito.verify(cellFactory).createFromId("C", new Position2D(2, 0));
+        Mockito.verify(cellFactory).createFromId("D", new Position2D(0, 1));
+        Mockito.verify(cellFactory).createFromId("E", new Position2D(1, 1));
+        Mockito.verify(cellFactory).createFromId("F", new Position2D(2, 1));
     }
 }

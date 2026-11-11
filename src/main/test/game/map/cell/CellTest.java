@@ -11,7 +11,7 @@ public class CellTest {
     @Test
     public void testCanPlaceOneUnitInCell() {
         // Arrange
-        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -24,7 +24,7 @@ public class CellTest {
     @Test
     public void testCannotPlaceMultipleUnitsInCell() {
         // Arrange
-        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position2D(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -41,7 +41,7 @@ public class CellTest {
     public void testPlacingUnitMovesItToPosition() {
         // Arrange
         Position2D position = new Position2D(0, 0);
-        GenericCell cell = new GenericCell(position);
+        Cell cell = new Cell(position);
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -54,7 +54,7 @@ public class CellTest {
     @Test
     public void testPopUnitReturnsCorrectUnit() {
         // Arrange
-        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         cell.tryPlaceUnit(unit, false);
 
@@ -68,7 +68,7 @@ public class CellTest {
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
-        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position2D(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
 
@@ -84,7 +84,7 @@ public class CellTest {
     @Test
     public void testCellWithoutUnitCannotBeDamaged() {
         // Arrange
-        GenericCell cell = new GenericCell(null);
+        Cell cell = new Cell(null);
 
         // Act
         boolean canDamage = cell.canDamage();
@@ -97,7 +97,7 @@ public class CellTest {
     public void testCellWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position2D(0, 0));
 
         // Act
         cell.tryPlaceUnit(unit, false);
@@ -111,7 +111,7 @@ public class CellTest {
     public void testCellDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell cell = new GenericCell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position2D(0, 0));
         cell.tryPlaceUnit(unit, false);
 
         // Act
@@ -125,7 +125,7 @@ public class CellTest {
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
         Position2D position = new Position2D(1, 1);
-        GenericCell cell = new GenericCell(position);
+        Cell cell = new Cell(position);
 
         // Act
         boolean hasPosition = cell.hasPosition(new Position2D(1, 1));

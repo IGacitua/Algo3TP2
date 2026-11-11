@@ -3,7 +3,7 @@ package game.map.cell;
 import game.map.Position2D;
 import game.units.Unit;
 
-public class Water extends GenericCell {
+public class Water extends Cell {
 
     public Water(Position2D position) {
         super(position);

@@ -13,6 +13,23 @@ public class Position2D {
         this.y = y;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        Position2D that = (Position2D) obj;
+        return that.getDistance(getX(), getY()) == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Position2D: (" + x + ", " + y + ")";
+    }
+
     public int getX() {
         return x;
     }
@@ -31,7 +48,7 @@ public class Position2D {
     }
 
     public double getDistance(int x, int y) {
-        // Hypot is a helper that calculates the square root of the sum of squares
+        // hypot is a static helper that calculates the square root of the sum of squares
         // AKA distance.
         // This avoids large-number overflow and is more accurate
         return Math.hypot(((double) getX() - x), (double) getY() - y);
@@ -61,5 +78,9 @@ public class Position2D {
         }
 
         return new NoDirection();
+    }
+
+    public Position2D getAdjacent(OrthogonalDirection direction) {
+        return new Position2D(getX() + direction.getDeltaX(), getY() + direction.getDeltaY());
     }
 }

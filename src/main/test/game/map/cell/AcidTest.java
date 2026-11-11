@@ -11,7 +11,7 @@ public class AcidTest {
     @Test
     public void testCanPlaceOneUnitInAcidCell() {
         // Arrange
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -24,7 +24,7 @@ public class AcidTest {
     @Test
     public void testCannotPlaceMultipleUnitsInAcidCell() {
         // Arrange
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -41,7 +41,7 @@ public class AcidTest {
     public void testPlacingUnitMovesItToPosition() {
         // Arrange
         Position2D position = new Position2D(0, 0);
-        GenericCell acid = new Acid(position);
+        Cell acid = new Acid(position);
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -54,7 +54,7 @@ public class AcidTest {
     @Test
     public void testPopUnitReturnsCorrectUnit() {
         // Arrange
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         acid.tryPlaceUnit(unit, false);
 
@@ -68,7 +68,7 @@ public class AcidTest {
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
 
@@ -84,7 +84,7 @@ public class AcidTest {
     @Test
     public void testAcidWithoutUnitCannotBeDamaged() {
         // Arrange
-        GenericCell acid = new Acid(null);
+        Cell acid = new Acid(null);
 
         // Act
         boolean canDamage = acid.canDamage();
@@ -97,7 +97,7 @@ public class AcidTest {
     public void testAcidWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
 
         // Act
         acid.tryPlaceUnit(unit, false);
@@ -111,7 +111,7 @@ public class AcidTest {
     public void testAcidDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
         acid.tryPlaceUnit(unit, false);
 
         // Act
@@ -125,7 +125,7 @@ public class AcidTest {
     public void testAcidContaminatesUnitOnPlacement() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        GenericCell acid = new Acid(new Position2D(0, 0));
+        Cell acid = new Acid(new Position2D(0, 0));
 
         // Act
         acid.tryPlaceUnit(unit, false);
@@ -138,7 +138,7 @@ public class AcidTest {
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
         Position2D position = new Position2D(1, 1);
-        GenericCell cell = new Acid(position);
+        Cell cell = new Acid(position);
 
         // Act
         boolean hasPosition = cell.hasPosition(new Position2D(1, 1));

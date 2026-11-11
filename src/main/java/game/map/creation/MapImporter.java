@@ -1,6 +1,7 @@
 package game.map.creation;
 
-import game.map.cell.GenericCell;
+import game.map.Position2D;
+import game.map.cell.Cell;
 import game.utils.FileHandler;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class MapImporter {
         this.cellFactory = cellFactory;
     }
 
-    public GenericCell[][] importMap(String filePath) throws NoMapFileException, InvalidMapFileException {
+    public Cell[][] importMap(String filePath) throws NoMapFileException, InvalidMapFileException {
         try {
             String mapData = fileHandler.readFile(filePath);
             return parseData(mapData);
@@ -23,22 +24,22 @@ public class MapImporter {
         }
     }
 
-    private GenericCell[][] parseData(String mapData) throws InvalidMapFileException {
+    private Cell[][] parseData(String mapData) throws InvalidMapFileException {
         String[] rows = mapData.split("\n");
         int rowCount = rows.length;
         int colCount = getColumnCount(rows);
 
-        GenericCell[][] map = new GenericCell[rowCount][colCount];
+        Cell[][] map = new Cell[rowCount][colCount];
 
-        for (int i = 0; i < rowCount; i++) {
-            String row = rows[i];
+        for (int y = 0; y < rowCount; y++) {
+            String row = rows[y];
             String[] cellIDs = row.split(" ");
-            for (int j = 0; j < colCount; j++) {
-                String cellID = cellIDs[j];
+            for (int x = 0; x < colCount; x++) {
+                String cellID = cellIDs[x];
                 if (cellID.isEmpty()) {
                     throw new InvalidMapFileException("Empty cell ID found in the map file.");
                 }
-                map[i][j] = cellFactory.createFromId(cellID);
+                map[y][x] = cellFactory.createFromId(cellID, new Position2D(x, y));
             }
         }
 

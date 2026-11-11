@@ -5,14 +5,14 @@ import game.map.Position2D;
 public class West implements OrthogonalDirection {
 
     public void movePosition(Position2D position) {
-        position.moveTo(deltaX(), deltaY());
+        position.moveTo(getDeltaX(), getDeltaY());
     }
 
-    public int deltaX() {
+    public int getDeltaX() {
         return -1;
     }
 
-    public int deltaY() {
+    public int getDeltaY() {
         return 0;
     }
 

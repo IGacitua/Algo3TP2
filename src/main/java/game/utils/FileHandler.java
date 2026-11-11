@@ -9,9 +9,6 @@ public class FileHandler {
     private static FileHandler instance;
 
     private FileHandler() {
-        if (instance != null) {
-            throw new DuplicateSingletonException(this.getClass());
-        }
     }
 
     public static FileHandler getInstance() {

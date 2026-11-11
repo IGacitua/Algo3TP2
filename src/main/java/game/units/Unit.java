@@ -14,7 +14,9 @@ public class Unit {
     public Unit(Position2D position, Weapon weapon) {
         this.weapon = weapon;
         this.position = position;
-        GameMap.getInstance().placeUnit(this, position);
+        if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
+            throw new IllegalArgumentException("Cannot place unit at the specified position: " + position);
+        }
     }
 
     public UnitAction getAttack(Position2D target) {

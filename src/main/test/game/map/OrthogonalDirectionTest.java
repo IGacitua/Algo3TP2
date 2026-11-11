@@ -13,8 +13,8 @@ public class OrthogonalDirectionTest {
         OrthogonalDirection direction = new East();
 
         // Act
-        int x = direction.deltaX();
-        int y = direction.deltaY();
+        int x = direction.getDeltaX();
+        int y = direction.getDeltaY();
 
         // Assert
         assertEquals(1, x, "Expected deltaX to be 1, is " + x);
@@ -52,8 +52,8 @@ public class OrthogonalDirectionTest {
         OrthogonalDirection direction = new North();
 
         // Act
-        int x = direction.deltaX();
-        int y = direction.deltaY();
+        int x = direction.getDeltaX();
+        int y = direction.getDeltaY();
 
         // Assert
         assertEquals(0, x, "Expected deltaX to be 0, is " + x);
@@ -91,8 +91,8 @@ public class OrthogonalDirectionTest {
         OrthogonalDirection direction = new South();
 
         // Act
-        int x = direction.deltaX();
-        int y = direction.deltaY();
+        int x = direction.getDeltaX();
+        int y = direction.getDeltaY();
 
         // Assert
         assertEquals(0, x, "Expected deltaX to be 0, is " + x);
@@ -130,8 +130,8 @@ public class OrthogonalDirectionTest {
         OrthogonalDirection direction = new West();
 
         // Act
-        int x = direction.deltaX();
-        int y = direction.deltaY();
+        int x = direction.getDeltaX();
+        int y = direction.getDeltaY();
 
         // Assert
         assertEquals(-1, x, "Expected deltaX to be -1, is " + x);
@@ -169,8 +169,8 @@ public class OrthogonalDirectionTest {
         OrthogonalDirection direction = new NoDirection();
 
         // Act
-        int x = direction.deltaX();
-        int y = direction.deltaY();
+        int x = direction.getDeltaX();
+        int y = direction.getDeltaY();
 
         // Assert
         assertEquals(0, x, "Expected deltaX to be 0, is " + x);

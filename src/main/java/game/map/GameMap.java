@@ -1,76 +1,87 @@
 package game.map;
 
+import game.SingletonNotInitializedException;
 import game.map.cell.Building;
-import game.map.cell.GenericCell;
+import game.map.cell.Cell;
+import game.map.creation.InvalidMapFileException;
+import game.map.creation.MapImporter;
+import game.map.direction.OrthogonalDirection;
 import game.units.Unit;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameMap {
     private static final GameMap instance = new GameMap();
 
-    private List<GenericCell> cells;
+    private boolean initialized = false; // TODO: Temporary solution. Eventually I'd like to get rid of the singleton access.
+    private CellGrid grid;
 
     private GameMap() {
-        Initialize();
     }
 
     public static GameMap getInstance() {
         return instance;
     }
 
-    private void Initialize() {
-        cells = new ArrayList<>();
-
-        cells.add(new GenericCell(new Position2D(0, 0)));
-        cells.add(new GenericCell(new Position2D(0, 1)));
-        cells.add(new GenericCell(new Position2D(0, 2)));
-        cells.add(new GenericCell(new Position2D(1, 0)));
-        cells.add(new GenericCell(new Position2D(2, 0)));
+    public void Initialize(MapImporter importer, String mapFilePath) throws InvalidMapFileException {
+        grid = new CellGrid(importer.importMap(mapFilePath));
+        initialized = true;
     }
 
-    public boolean placeUnit(Unit unit, Position2D position) {
-        GenericCell cell = getCell(position);
+    public boolean tryPlaceUnit(Unit unit, Position2D position) {
+        ensureInitialized();
+
+        Cell cell = getCell(position);
         if (cell != null) {
             return cell.tryPlaceUnit(unit, false);
         }
         return false;
     }
 
+    /// Temporary method for testing.
     public void placeBuilding(Position2D position) {
-        GenericCell cell = getCell(position);
-        if (cell != null) {
-            cells.remove(cell);
-        }
-        cells.add(new Building(position));
+        ensureInitialized();
+
+        grid.replaceCell(new Building(position), position);
     }
 
-    public GenericCell getCell(Position2D position) {
-        for (GenericCell cell : cells) {
-            if (cell.hasPosition(position)) {
-                return cell;
-            }
-        }
-        return null;
+    public Cell getCell(Position2D position) {
+        ensureInitialized();
+
+        return grid.getCell(position);
     }
 
     public void damage(Position2D target) {
-        GenericCell cell = getCell(target);
+        ensureInitialized();
+
+        Cell cell = getCell(target);
         if (cell != null) {
             cell.tryDamage();
         }
     }
 
-    public void push(Position2D from, Position2D to) {
-        GenericCell fromCell = getCell(from);
-        GenericCell toCell = getCell(to);
+    public void pushUnit(Position2D unit, OrthogonalDirection direction) {
+        ensureInitialized();
 
-        if (fromCell != null && toCell != null) {
-            Unit unitToPush = fromCell.popUnit();
-            if (unitToPush != null) {
-                toCell.tryPlaceUnit(unitToPush, true);
-            }
+        Cell fromCell = getCell(unit);
+
+        if (fromCell == null) {
+            return; // TODO: Exception.
+        }
+
+        Cell toCell = getCell(unit.getAdjacent(direction));
+
+        if (toCell == null) {
+            return; // TODO: Exception.
+        }
+
+        Unit unitToPush = fromCell.popUnit();
+        if (unitToPush != null) {
+            toCell.tryPlaceUnit(unitToPush, true);
+        }
+    }
+
+    private void ensureInitialized() {
+        if (!initialized) {
+            throw new SingletonNotInitializedException(GameMap.class);
         }
     }
 }
