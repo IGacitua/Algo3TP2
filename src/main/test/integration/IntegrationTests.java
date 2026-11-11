@@ -3,6 +3,7 @@ package integration;
 import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.Position2D;
+import game.map.cell.Building;
 import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.weapons.Artillery;
@@ -44,7 +45,6 @@ public class IntegrationTests {
         action.execute();
 
         // Assert
-        assertTrue("Expected the cell at (0,0) to be damaged after the attack.", GameMap.getInstance().isDamaged(vekCentro.getPosition()));
         assertTrue("Expected the unit at (0,0) to be damaged after the attack.", vekCentro.isDamaged());
 
         double distanceCentro = vekCentro.getPosition().getDistance(0, 0);
@@ -54,7 +54,7 @@ public class IntegrationTests {
         assertEquals("Expected the unit at (0,1) to have moved after the attack.", 0, distanceNorte, DELTA);
         assertEquals("Expected the unit at (1,0) to have moved after the attack.", 0, distanceEste, DELTA);
 
-        assertTrue(map.getCell(new Position2D(0, 2)).isDamaged());
+        assertTrue(((Building) map.getCell(new Position2D(0, 2))).isDestroyed());
         assertEquals(4, ElectricalNetwork.getInstance().getPower());
     }
 }

@@ -8,16 +8,16 @@ import game.units.weapons.Weapon;
 
 public class Unit {
     private final Weapon weapon;
-    private boolean isDamaged = false;
     private final Position2D position;
+    private boolean isDamaged = false;
 
     public Unit(Position2D position, Weapon weapon) {
         this.weapon = weapon;
         this.position = position;
-        GameMap.getInstance().placeUnit(this,position);
+        GameMap.getInstance().placeUnit(this, position);
     }
 
-    public UnitAction getAttack(Position2D target){
+    public UnitAction getAttack(Position2D target) {
         return new AttackAction(weapon, target);
     }
 
@@ -25,7 +25,7 @@ public class Unit {
         return position;
     }
 
-    public boolean isDamaged(){
+    public boolean isDamaged() {
         return isDamaged;
     }
 
@@ -35,5 +35,13 @@ public class Unit {
 
     public void moveTo(Position2D newPosition) {
         position.moveTo(newPosition.getX(), newPosition.getY());
+    }
+
+    public boolean canMoveToWater() {
+        throw new UnsupportedOperationException("Not yet implemented"); // TODO
+    }
+
+    public void contaminate() {
+        throw new UnsupportedOperationException("Not yet implemented"); // TODO
     }
 }

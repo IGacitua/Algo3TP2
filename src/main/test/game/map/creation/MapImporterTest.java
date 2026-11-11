@@ -88,7 +88,7 @@ public class MapImporterTest {
     }
 
     @Test
-    public void validMapFileCallsCellFactoryOne() throws IOException {
+    public void validMapFileCallsCellFactoryOne() throws IOException, InvalidMapFileException {
         // Arrange
         String map = "A B C";
         FileHandler fileHandler = Mockito.mock(FileHandler.class);
@@ -105,13 +105,13 @@ public class MapImporterTest {
         }
 
         // Assert
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("A");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("B");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("C");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("A");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("B");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("C");
     }
 
     @Test
-    public void validMapFileCallsCellFactoryTwo() throws IOException {
+    public void validMapFileCallsCellFactoryTwo() throws IOException, InvalidMapFileException {
         // Arrange
         String map = "A B C" + "\n" + "D E F";
         FileHandler fileHandler = Mockito.mock(FileHandler.class);
@@ -128,11 +128,11 @@ public class MapImporterTest {
         }
 
         // Assert
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("A");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("B");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("C");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("D");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("E");
-        Mockito.verify(cellFactory, Mockito.times(1)).fromID("F");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("A");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("B");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("C");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("D");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("E");
+        Mockito.verify(cellFactory, Mockito.times(1)).createFromId("F");
     }
 }

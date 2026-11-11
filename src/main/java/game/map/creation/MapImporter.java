@@ -1,6 +1,6 @@
 package game.map.creation;
 
-import game.map.Cell;
+import game.map.cell.Cell;
 import game.utils.FileHandler;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class MapImporter {
                 if (cellID.isEmpty()) {
                     throw new InvalidMapFileException("Empty cell ID found in the map file.");
                 }
-                map[i][j] = cellFactory.fromID(cellID);
+                map[i][j] = cellFactory.createFromId(cellID);
             }
         }
 

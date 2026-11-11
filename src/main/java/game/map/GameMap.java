@@ -1,5 +1,8 @@
 package game.map;
 
+import game.map.cell.Building;
+import game.map.cell.Cell;
+import game.map.cell.Ground;
 import game.units.Unit;
 
 import java.util.ArrayList;
@@ -10,48 +13,43 @@ public class GameMap {
 
     private List<Cell> cells;
 
-    public static GameMap getInstance(){
-        return instance;
-    }
-
-    private GameMap(){
+    private GameMap() {
         Initialize();
     }
 
-    private void Initialize(){
+    public static GameMap getInstance() {
+        return instance;
+    }
+
+    private void Initialize() {
         cells = new ArrayList<>();
 
-        cells.add(new Cell(new Position2D(0,0)));
-        cells.add(new Cell(new Position2D(0,1)));
-        cells.add(new Cell(new Position2D(0,2)));
-        cells.add(new Cell(new Position2D(1,0)));
-        cells.add(new Cell(new Position2D(2,0)));
+        cells.add(new Ground(new Position2D(0, 0)));
+        cells.add(new Ground(new Position2D(0, 1)));
+        cells.add(new Ground(new Position2D(0, 2)));
+        cells.add(new Ground(new Position2D(1, 0)));
+        cells.add(new Ground(new Position2D(2, 0)));
     }
 
-    public boolean placeUnit(Unit unit, Position2D position){
+    public boolean placeUnit(Unit unit, Position2D position) {
         Cell cell = getCell(position);
-        if (cell != null){
-            return cell.placeUnit(unit, false);
+        if (cell != null) {
+            return cell.tryPlaceUnit(unit, false);
         }
         return false;
     }
 
-    public void placeBuilding(Position2D position){
+    public void placeBuilding(Position2D position) {
         Cell cell = getCell(position);
-        cell.makeBuilding();
-    }
-
-    public boolean isDamaged(Position2D position){
-        Cell cell = getCell(position);
-        if (cell != null){
-            return cell.isDamaged();
+        if (cell != null) {
+            cells.remove(cell);
         }
-        return false;
+        cells.add(new Building(position));
     }
 
     public Cell getCell(Position2D position) {
-        for(Cell cell : cells){
-            if (cell.position.getDistance(position) == 0){
+        for (Cell cell : cells) {
+            if (cell.hasPosition(position)) {
                 return cell;
             }
         }
@@ -61,7 +59,7 @@ public class GameMap {
     public void damage(Position2D target) {
         Cell cell = getCell(target);
         if (cell != null) {
-            cell.damage();
+            cell.tryDamage();
         }
     }
 
@@ -72,7 +70,7 @@ public class GameMap {
         if (fromCell != null && toCell != null) {
             Unit unitToPush = fromCell.popUnit();
             if (unitToPush != null) {
-                toCell.placeUnit(unitToPush, true);
+                toCell.tryPlaceUnit(unitToPush, true);
             }
         }
     }

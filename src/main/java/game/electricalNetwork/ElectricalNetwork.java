@@ -5,21 +5,22 @@ public class ElectricalNetwork {
 
     private int power;
 
-    public static ElectricalNetwork getInstance() {
-        return instance;
-    }
-
     private ElectricalNetwork() {
         power = 5;
     }
 
-    public int getPower(){
+    public static ElectricalNetwork getInstance() {
+        return instance;
+    }
+
+    public int getPower() {
         return power;
     }
 
-    public void reducePower() {
-        if (power > 0){
-            power--;
+    public void reducePower(int amount) {
+        power -= amount;
+        if (power < 0) {
+            power = 0;
         }
     }
 }
