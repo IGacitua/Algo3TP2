@@ -26,11 +26,6 @@ public class Position2D {
         this.y = y;
     }
 
-    public void moveDelta(int x, int y) {
-        this.x += x;
-        this.y += y;
-    }
-
     public double getDistance(Position2D other) {
         return other.getDistance(getX(), getY());
     }

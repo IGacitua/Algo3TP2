@@ -4,7 +4,7 @@ import game.map.Position2D;
 
 public class South implements OrthogonalDirection {
     public void movePosition(Position2D position) {
-        position.moveDelta(deltaX(), deltaY());
+        position.moveTo(deltaX(), deltaY());
     }
 
     public int deltaX() {

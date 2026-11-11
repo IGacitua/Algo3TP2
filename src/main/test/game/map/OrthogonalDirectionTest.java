@@ -43,7 +43,7 @@ public class OrthogonalDirectionTest {
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveDelta(1, 0);
+        Mockito.verify(position).moveTo(1, 0);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class OrthogonalDirectionTest {
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveDelta(0, -1);
+        Mockito.verify(position).moveTo(0, -1);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class OrthogonalDirectionTest {
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveDelta(0, 1);
+        Mockito.verify(position).moveTo(0, 1);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class OrthogonalDirectionTest {
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveDelta(-1, 0);
+        Mockito.verify(position).moveTo(-1, 0);
     }
 
     @Test
@@ -199,6 +199,6 @@ public class OrthogonalDirectionTest {
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position, Mockito.times(0)).moveDelta(Mockito.any(int.class), Mockito.any(int.class));
+        Mockito.verify(position, Mockito.times(0)).moveTo(Mockito.any(int.class), Mockito.any(int.class));
     }
 }
