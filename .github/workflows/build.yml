@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Start services
         run: scripts/start_services.sh
       - name: Run test suite
@@ -13,7 +13,7 @@ jobs:
       - name: Run mutation test
         run: docker compose -f docker/docker-compose.yaml exec -T app bash scripts/run_mutation_test.sh
       - name: Upload coverage report
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
 
   package:
     runs-on: ubuntu-latest
@@ -21,7 +21,7 @@ jobs:
     if: contains(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Start services
         run: scripts/start_services.sh
       - name: Package
