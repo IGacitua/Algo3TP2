@@ -31,9 +31,10 @@ public class Position2D {
     }
 
     public double getDistance(int x, int y) {
-        int dx = getX() - x;
-        int dy = getY() - y;
-        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        // Hypot is a helper that calculates the square root of the sum of squares
+        // AKA distance.
+        // This avoids large-number overflow and is more accurate
+        return Math.hypot(((double) getX() - x), (double) getY() - y);
     }
 
     public OrthogonalDirection getDirectionTo(Position2D other) {
