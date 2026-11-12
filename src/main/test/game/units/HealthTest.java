@@ -39,4 +39,39 @@ public class HealthTest {
         assertEquals(0, health.getCurrent());
         assertFalse(health.isAlive());
     }
+
+    @Test
+    public void testConsecutiveDamageAccumulates() {
+        // Arrange
+        Health health = new Health(5);
+
+        // Act
+        health.receiveDamage(2);
+        health.receiveDamage(1);
+
+        // Assert
+        assertEquals(2, health.getCurrent());
+        assertTrue(health.isAlive());
+    }
+
+    @Test
+    public void testHealthCannotStartWithInvalidMaximum() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Health(0);
+        });
+    }
+
+    @Test
+    public void testNegativeDamageIsRejected() {
+        // Arrange
+        Health health = new Health(3);
+
+        // Act + Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            health.receiveDamage(-2);
+        });
+
+        // The health should be the same as before the failed action
+        assertEquals(3, health.getCurrent());
+    }
 }

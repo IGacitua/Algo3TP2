@@ -10,10 +10,12 @@ public class Unit {
     private final Weapon weapon;
     private final Position2D position;
     private boolean isDamaged = false;
+    private final Health health;
 
     public Unit(Position2D position, Weapon weapon) {
         this.weapon = weapon;
         this.position = position;
+        this.health = new Health(3);
         if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
             throw new IllegalArgumentException("Cannot place unit at the specified position: " + position);
         }
@@ -31,7 +33,12 @@ public class Unit {
         return isDamaged;
     }
 
+    public int getCurrentHealth() {
+        return health.getCurrent();
+    }
+
     public void damage() {
+        health.receiveDamage(1);
         isDamaged = true;
     }
 
