@@ -1,9 +1,10 @@
 package game.units.actions;
 
+import game.map.GameMap;
 import game.map.Position2D;
 import game.units.weapons.Weapon;
 
-public class AttackAction extends UnitAction {
+public class AttackAction implements UnitAction {
     private final Weapon weapon;
     private final Position2D target;
 
@@ -13,7 +14,7 @@ public class AttackAction extends UnitAction {
     }
 
     @Override
-    public void execute() {
+    public void execute(GameMap map) {
         weapon.attack(target);
     }
 }
