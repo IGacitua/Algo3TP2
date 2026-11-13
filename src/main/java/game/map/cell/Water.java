@@ -10,6 +10,11 @@ public class Water extends Cell {
     }
 
     @Override
+    public String shortName() {
+        return "W";
+    }
+
+    @Override
     protected boolean canDamage() {
         return containedUnit != null;
     }

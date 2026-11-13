@@ -33,7 +33,7 @@ public class SquadWeaponsIntegrationTest {
         }
         Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
-        GameMap.getInstance().Initialize(mockMapImporter, "");
+        GameMap.getInstance().initialize(mockMapImporter, "");
     }
 
     /*

@@ -12,6 +12,10 @@ public class Cell {
         this.position = position;
     }
 
+    public String shortName() {
+        return "G";
+    }
+
     public void tryDamage() {
         if (!canDamage()) {
             return;

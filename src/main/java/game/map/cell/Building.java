@@ -15,6 +15,11 @@ public class Building extends Cell {
     }
 
     @Override
+    public String shortName() {
+        return "B";
+    }
+
+    @Override
     protected boolean canDamage() {
         return containedUnit != null || !isDestroyed;
     }

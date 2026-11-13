@@ -10,6 +10,11 @@ public class Acid extends Cell {
     }
 
     @Override
+    public String shortName() {
+        return "A";
+    }
+
+    @Override
     protected void onUnitPlaced(Unit unit, boolean pushed) {
         unit.contaminate();
     }
