@@ -2,6 +2,7 @@ package game.units;
 
 import game.map.GameMap;
 import game.map.Position2D;
+import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.UnitAction;
 import game.units.weapons.Weapon;
@@ -9,15 +10,19 @@ import game.units.weapons.Weapon;
 public class Unit {
     private final Weapon weapon;
     private final Position2D position;
-    private boolean isDamaged = false;
     private final Health health;
+    private boolean isDamaged = false;
 
     public Unit(Position2D position, Weapon weapon) {
         this.weapon = weapon;
         this.position = position;
         this.health = new Health(3);
-        if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
-            throw new IllegalArgumentException("Cannot place unit at the specified position: " + position);
+        try {
+            if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
+                throw new IllegalArgumentException("Cannot place unit at the specified position: " + position);
+            }
+        } catch (PositionOutOfBoundsException e) {
+            throw new RuntimeException(e); // TODO: Resolve properly
         }
     }
 
