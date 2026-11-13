@@ -26,18 +26,18 @@ public class CellGrid {
         matrix[row][col] = cell;
     }
 
-    public Cell getCell(Position2D position) {
+    public Cell getCell(Position2D position) throws PositionOutOfBoundsException {
         int row = position.getX();
         int col = position.getY();
         return getCell(row, col);
     }
 
-    public Cell getCell(int row, int col) {
+    public Cell getCell(int row, int col) throws PositionOutOfBoundsException {
         if (row < 0 || row >= matrix.length) {
-            throw new IndexOutOfBoundsException("Row index out of bounds: " + row);
+            throw new PositionOutOfBoundsException(row, col);
         }
         if (col < 0 || col >= matrix[row].length) {
-            throw new IndexOutOfBoundsException("Column index out of bounds: " + col);
+            throw new PositionOutOfBoundsException(row, col);
         }
         return matrix[row][col];
     }

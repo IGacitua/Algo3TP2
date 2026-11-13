@@ -5,7 +5,7 @@ import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
-import game.map.direction.OrthogonalDirection;
+import game.map.direction.*;
 import game.units.Unit;
 
 public class GameMap {
@@ -26,56 +26,54 @@ public class GameMap {
         initialized = true;
     }
 
-    public boolean tryPlaceUnit(Unit unit, Position2D position) {
+    public boolean tryPlaceUnit(Unit unit, Position2D position) throws PositionOutOfBoundsException {
         ensureInitialized();
-
-        Cell cell = getCell(position);
-        if (cell != null) {
-            return cell.tryPlaceUnit(unit, false);
-        }
-        return false;
+        return getCell(position).tryPlaceUnit(unit, false);
     }
 
     /// Temporary method for testing.
     public void placeBuilding(Position2D position) {
         ensureInitialized();
-
         grid.replaceCell(new Building(position), position);
     }
 
-    public Cell getCell(Position2D position) {
+    public Cell getCell(Position2D position) throws PositionOutOfBoundsException {
         ensureInitialized();
-
         return grid.getCell(position);
     }
 
-    public void damage(Position2D target) {
+    public void damage(Position2D target) throws PositionOutOfBoundsException {
         ensureInitialized();
-
-        Cell cell = getCell(target);
-        if (cell != null) {
-            cell.tryDamage();
-        }
+        getCell(target).tryDamage();
     }
 
-    public void pushUnit(Position2D unit, OrthogonalDirection direction) {
+    public void pushUnit(Position2D unit, OrthogonalDirection direction) throws PositionOutOfBoundsException {
         ensureInitialized();
 
         Cell fromCell = getCell(unit);
-
-        if (fromCell == null) {
-            return; // TODO: Exception.
-        }
-
         Cell toCell = getCell(unit.getAdjacent(direction));
-
-        if (toCell == null) {
-            return; // TODO: Exception.
-        }
 
         Unit unitToPush = fromCell.popUnit();
         if (unitToPush != null) {
             toCell.tryPlaceUnit(unitToPush, true);
+        }
+    }
+
+    public void pushAllAdjacent(Position2D target) {
+        ensureInitialized();
+
+        pushAway(target, new North());
+        pushAway(target, new South());
+        pushAway(target, new East());
+        pushAway(target, new West());
+    }
+
+    private void pushAway(Position2D target, OrthogonalDirection direction) {
+        try {
+            Position2D adjacent = target.getAdjacent(direction);
+            pushUnit(adjacent, direction);
+        } catch (PositionOutOfBoundsException e) {
+            // Skip cells that are out of bounds.
         }
     }
 
