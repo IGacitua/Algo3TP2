@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 public class FileHandler {
 
+    private static final Path ROOT = Path.of("").toAbsolutePath();
     private static FileHandler instance;
 
     private FileHandler() {
@@ -20,14 +21,12 @@ public class FileHandler {
 
     /// Reads the content of a file at the specified path and returns it as a String.
     public String readFile(String filePath) throws IOException {
-        Path path = Path.of(filePath);
-        return Files.readString(path);
+        return Files.readString(ROOT.resolve(filePath));
     }
 
     /// Writes the specified content to a file at the given path. </br>
     /// Overwrites the file if it already exists.
     public void writeFile(String filePath, String content) throws IOException {
-        Path path = Path.of(filePath);
-        Files.writeString(path, content);
+        Files.writeString(ROOT.resolve(filePath), content);
     }
 }

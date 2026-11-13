@@ -10,6 +10,11 @@ public class Mountain extends Cell {
     }
 
     @Override
+    public String shortName() {
+        return "M";
+    }
+
+    @Override
     protected boolean canDamage() {
         return false;
     }

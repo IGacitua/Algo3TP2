@@ -52,7 +52,7 @@ public class IntegrationTests {
         final Position2D buildingPosition = new Position2D(targetX, targetY - 2); // where the north unit lands
 
         GameMap map = GameMap.getInstance();
-        map.Initialize(mockMapImporter, "");
+        map.initialize(mockMapImporter, "");
         map.placeBuilding(buildingPosition);
 
         // Arrange: Units

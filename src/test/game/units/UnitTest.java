@@ -25,7 +25,7 @@ public class UnitTest {
         Mockito.when(importer.importMap(Mockito.anyString()))
                 .thenReturn(cells);
 
-        GameMap.getInstance().Initialize(importer, "");
+        GameMap.getInstance().initialize(importer, "");
 
         // Arrange: creates the unit
         Unit unit = new Unit(new Position2D(0, 0), null);

@@ -20,26 +20,25 @@ public class MapImporter {
             String mapData = fileHandler.readFile(filePath);
             return parseData(mapData);
         } catch (IOException e) {
-            throw new NoMapFileException();
+            throw new NoMapFileException(filePath);
         }
     }
 
     private Cell[][] parseData(String mapData) throws InvalidMapFileException {
-        String[] rows = mapData.split("\n");
-        int rowCount = rows.length;
-        int colCount = getColumnCount(rows);
+        String[] rows = mapData.split("\\R"); // \\R matches any line break.
+        int height = rows.length;
+        int width = getColumnCount(rows);
 
-        Cell[][] map = new Cell[rowCount][colCount];
+        Cell[][] map = new Cell[width][height]; // Indexed [x][y]
 
-        for (int y = 0; y < rowCount; y++) {
-            String row = rows[y];
-            String[] cellIDs = row.split(" ");
-            for (int x = 0; x < colCount; x++) {
+        for (int y = 0; y < height; y++) {
+            String[] cellIDs = rows[y].split(" ");
+            for (int x = 0; x < width; x++) {
                 String cellID = cellIDs[x];
                 if (cellID.isEmpty()) {
                     throw new InvalidMapFileException("Empty cell ID found in the map file.");
                 }
-                map[y][x] = cellFactory.createFromId(cellID, new Position2D(x, y));
+                map[x][y] = cellFactory.createFromId(cellID, new Position2D(x, y));
             }
         }
 

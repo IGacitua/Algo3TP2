@@ -21,7 +21,7 @@ public class GameMap {
         return instance;
     }
 
-    public void Initialize(MapImporter importer, String mapFilePath) throws InvalidMapFileException {
+    public void initialize(MapImporter importer, String mapFilePath) throws InvalidMapFileException {
         grid = new CellGrid(importer.importMap(mapFilePath));
         initialized = true;
     }
