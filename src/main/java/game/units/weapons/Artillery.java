@@ -10,7 +10,7 @@ import game.map.direction.West;
 public class Artillery extends Weapon {
 
     @Override
-    public void attack(Position2D target) {
+    public void attack(Position2D target, GameMap map) {
 
         GameMap.getInstance().damage(target);
 

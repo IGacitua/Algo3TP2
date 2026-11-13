@@ -1,8 +1,9 @@
 package game.units.weapons;
 
+import game.map.GameMap;
 import game.map.Position2D;
 import game.units.Unit;
 
 public abstract class Weapon {
-    public abstract void attack(Position2D target);
+    public abstract void attack(Position2D target, GameMap map);
 }

@@ -15,6 +15,6 @@ public class AttackAction implements UnitAction {
 
     @Override
     public void execute(GameMap map) {
-        weapon.attack(target);
+        weapon.attack(target, map);
     }
 }
