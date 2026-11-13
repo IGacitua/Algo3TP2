@@ -3,6 +3,7 @@ package integration;
 import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.Position2D;
+import game.map.PositionOutOfBoundsException;
 import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
@@ -30,7 +31,7 @@ public class IntegrationTests {
      *   Descuento de la Red Eléctrica.
      */
     @Test
-    public void TestArtilleryShootsVek() throws InvalidMapFileException {
+    public void TestArtilleryShootsVek() throws InvalidMapFileException, PositionOutOfBoundsException {
         // Arrange: Network
 
         ElectricalNetwork.getInstance().reset();
