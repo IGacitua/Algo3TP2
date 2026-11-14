@@ -8,9 +8,9 @@ Entrega 1:
 - [X] Verificar que el Cañón impacte a la primera unidad u obstáculo en línea recta y no a las que están detrás.
 - [ ] Verificar que la Artillería pueda atacar por encima de obstáculos, que no pueda atacar casillas adyacentes y que
   dañe la casilla objetivo y empuje hacia afuera a las unidades de las 4 casillas adyacentes.
-- [ ] Verificar que un Mech no pueda moverse ni atacar dos veces en el mismo turno.
-- [ ] Verificar que se pueda deshacer el movimiento de un Mech que todavía no atacó y que vuelva a su posición anterior.
-- [ ] Verificar que no se pueda deshacer un movimiento después de que el Mech atacó, ni más de una vez por turno.
+- [X] Verificar que un Mech no pueda moverse ni atacar dos veces en el mismo turno.
+- [X] Verificar que se pueda deshacer el movimiento de un Mech que todavía no atacó y que vuelva a su posición anterior.
+- [X] Verificar que no se pueda deshacer un movimiento después de que el Mech atacó, ni más de una vez por turno.
 
 Entrega 2:
 
