@@ -12,7 +12,7 @@ public class Cell {
         this.position = position;
     }
 
-    public String shortName() {
+    public String cellTypeId() {
         return "G";
     }
 

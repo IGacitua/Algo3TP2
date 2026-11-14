@@ -28,7 +28,7 @@ public class MapTests {
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 try {
-                    System.out.print(map.getCell(new Position2D(x, y)).shortName() + " ");
+                    System.out.print(map.getCell(new Position2D(x, y)).cellTypeId() + " ");
                 } catch (PositionOutOfBoundsException e) {
                     Assert.fail("Position out of bounds: " + e.getMessage());
                 }
@@ -41,18 +41,18 @@ public class MapTests {
                 try {
                     Cell c = map.getCell(new Position2D(x, y));
                     if (x == 0 || y == 0 || x == 7 || y == 7) {
-                        Assert.assertEquals("Expected mountain at " + x + ", " + y + ".", Mountain.class.getSimpleName(), c.getClass().getSimpleName());
+                        Assert.assertEquals("Expected mountain at " + x + ", " + y + ".", new Mountain(null).cellTypeId(), c.cellTypeId());
                     } else if (y == 1 || y == 2) {
-                        Assert.assertEquals("Expected water at " + x + ", " + y + ".", Water.class.getSimpleName(), c.getClass().getSimpleName());
+                        Assert.assertEquals("Expected water at " + x + ", " + y + ".", new Water(null).cellTypeId(), c.cellTypeId());
                     } else if (y == 3 || y == 4) {
-                        Assert.assertEquals("Expected generic cell at " + x + ", " + y + ".", Cell.class.getSimpleName(), c.getClass().getSimpleName());
+                        Assert.assertEquals("Expected generic cell at " + x + ", " + y + ".", new Cell(null).cellTypeId(), c.cellTypeId());
                     } else if (y == 5 || y == 6) {
                         if (x == 1 || x == 2) {
-                            Assert.assertEquals("Expected acid at " + x + ", " + y + ".", Acid.class.getSimpleName(), c.getClass().getSimpleName());
+                            Assert.assertEquals("Expected acid at " + x + ", " + y + ".", new Acid(null).cellTypeId(), c.cellTypeId());
                         } else if (x == 3 || x == 4) {
-                            Assert.assertEquals("Expected generic cell at " + x + ", " + y + ".", Cell.class.getSimpleName(), c.getClass().getSimpleName());
+                            Assert.assertEquals("Expected generic cell at " + x + ", " + y + ".", new Cell(null).cellTypeId(), c.cellTypeId());
                         } else if (x == 5 || x == 6) {
-                            Assert.assertEquals("Expected building at " + x + ", " + y + ".", Building.class.getSimpleName(), c.getClass().getSimpleName());
+                            Assert.assertEquals("Expected building at " + x + ", " + y + ".", new Building(null).cellTypeId(), c.cellTypeId());
                         }
                     }
                 } catch (PositionOutOfBoundsException e) {

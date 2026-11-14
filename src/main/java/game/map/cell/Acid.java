@@ -10,7 +10,7 @@ public class Acid extends Cell {
     }
 
     @Override
-    public String shortName() {
+    public String cellTypeId() {
         return "A";
     }
 
