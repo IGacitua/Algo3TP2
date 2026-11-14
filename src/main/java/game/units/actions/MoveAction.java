@@ -21,7 +21,7 @@ public class MoveAction extends UnitAction {
      */
     @Override
     public void execute() {
-        if (!GameMap.getInstance().tryPlaceUnit(this.unit, this.destination)) { // TODO: probablemente hay que usar otro metodo para mover la unidad.
+        if (!GameMap.getInstance().tryPlaceUnit(this.unit, this.destination)) { // TODO: Ezequiel (probablemente hay que usar otro metodo para mover la unidad).
             throw new IllegalStateException("Unit cannot be placed at destination: " + this.destination);
         }
         this.unit.moveTo(this.destination);
