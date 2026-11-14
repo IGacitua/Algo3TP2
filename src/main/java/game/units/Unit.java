@@ -14,15 +14,22 @@ public class Unit {
     private boolean isDamaged = false;
 
     public Unit(Position2D position, Weapon weapon) {
+        this(position, weapon, 3);
+    }
+
+    public Unit(Position2D position, Weapon weapon, int maximumHealth) {
         this.weapon = weapon;
         this.position = position;
-        this.health = new Health(3);
+        this.health = new Health(maximumHealth);
+
         try {
             if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
-                throw new IllegalArgumentException("Cannot place unit at the specified position: " + position);
+                throw new IllegalArgumentException(
+                        "Cannot place unit at the specified position: " + position
+                );
             }
         } catch (PositionOutOfBoundsException e) {
-            throw new RuntimeException(e); // TODO: Resolve properly
+            throw new RuntimeException(e);
         }
     }
 
