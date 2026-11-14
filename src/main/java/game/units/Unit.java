@@ -6,6 +6,8 @@ import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.UnitAction;
 import game.units.weapons.Weapon;
+import game.units.movement.MovementType;
+import game.units.movement.GroundedMovement;
 
 public class Unit {
     private final Weapon weapon;
@@ -13,15 +15,27 @@ public class Unit {
     private final Health health;
     private boolean isDamaged = false;
     private boolean contaminated = false;
+    private final MovementType movementType;
 
     public Unit(Position2D position, Weapon weapon) {
-        this(position, weapon, 3);
+        this(position, weapon, 3, new GroundedMovement());
     }
 
     public Unit(Position2D position, Weapon weapon, int maximumHealth) {
+        this(position, weapon, maximumHealth, new GroundedMovement());
+    }
+
+    public Unit(Position2D position, Weapon weapon, int maximumHealth,
+                MovementType movementType) {
+
+        if (movementType == null) {
+            throw new IllegalArgumentException("Movement type cannot be null");
+        }
+
         this.weapon = weapon;
         this.position = position;
         this.health = new Health(maximumHealth);
+        this.movementType = movementType;
 
         try {
             if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
@@ -74,14 +88,20 @@ public class Unit {
     }
 
     public boolean canMoveToWater() {
-        throw new UnsupportedOperationException("Not yet implemented"); // TODO
+        return movementType.canMoveToWater();
     }
 
     public void contaminate() {
-        contaminated = true;
+        if (movementType.canBeContaminated()) {
+            contaminated = true;
+        }
     }
 
     public void removeContamination() {
         contaminated = false;
+    }
+
+    public void kill() {
+        health.kill();
     }
 }

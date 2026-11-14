@@ -37,5 +37,10 @@ public class Health {
     public int getMaximum() {
         return maximum;
     }
+
+    public void kill() {
+        current = 0;
+    }
 }
+
 

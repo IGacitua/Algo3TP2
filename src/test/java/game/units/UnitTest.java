@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import game.units.movement.FlyingMovement;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -117,5 +119,71 @@ public class UnitTest {
 
         // Assert
         assertEquals(8, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testFlyingUnitCannotBeContaminated() {
+        Unit unit = new Unit(
+                new Position2D(0, 0),
+                null,
+                10,
+                new FlyingMovement()
+        );
+
+        unit.contaminate();
+        unit.damage(2);
+
+        assertEquals(8, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testFlyingUnitCanMoveToWater() {
+        Unit unit = new Unit(
+                new Position2D(0, 0),
+                null,
+                3,
+                new FlyingMovement()
+        );
+
+        assertTrue(unit.canMoveToWater());
+    }
+
+    @Test
+    public void testGroundedUnitCannotMoveToWater() {
+        Unit unit = new Unit(
+                new Position2D(0, 0),
+                null,
+                3
+        );
+
+        assertFalse(unit.canMoveToWater());
+    }
+
+    @Test
+    public void testGroundedUnitCanBeContaminated() {
+        Unit unit = new Unit(
+                new Position2D(0, 0),
+                null,
+                10
+        );
+
+        unit.contaminate();
+        unit.damage(2);
+
+        assertEquals(6, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testUnitCanBeKilledInstantly() {
+        Unit unit = new Unit(
+                new Position2D(0, 0),
+                null,
+                10
+        );
+
+        unit.kill();
+
+        assertEquals(0, unit.getCurrentHealth());
+        assertFalse(unit.isAlive());
     }
 }
