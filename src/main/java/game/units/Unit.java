@@ -6,23 +6,45 @@ import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.UnitAction;
 import game.units.weapons.Weapon;
+import game.units.movement.MovementType;
+import game.units.movement.GroundedMovement;
 
 public class Unit {
     private final Weapon weapon;
     private final Position2D position;
     private final Health health;
     private boolean isDamaged = false;
+    private boolean contaminated = false;
+    private final MovementType movementType;
 
     public Unit(Position2D position, Weapon weapon) {
+        this(position, weapon, 3, new GroundedMovement());
+    }
+
+    public Unit(Position2D position, Weapon weapon, int maximumHealth) {
+        this(position, weapon, maximumHealth, new GroundedMovement());
+    }
+
+    public Unit(Position2D position, Weapon weapon, int maximumHealth,
+                MovementType movementType) {
+
+        if (movementType == null) {
+            throw new IllegalArgumentException("Movement type cannot be null");
+        }
+
         this.weapon = weapon;
         this.position = position;
-        this.health = new Health(3);
+        this.health = new Health(maximumHealth);
+        this.movementType = movementType;
+
         try {
             if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
-                throw new IllegalArgumentException("Cannot place unit at the specified position: " + position);
+                throw new IllegalArgumentException(
+                        "Cannot place unit at the specified position: " + position
+                );
             }
         } catch (PositionOutOfBoundsException e) {
-            throw new RuntimeException(e); // TODO: Resolve properly
+            throw new RuntimeException(e);
         }
     }
 
@@ -43,8 +65,22 @@ public class Unit {
     }
 
     public void damage() {
-        health.receiveDamage(1);
+        damage(1);
+    }
+
+    public void damage(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+
+        int effectiveDamage = contaminated ? amount * 2 : amount;
+
+        health.receiveDamage(effectiveDamage);
         isDamaged = true;
+    }
+
+    public boolean isAlive() {
+        return health.isAlive();
     }
 
     public void moveTo(Position2D newPosition) {
@@ -52,10 +88,20 @@ public class Unit {
     }
 
     public boolean canMoveToWater() {
-        throw new UnsupportedOperationException("Not yet implemented"); // TODO
+        return movementType.canMoveToWater();
     }
 
     public void contaminate() {
-        throw new UnsupportedOperationException("Not yet implemented"); // TODO
+        if (movementType.canBeContaminated()) {
+            contaminated = true;
+        }
+    }
+
+    public void removeContamination() {
+        contaminated = false;
+    }
+
+    public void kill() {
+        health.kill();
     }
 }

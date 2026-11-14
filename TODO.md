@@ -18,7 +18,7 @@ Entrega 2:
   colisión.
 - [ ] Verificar que el daño a un edificio reduzca la Red Eléctrica en 1 punto.
 - [ ] Verificar que un Vek terrestre empujado al Agua muera, que el Avispón no, y que un Mech en el Agua no pueda atacar.
-- [ ] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
+- [X] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
   Avispón no se contamine.
 - [ ] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
 - [ ] Verificar que al deshacer el movimiento de un Mech que terminó sobre Ácido, el Mech deje de estar Contaminado.
