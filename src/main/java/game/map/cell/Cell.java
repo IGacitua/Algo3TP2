@@ -62,4 +62,8 @@ public class Cell {
     public boolean hasPosition(Position2D position) {
         return this.position.getDistance(position) == 0;
     }
+
+    public boolean hasUnit() {
+        return containedUnit != null;
+    }
 }

@@ -4,8 +4,8 @@ Entrega 1:
   las posiciones correctas.
 - [ ] Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento, sin atravesar obstáculos ni
   otras unidades.
-- [ ] Verificar que el Puño cause 2 de daño a una unidad adyacente y la empuje 1 casilla en la dirección del golpe.
-- [ ] Verificar que el Cañón impacte a la primera unidad u obstáculo en línea recta y no a las que están detrás.
+- [X] Verificar que el Puño cause 2 de daño a una unidad adyacente y la empuje 1 casilla en la dirección del golpe.
+- [X] Verificar que el Cañón impacte a la primera unidad u obstáculo en línea recta y no a las que están detrás.
 - [ ] Verificar que la Artillería pueda atacar por encima de obstáculos, que no pueda atacar casillas adyacentes y que
   dañe la casilla objetivo y empuje hacia afuera a las unidades de las 4 casillas adyacentes.
 - [ ] Verificar que un Mech no pueda moverse ni atacar dos veces en el mismo turno.
