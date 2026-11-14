@@ -12,6 +12,7 @@ public class Unit {
     private final Position2D position;
     private final Health health;
     private boolean isDamaged = false;
+    private boolean contaminated = false;
 
     public Unit(Position2D position, Weapon weapon) {
         this(position, weapon, 3);
@@ -50,8 +51,22 @@ public class Unit {
     }
 
     public void damage() {
-        health.receiveDamage(1);
+        damage(1);
+    }
+
+    public void damage(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+
+        int effectiveDamage = contaminated ? amount * 2 : amount;
+
+        health.receiveDamage(effectiveDamage);
         isDamaged = true;
+    }
+
+    public boolean isAlive() {
+        return health.isAlive();
     }
 
     public void moveTo(Position2D newPosition) {
@@ -63,6 +78,10 @@ public class Unit {
     }
 
     public void contaminate() {
-        throw new UnsupportedOperationException("Not yet implemented"); // TODO
+        contaminated = true;
+    }
+
+    public void removeContamination() {
+        contaminated = false;
     }
 }

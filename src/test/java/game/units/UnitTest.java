@@ -6,7 +6,7 @@ import game.map.Position2D;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -51,5 +51,71 @@ public class UnitTest {
 
         // Assert
         assertEquals(4, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testUnitCanReceiveDifferentAmountsOfDamage() {
+        // Arrange
+        Unit unit = new Unit(new Position2D(0, 0), null, 5);
+
+        // Act
+        unit.damage(2);
+
+        // Assert
+        assertEquals(3, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testUnitDiesWhenHealthReachesZero() {
+        // Arrange
+        Unit unit = new Unit(new Position2D(0, 0), null, 3);
+
+        // Act
+        unit.damage(3);
+
+        // Assert
+        assertEquals(0, unit.getCurrentHealth());
+        assertFalse(unit.isAlive());
+    }
+
+    @Test
+    public void testContaminatedUnitReceivesDoubleDamage() {
+        // Arrange
+        Unit unit = new Unit(new Position2D(0, 0), null, 10);
+
+        // Act
+        unit.contaminate();
+        unit.damage(2);
+
+        // Assert
+        assertEquals(6, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testContaminationDoesNotStack() {
+        // Arrange
+        Unit unit = new Unit(new Position2D(0, 0), null, 10);
+
+        // Act
+        unit.contaminate();
+        unit.contaminate();
+        unit.damage(2);
+
+        // Assert
+        assertEquals(6, unit.getCurrentHealth());
+    }
+
+    @Test
+    public void testRemovingContaminationRestoresNormalDamage() {
+        // Arrange
+        Unit unit = new Unit(new Position2D(0, 0), null, 10);
+
+        // Act
+        unit.contaminate();
+        unit.removeContamination();
+        unit.damage(2);
+
+        // Assert
+        assertEquals(8, unit.getCurrentHealth());
     }
 }
