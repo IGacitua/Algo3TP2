@@ -4,6 +4,7 @@ import game.map.GameMap;
 import game.map.Position2D;
 import game.units.Unit;
 
+
 public class MoveAction implements UnitAction {
 	private Unit unit;
 	private Position2D origin;
@@ -15,17 +16,39 @@ public class MoveAction implements UnitAction {
 		this.destination = destination;
 	}
 	
+	/**
+     * Execute the move action by moving the unit to the destination cell.
+     * @param map The game map where the action is executed.
+     */
 	@Override
-	public void execute(GameMap map) {
-		// map.moveUnit(origin, destination);
-	}
-	
-	public void undone(GameMap map) {
-		// map.moveUnit(destination, origin);
-	}
+    public void execute(GameMap map) {
+        // Le decimos al mapa que actualice la grilla (saque a la unidad de la celda vieja 
+        // y la ponga en la nueva, aplicando efectos de terreno si los hay)
+        map.moveUnit(this.origin, this.destination); // Ezequiel: hay que crear el método moveUnit en GameMap (va a ser parecido a pushUnit)
+        
+        // Le decimos a la unidad que actualice sus coordenadas internas.
+        this.unit.moveTo(this.destination);
+    }
 
-	public Position2D getDestination() {
-		return this.destination;
-	}
+	/**
+     * Undo the move action by placing the unit back at its original position.
+     * @param map The game map where the action is undone.
+     */
+    public void undone(GameMap map) {
+        // Deshacer es simplemente mover en reversa: del destino al origen
+        map.moveUnit(this.destination, this.origin);
+        
+        // Se devuelve la coordenada interna de la unidad a como estaba
+        this.unit.moveTo(this.origin);
+    }
+
+    public Position2D getDestination() {
+        return this.destination;
+    }
+    
 }
+
+
+    
+
 

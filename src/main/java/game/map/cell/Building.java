@@ -15,7 +15,7 @@ public class Building extends Cell {
     }
 
     @Override
-    public String shortName() {
+    public String cellTypeId() {
         return "B";
     }
 

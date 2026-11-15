@@ -2,12 +2,11 @@ package game.map.creation;
 
 import game.map.Position2D;
 import game.utils.FileHandler;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
-
-import static org.junit.Assert.fail;
 
 public class MapImporterTest {
 
@@ -21,19 +20,9 @@ public class MapImporterTest {
 
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
 
-        // Act
-        try {
-            mapImporter.importMap("nonexistent_file.txt");
-        }
+        // Act & Assert
 
-        // Assert
-        catch (NoMapFileException e) {
-            return;
-        } catch (InvalidMapFileException e) {
-            fail("Expected NoMapFileException, but got InvalidMapFileException.");
-        }
-
-        fail("Expected NoMapFileException, got none.");
+        Assertions.assertThrows(NoMapFileException.class, () -> mapImporter.importMap("nonexistent_file.txt"));
     }
 
     @Test
@@ -47,19 +36,8 @@ public class MapImporterTest {
 
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
 
-        // Act
-        try {
-            mapImporter.importMap("invalid_map.txt");
-        }
-
-        // Assert
-        catch (InvalidMapFileException e) {
-            return;
-        } catch (NoMapFileException e) {
-            fail("Expected InvalidMapFileException, but got NoMapFileException.");
-        }
-
-        fail("Expected InvalidMapFileException, got none.");
+        // Act & Assert
+        Assertions.assertThrows(InvalidMapFileException.class, () -> mapImporter.importMap("invalid_map.txt"));
     }
 
     @Test
@@ -73,19 +51,8 @@ public class MapImporterTest {
 
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
 
-        // Act
-        try {
-            mapImporter.importMap("empty_map.txt");
-        }
-
-        // Assert
-        catch (InvalidMapFileException e) {
-            return;
-        } catch (NoMapFileException e) {
-            fail("Expected InvalidMapFileException, but got NoMapFileException.");
-        }
-
-        fail("Expected InvalidMapFileException, got none.");
+        // Act & Assert
+        Assertions.assertThrows(InvalidMapFileException.class, () -> mapImporter.importMap("empty_map.txt"));
     }
 
     @Test
@@ -99,11 +66,7 @@ public class MapImporterTest {
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
 
         // Act
-        try {
-            mapImporter.importMap("valid_map.txt");
-        } catch (InvalidMapFileException e) {
-            fail("Expected valid map file, but got InvalidMapFileException.");
-        }
+        Assertions.assertDoesNotThrow(() -> mapImporter.importMap("valid_map.txt"));
 
         // Assert
         Mockito.verify(cellFactory).createFromId("A", new Position2D(0, 0));
@@ -122,11 +85,7 @@ public class MapImporterTest {
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
 
         // Act
-        try {
-            mapImporter.importMap("valid_map.txt");
-        } catch (InvalidMapFileException e) {
-            fail("Expected valid map file, but got InvalidMapFileException.");
-        }
+        Assertions.assertDoesNotThrow(() -> mapImporter.importMap("valid_map.txt"));
 
         // Assert
         Mockito.verify(cellFactory).createFromId("A", new Position2D(0, 0));

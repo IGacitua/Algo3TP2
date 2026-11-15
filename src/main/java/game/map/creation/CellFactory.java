@@ -6,28 +6,36 @@ import game.map.cell.*;
 public class CellFactory {
 
     // I could use a Dictionary<ID, Class> and use reflection to get the constructor... but that's overkill.
-    // These could be instance variables, and initialized in the class, but again, no reason to.
-    // I could also set the IDs in the Cell class as static, but I prefer having everything in one place.
-    private static final String ACID_ID = "A";
-    private static final String BUILDING_ID = "B";
-    private static final String GROUND_ID = "G";
-    private static final String MOUNTAIN_ID = "M";
-    private static final String WATER_ID = "W";
+    public final String ACID_ID;
+    public final String BUILDING_ID;
+    public final String GROUND_ID;
+    public final String MOUNTAIN_ID;
+    public final String WATER_ID;
 
-    public Cell createFromId(String cellID, Position2D cellPosition) throws InvalidMapFileException {
-        switch (cellID) {
-            case ACID_ID:
-                return new Acid(cellPosition);
-            case BUILDING_ID:
-                return new Building(cellPosition);
-            case GROUND_ID:
-                return new Cell(cellPosition);
-            case MOUNTAIN_ID:
-                return new Mountain(cellPosition);
-            case WATER_ID:
-                return new Water(cellPosition);
-            default:
-                throw new InvalidMapFileException("Invalid cell ID: " + cellID);
-        }
+    public CellFactory() {
+        ACID_ID = new Acid(null).cellTypeId();
+        BUILDING_ID = new Building(null).cellTypeId();
+        GROUND_ID = new Cell(null).cellTypeId();
+        MOUNTAIN_ID = new Mountain(null).cellTypeId();
+        WATER_ID = new Water(null).cellTypeId();
+    }
+
+    public Cell createFromId(String cellId, Position2D cellPosition) throws InvalidMapFileException {
+        if (cellId.equals(ACID_ID))
+            return new Acid(cellPosition);
+
+        if (cellId.equals(BUILDING_ID))
+            return new Building(cellPosition);
+
+        if (cellId.equals(GROUND_ID))
+            return new Cell(cellPosition);
+
+        if (cellId.equals(MOUNTAIN_ID))
+            return new Mountain(cellPosition);
+
+        if (cellId.equals(WATER_ID))
+            return new Water(cellPosition);
+
+        throw new InvalidMapFileException("Invalid cell ID: " + cellId);
     }
 }

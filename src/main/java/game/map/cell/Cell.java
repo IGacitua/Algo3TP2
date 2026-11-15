@@ -12,7 +12,7 @@ public class Cell {
         this.position = position;
     }
 
-    public String shortName() {
+    public String cellTypeId() {
         return "G";
     }
 
@@ -61,5 +61,9 @@ public class Cell {
 
     public boolean hasPosition(Position2D position) {
         return this.position.getDistance(position) == 0;
+    }
+
+    public boolean hasUnit() {
+        return containedUnit != null;
     }
 }

@@ -4,6 +4,7 @@ import game.map.GameMap;
 import game.map.Position2D;
 import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
+import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
 import game.units.weapons.Weapon;
 import game.units.movement.MovementType;
@@ -49,7 +50,13 @@ public class Unit {
     }
 
     public UnitAction getAttack(Position2D target) {
-        return new AttackAction(weapon, target);
+        Position2D origin = new Position2D(this.position.getX(), this.position.getY());
+        return new AttackAction(weapon, origin, target);
+    }
+
+    public UnitAction getMove(Position2D destination) {
+        Position2D origin = new Position2D(this.position.getX(), this.position.getY());
+        return new MoveAction(this, origin, destination);
     }
 
     public Position2D getPosition() {

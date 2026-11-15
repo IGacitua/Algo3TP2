@@ -10,7 +10,7 @@ public class Mountain extends Cell {
     }
 
     @Override
-    public String shortName() {
+    public String cellTypeId() {
         return "M";
     }
 
