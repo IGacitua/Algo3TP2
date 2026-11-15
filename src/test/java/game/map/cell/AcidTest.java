@@ -146,4 +146,57 @@ public class AcidTest {
         // Assert
         Assertions.assertTrue(hasPosition, "Acid should return true for matching position.");
     }
+
+    @Test
+    public void testAcidIsNotVekTarget() {
+        // Arrange
+        Cell acid = new Acid(new Position2D(0, 0));
+
+        // Act
+        boolean isVekTarget = acid.isVekTarget();
+
+        // Assert
+        Assertions.assertFalse(isVekTarget, "Acid should not be a Vek target.");
+    }
+
+    @Test
+    public void testAcidIsNotWater() {
+        // Arrange
+        Cell acid = new Acid(new Position2D(0, 0));
+
+        // Act
+        boolean isWater = acid.isWater();
+
+        // Assert
+        Assertions.assertFalse(isWater, "Acid should not be water.");
+    }
+
+    @Test
+    public void testAcidHasUnitAfterPlacement() {
+        // Arrange
+        Unit unit = Mockito.mock(Unit.class);
+        Cell acid = new Acid(new Position2D(0, 0));
+
+        // Act
+        acid.tryPlaceUnit(unit, false);
+        boolean hasUnit = acid.hasUnit();
+
+        // Assert
+        Assertions.assertTrue(hasUnit, "Acid should report having a unit after placement.");
+    }
+
+    @Test
+    public void testAcidHasMechAfterPlacement() {
+        // Arrange
+        Unit mechUnit = Mockito.mock(Unit.class);
+        Mockito.when(mechUnit.isMech()).thenReturn(true);
+        Cell acid = new Acid(new Position2D(0, 0));
+
+        // Act
+        acid.tryPlaceUnit(mechUnit, false);
+        boolean hasMech = acid.hasMech();
+
+        // Assert
+        Assertions.assertTrue(hasMech, "Acid should report having a mech after placement.");
+    }
 }

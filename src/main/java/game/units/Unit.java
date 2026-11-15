@@ -6,39 +6,39 @@ import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
-import game.units.movement.GroundedMovement;
-import game.units.movement.MovementType;
+import game.units.movement.Grounded;
+import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
 public class Unit {
     protected final Weapon weapon;
     private final Position2D position;
     private final Health health;
-    private final MovementType movementType;
+    private final Movement movement;
     private boolean isDamaged = false;
     private boolean contaminated = false;
 
     public Unit(Position2D position, Weapon weapon) {
-        this(position, weapon, 3, new GroundedMovement());
+        this(position, weapon, 3, new Grounded(1));
     }
 
     public Unit(Position2D position, Weapon weapon, int maximumHealth) {
-        this(position, weapon, maximumHealth, new GroundedMovement());
+        this(position, weapon, maximumHealth, new Grounded(1));
     }
 
-    public Unit(Position2D position, Weapon weapon, int maximumHealth, MovementType movementType) {
+    public Unit(Position2D position, Weapon weapon, int maximumHealth, Movement movement) {
 
-        if (movementType == null) {
+        if (movement == null) {
             throw new IllegalArgumentException("Movement type cannot be null");
         }
 
         this.weapon = weapon;
         this.position = position;
         this.health = new Health(maximumHealth);
-        this.movementType = movementType;
+        this.movement = movement;
 
         try {
-            if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
+            if (!GameMap.getInstance().placeUnitAt(this, position)) {
                 throw new IllegalArgumentException(
                         "Cannot place unit at the specified position: " + position
                 );
@@ -94,11 +94,11 @@ public class Unit {
     }
 
     public boolean canMoveToWater() {
-        return movementType.canMoveToWater();
+        return movement.canMoveToWater();
     }
 
     public void contaminate() {
-        if (movementType.canBeContaminated()) {
+        if (movement.canBeContaminated()) {
             contaminated = true;
         }
     }
@@ -112,6 +112,10 @@ public class Unit {
     }
 
     public int getMovementDistance() {
-        return 1; // TODO
+        return movement.getMovementDistance();
+    }
+
+    public boolean isMech() {
+        return false;
     }
 }

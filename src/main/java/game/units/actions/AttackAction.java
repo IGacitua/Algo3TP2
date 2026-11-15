@@ -13,19 +13,20 @@ public class AttackAction implements UnitAction {
         this(weapon, null, target);
     }
 
-    public AttackAction(Weapon weapon, Position2D target, Position2D origin) {
+    public AttackAction(Weapon weapon, Position2D origin, Position2D target) {
         this.weapon = weapon;
-        this.target = target;
         this.origin = origin;
+        this.target = target;
     }
 
     @Override
-    public void execute(GameMap map) {
+    public boolean tryExecute(GameMap map) {
         if (origin != null) {
-        	// Se le pasa el origen, el objetivo y el mapa al arma
+            // Se le pasa el origen, el objetivo y el mapa al arma
             weapon.attack(origin, target, map);
         } else {
             weapon.attack(target, map);
         }
+        return true; // TODO: Cambiar Weapon::Attack para que devuelva si el ataque se logró o no.
     }
 }

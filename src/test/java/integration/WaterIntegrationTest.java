@@ -7,14 +7,11 @@ import game.map.cell.Water;
 import game.map.creation.MapImporter;
 import game.map.direction.East;
 import game.units.Unit;
-import game.units.movement.FlyingMovement;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import game.units.movement.Flying;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WaterIntegrationTest {
 
@@ -37,7 +34,7 @@ public class WaterIntegrationTest {
                 3
         );
 
-        GameMap.getInstance().pushUnit(
+        GameMap.getInstance().pushUnitTowards(
                 new Position2D(0, 0),
                 new East()
         );
@@ -62,10 +59,10 @@ public class WaterIntegrationTest {
                 new Position2D(0, 0),
                 null,
                 3,
-                new FlyingMovement()
+                new Flying()
         );
 
-        GameMap.getInstance().pushUnit(
+        GameMap.getInstance().pushUnitTowards(
                 new Position2D(0, 0),
                 new East()
         );
@@ -95,7 +92,7 @@ public class WaterIntegrationTest {
                 3
         );
 
-        boolean placed = GameMap.getInstance().tryPlaceUnit(
+        boolean placed = GameMap.getInstance().placeUnitAt(
                 unit,
                 new Position2D(1, 0)
         );

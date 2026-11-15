@@ -147,7 +147,7 @@ public class BuildingTest {
         Assertions.assertTrue(building.isDestroyed(), "Building cell should be destroyed.");
     }
 
-    @Test // TODO: Change ElectricalNetwork to NOT Singleton so this test can be isolated.
+    @Test
     public void testDestroyingBuildingReducesElectricalNetwork() {
         // Arrange
         Building building = new Building(new Position2D(0, 0));
@@ -190,5 +190,71 @@ public class BuildingTest {
 
         // Assert
         Assertions.assertTrue(hasPosition, "Building should return true for matching position.");
+    }
+
+    @Test
+    public void testBuildingIsVekTarget() {
+        // Arrange
+        Cell building = new Building(new Position2D(0, 0));
+
+        // Act
+        boolean isVekTarget = building.isVekTarget();
+
+        // Assert
+        Assertions.assertTrue(isVekTarget, "Building should be a Vek target.");
+    }
+
+    @Test
+    public void testDestroyedBuildingIsNotVekTarget() {
+        // Arrange
+        Cell building = new Building(new Position2D(0, 0));
+        building.tryDamage(1);
+
+        // Act
+        boolean isVekTarget = building.isVekTarget();
+
+        // Assert
+        Assertions.assertFalse(isVekTarget, "Destroyed building should not be a Vek target.");
+    }
+
+    @Test
+    public void testBuildingIsNotWater() {
+        // Arrange
+        Cell building = new Building(new Position2D(0, 0));
+
+        // Act
+        boolean isWater = building.isWater();
+
+        // Assert
+        Assertions.assertFalse(isWater, "Building should not be water.");
+    }
+
+    @Test
+    public void testBuildingHasUnitAfterPlacement() {
+        // Arrange
+        Unit unit = Mockito.mock(Unit.class);
+        Cell building = new Building(new Position2D(0, 0));
+
+        // Act
+        building.tryPlaceUnit(unit, false);
+        boolean hasUnit = building.hasUnit();
+
+        // Assert
+        Assertions.assertTrue(hasUnit, "Building should report having a unit after placement.");
+    }
+
+    @Test
+    public void testBuildingHasMechAfterPlacement() {
+        // Arrange
+        Unit mechUnit = Mockito.mock(Unit.class);
+        Mockito.when(mechUnit.isMech()).thenReturn(true);
+        Cell building = new Acid(new Position2D(0, 0));
+
+        // Act
+        building.tryPlaceUnit(mechUnit, false);
+        boolean hasMech = building.hasMech();
+
+        // Assert
+        Assertions.assertTrue(hasMech, "Building should report having a mech after placement.");
     }
 }

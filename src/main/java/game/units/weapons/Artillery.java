@@ -21,7 +21,7 @@ public class Artillery extends Weapon {
     @Override
     public void attack(Position2D target, GameMap map) {
         try {
-            GameMap.getInstance().applyDamage(target, 1);
+            GameMap.getInstance().damageCellAt(target, 1);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e); // TODO: Catch corrctly.
         }

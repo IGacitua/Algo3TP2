@@ -8,7 +8,9 @@ import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
+import game.units.Mech;
 import game.units.Unit;
+import game.units.Vek;
 import game.units.actions.UnitAction;
 import game.units.weapons.Artillery;
 import game.units.weapons.Weapon;
@@ -45,29 +47,29 @@ public class IntegrationTests {
                 mockCells[x][y] = new Cell(new Position2D(x, y));
             }
         }
-        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
-
         final int targetX = 2;
         final int targetY = 2;
-        final Position2D buildingPosition = new Position2D(targetX, targetY - 2); // where the north unit lands
+        // where the north unit lands
+        mockCells[targetX][targetY - 2] = new Building(new Position2D(targetX, targetY - 2)); // North of target
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
+
 
         GameMap map = GameMap.getInstance();
         map.initialize(mockMapImporter, "");
-        map.placeBuilding(buildingPosition);
 
         // Arrange: Units
 
         Weapon artillery = new Artillery();
-        Unit mecha = new Unit(new Position2D(targetX, targetY + 2), artillery);   // South of target (y grows downward)
+        Unit mecha = new Mech(new Position2D(targetX, targetY + 2), artillery);   // South of target (y grows downward)
 
-        Unit vekCentro = new Unit(new Position2D(targetX, targetY), null);        // Target
-        Unit vekNorte = new Unit(new Position2D(targetX, targetY - 1), null);    // North of target
-        Unit vekEste = new Unit(new Position2D(targetX + 1, targetY), null);    // East of target
+        Unit vekCentro = new Vek(new Position2D(targetX, targetY), null);        // Target
+        Unit vekNorte = new Vek(new Position2D(targetX, targetY - 1), null);    // North of target
+        Unit vekEste = new Vek(new Position2D(targetX + 1, targetY), null);    // East of target
 
         // Act
 
         UnitAction action = mecha.getAttack(vekCentro.getPosition());
-        action.execute(map);
+        action.tryExecute(map);
 
         // Assert
 
@@ -77,7 +79,7 @@ public class IntegrationTests {
         assertEquals("Expected the north unit to be pushed north.", new Position2D(targetX, targetY - 2), vekNorte.getPosition());
         assertEquals("Expected the east unit to be pushed east.", new Position2D(targetX + 2, targetY), vekEste.getPosition());
 
-        assertTrue(((Building) map.getCell(buildingPosition)).isDestroyed());
+        assertTrue(((Building) map.getCellAt(new Position2D(targetX, targetY - 2))).isDestroyed());
         assertEquals(4, ElectricalNetwork.getInstance().getPower());
     }
 }

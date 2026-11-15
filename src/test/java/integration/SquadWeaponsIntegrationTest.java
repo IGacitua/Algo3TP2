@@ -4,6 +4,7 @@ import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.Position2D;
 import game.map.PositionOutOfBoundsException;
+import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
@@ -32,6 +33,7 @@ public class SquadWeaponsIntegrationTest {
                 mockCells[x][y] = new Cell(new Position2D(x, y));
             }
         }
+        mockCells[1][3] = new Building(new Position2D(1, 3)); // Adjacent obstacle for artillery test
         Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
         GameMap.getInstance().initialize(mockMapImporter, "");
@@ -55,7 +57,7 @@ public class SquadWeaponsIntegrationTest {
         UnitAction punchAttack = combatMech.getAttack(targetPosition);
 
         // Act
-        punchAttack.execute(GameMap.getInstance());
+        punchAttack.tryExecute(GameMap.getInstance());
 
         // Assert
         assertTrue(targetVek.isDamaged(), "Target Vek should take damage from Punch");
@@ -83,7 +85,7 @@ public class SquadWeaponsIntegrationTest {
         UnitAction cannonAttack = cannonMech.getAttack(aimPosition);
 
         // Act
-        cannonAttack.execute(GameMap.getInstance());
+        cannonAttack.tryExecute(GameMap.getInstance());
 
         // Assert
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
@@ -105,8 +107,6 @@ public class SquadWeaponsIntegrationTest {
         Position2D adjacentObstaclePosition = new Position2D(1, 3);
         Position2D targetPosition = new Position2D(4, 3);
 
-        GameMap.getInstance().placeBuilding(adjacentObstaclePosition);
-
         Unit artilleryMech = new Unit(mechPosition, artillery);
         Unit centerVek = new Unit(targetPosition, null);
         Unit northVek = new Unit(new Position2D(4, 2), null);
@@ -118,10 +118,10 @@ public class SquadWeaponsIntegrationTest {
         UnitAction validArtilleryAttack = artilleryMech.getAttack(targetPosition);
 
         // Act
-        validArtilleryAttack.execute(GameMap.getInstance());
+        validArtilleryAttack.tryExecute(GameMap.getInstance());
 
         // Assert
-        assertThrows(RuntimeException.class, () -> adjacentAttack.execute(GameMap.getInstance()), "Artillery should not be able to target adjacent tiles");
+        assertThrows(RuntimeException.class, () -> adjacentAttack.tryExecute(GameMap.getInstance()), "Artillery should not be able to target adjacent tiles");
         assertTrue(centerVek.isDamaged(), "Unit on target cell should take damage over obstacle");
         assertEquals(2, centerVek.getCurrentHealth(), "Unit on target cell should receive 1 damage over obstacle");
         assertEquals(new Position2D(4, 1), northVek.getPosition(), "North unit should be pushed to (4, 1)");

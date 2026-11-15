@@ -5,11 +5,15 @@ import game.units.Unit;
 
 public class Cell {
     protected final Position2D position;
-    protected Unit containedUnit;
+    protected UnitSlot unitSlot;
 
     public Cell(Position2D position) {
-        containedUnit = null;
         this.position = position;
+        unitSlot = createUnitSlot();
+    }
+
+    protected UnitSlot createUnitSlot() {
+        return new UnitSlot(1);
     }
 
     public String cellTypeId() {
@@ -25,13 +29,11 @@ public class Cell {
     }
 
     public boolean canDamage() {
-        return containedUnit != null;
+        return unitSlot.hasUnit();
     }
 
     protected void onDamaged(int damage) {
-        if (containedUnit != null) {
-            containedUnit.damage(damage);
-        }
+        unitSlot.damage(damage);
     }
 
     public boolean tryPlaceUnit(Unit unit, boolean pushed) {
@@ -39,24 +41,24 @@ public class Cell {
             return false;
         }
 
-        unit.moveTo(position);
-        containedUnit = unit;
-
-        onUnitPlaced(unit, pushed);
-        return true;
+        if (unitSlot.tryPlace(unit)) {
+            unit.moveTo(position);
+            onUnitPlaced(unit, pushed);
+            return true;
+        }
+        
+        return false;
     }
 
     public boolean canPlaceUnit(Unit unit, boolean pushed) {
-        return containedUnit == null;
+        return !unitSlot.isFull();
     }
 
     protected void onUnitPlaced(Unit unit, boolean pushed) {
     }
 
     public Unit popUnit() {
-        Unit unit = containedUnit;
-        containedUnit = null;
-        return unit;
+        return unitSlot.popUnit();
     }
 
     public boolean hasPosition(Position2D position) {
@@ -64,10 +66,18 @@ public class Cell {
     }
 
     public boolean hasUnit() {
-        return containedUnit != null;
+        return unitSlot.hasUnit();
     }
 
     public boolean hasMech() {
-        return hasUnit() && containedUnit.getClass() == game.units.Mech.class; // TODO: No deberiamos usar .getClass();
+        return unitSlot.hasUnit(Unit::isMech);
+    }
+
+    public boolean isVekTarget() {
+        return false;
+    }
+
+    public boolean isWater() {
+        return false;
     }
 }

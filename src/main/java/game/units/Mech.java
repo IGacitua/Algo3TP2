@@ -4,14 +4,28 @@ import game.map.GameMap;
 import game.map.Position2D;
 import game.map.PositionOutOfBoundsException;
 import game.units.actions.MoveAction;
-import game.units.movement.MovementType;
+import game.units.movement.Grounded;
+import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
 public class Mech extends Unit {
 
+    public Mech(Position2D position, Weapon weapon) {
+        this(position, weapon, 3, new Grounded(1));
+    }
+
+    public Mech(Position2D position, Weapon weapon, int maximumHealth) {
+        this(position, weapon, maximumHealth, new Grounded(1));
+    }
+
     // Usamos la misma firma que tu constructor principal de Unit
-    public Mech(Position2D position, Weapon weapon, int maximumHealth, MovementType movementType) {
-        super(position, weapon, maximumHealth, movementType);
+    public Mech(Position2D position, Weapon weapon, int maximumHealth, Movement movement) {
+        super(position, weapon, maximumHealth, movement);
+    }
+
+    @Override
+    public boolean isMech() {
+        return true;
     }
 
     public MoveAction createMoveCommand(Position2D destination) {
@@ -20,7 +34,7 @@ public class Mech extends Unit {
 
     // Regla de que un Mech en el agua no puede atacar
     public boolean canAttack(GameMap map) throws PositionOutOfBoundsException {
-        return !map.hasWater(this.getPosition());
+        return !map.hasWaterAt(this.getPosition());
     }
 
 }

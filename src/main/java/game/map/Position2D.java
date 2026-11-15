@@ -54,6 +54,14 @@ public class Position2D {
         return Math.hypot(((double) getX() - x), (double) getY() - y);
     }
 
+    public double getOrthogonalDistance(Position2D other) {
+        return other.getOrthogonalDistance(getX(), getY());
+    }
+
+    public double getOrthogonalDistance(int x, int y) {
+        return Math.abs(getX() - x) + Math.abs(getY() - y);
+    }
+
     public OrthogonalDirection getDirectionTo(Position2D other) {
         return other.getDirectionTo(getX(), getY()).invert();
     }
@@ -83,7 +91,7 @@ public class Position2D {
     public Position2D getAdjacent(OrthogonalDirection direction) {
         return new Position2D(getX() + direction.getDeltaX(), getY() + direction.getDeltaY());
     }
-    
+
     // Criterio de desempate para el Vek en caso de tener opciones validas con la misma prioridad en su fase
     public boolean isHigherPriorityThan(Position2D other) {
         if (this.y < other.y) return true; // Menor fila

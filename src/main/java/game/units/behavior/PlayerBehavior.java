@@ -27,14 +27,14 @@ public class PlayerBehavior implements Behavior {
                 if (hasMoved || hasAttacked) {
                     throw new IllegalStateException("Cannot move after attacking or move twice in the same turn.");
                 }
-                action.execute(map);
+                action.tryExecute(map);
                 this.previousMovement = (MoveAction) action;
                 this.hasMoved = true;
             } else if (action instanceof AttackAction) {
                 if (hasAttacked) {
                     throw new IllegalStateException("Cannot attack twice in the same turn.");
                 }
-                action.execute(map);
+                action.tryExecute(map);
                 this.hasAttacked = true;
             }
         } catch (PositionOutOfBoundsException e) {
