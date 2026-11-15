@@ -7,6 +7,7 @@ import game.map.creation.MapImporter;
 import game.map.direction.*;
 import game.units.Unit;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -74,10 +75,18 @@ public class GameMap {
         Cell destinationCell = getCellAt(destination);
 
         Unit unitToMove = originCell.popUnit();
-        if (unitToMove != null) {
-            return destinationCell.tryPlaceUnit(unitToMove, true);
+        if (unitToMove == null) {
+            return false;
         }
-        return false;
+
+        int movementDistance = unitToMove.getMovementDistance();
+        if (origin.getOrthogonalDistance(destination) > movementDistance) {
+            // The destination is too far away.
+            originCell.tryPlaceUnit(unitToMove, true); // Put the unit back.
+            return false;
+        }
+
+        return destinationCell.tryPlaceUnit(unitToMove, true);
     }
 
     public void pushUnitTowards(Position2D unit, OrthogonalDirection direction) throws PositionOutOfBoundsException {
@@ -112,8 +121,13 @@ public class GameMap {
 
     // Search
 
-    public List<Position2D> getReachablePositions(Unit unit) {
-        Position2D unitPosition = unit.getPosition();
+    public List<Position2D> getReachablePositions(Position2D unitPosition) throws PositionOutOfBoundsException {
+        Cell position = getCellAt(unitPosition);
+        if (!position.hasUnit()) {
+            return new ArrayList<>(); // Empty
+        }
+
+        Unit unit = getCellAt(unitPosition).popUnit();
         int movementDistance = unit.getMovementDistance();
         Predicate<Cell> canMoveTo = (c) -> c.canPlaceUnit(unit, false);
 

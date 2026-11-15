@@ -2,6 +2,7 @@ package game.units.behavior;
 
 import game.map.GameMap;
 import game.map.Position2D;
+import game.map.PositionOutOfBoundsException;
 import game.units.Vek;
 import game.units.actions.UnitAction;
 
@@ -15,23 +16,27 @@ public class ApproachingBuildingRule implements BehaviorRules {
         Position2D bestPos = null;
         double minDistance = Integer.MAX_VALUE;
 
-        for (Position2D pos : map.getReachablePositions(vek)) {
-            // El mapa resuelve la distancia topológica
-            double dist = map.distanceToClosestVekTarget(pos);
+        try {
+            for (Position2D pos : map.getReachablePositions(vek.getPosition())) {
+                // El mapa resuelve la distancia topológica
+                double dist = map.distanceToClosestVekTarget(pos);
 
-            // Si encontramos una posición más cerca del edificio, la reemplazamos
-            if (dist < minDistance) {
-                minDistance = dist;
-                bestPlan = vek.planMovementTo(pos);
-                bestPos = pos;
-            }
-            // Si están a la misma distancia, entra a jugar el desempate de la coordenada
-            else if (dist == minDistance) {
-                if (bestPos == null || pos.isHigherPriorityThan(bestPos)) {
+                // Si encontramos una posición más cerca del edificio, la reemplazamos
+                if (dist < minDistance) {
+                    minDistance = dist;
                     bestPlan = vek.planMovementTo(pos);
                     bestPos = pos;
                 }
+                // Si están a la misma distancia, entra a jugar el desempate de la coordenada
+                else if (dist == minDistance) {
+                    if (bestPos == null || pos.isHigherPriorityThan(bestPos)) {
+                        bestPlan = vek.planMovementTo(pos);
+                        bestPos = pos;
+                    }
+                }
             }
+        } catch (PositionOutOfBoundsException e) {
+            throw new RuntimeException(e); // TODO: Handle properly
         }
         if (bestPlan.isEmpty()) {
             return null;

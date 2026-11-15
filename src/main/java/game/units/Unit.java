@@ -112,7 +112,7 @@ public class Unit {
     }
 
     public int getMovementDistance() {
-        return 1; // TODO
+        return movement.getMovementDistance();
     }
 
     public boolean isMech() {

@@ -14,8 +14,6 @@ import org.junit.Test;
 
 public class MovementIntegrationTest {
 
-    private static final Position2D STARTING_POSITION = new Position2D(1, 0);
-
     private static void rebuildMap() {
         FileHandler fileHandler = FileHandler.getInstance();
         CellFactory cellFactory = new CellFactory();
@@ -30,7 +28,7 @@ public class MovementIntegrationTest {
     }
 
     private static Mech buildMech() {
-        return new Mech(STARTING_POSITION, null, 10, new Grounded(2));
+        return new Mech(new Position2D(1, 0), null, 10, new Grounded(2));
     }
 
     // Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento,
