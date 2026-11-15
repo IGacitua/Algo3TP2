@@ -170,4 +170,60 @@ public class WaterTest {
         // Assert
         Assertions.assertTrue(hasPosition, "Water should return true for matching position.");
     }
+
+
+    @Test
+    public void testWaterIsNotVekTarget() {
+        // Arrange
+        Cell water = new Water(new Position2D(0, 0));
+
+        // Act
+        boolean isVekTarget = water.isVekTarget();
+
+        // Assert
+        Assertions.assertFalse(isVekTarget, "Water should not be a Vek target.");
+    }
+
+    @Test
+    public void testWaterIsWater() {
+        // Arrange
+        Cell cell = new Water(new Position2D(0, 0));
+
+        // Act
+        boolean isWater = cell.isWater();
+
+        // Assert
+        Assertions.assertTrue(isWater, "Water should be water.");
+    }
+
+    @Test
+    public void testWaterHasUnitAfterPlacement() {
+        // Arrange
+        Unit unit = Mockito.mock(Unit.class);
+        Mockito.when(unit.canMoveToWater()).thenReturn(true);
+        Cell water = new Water(new Position2D(0, 0));
+
+        // Act
+        water.tryPlaceUnit(unit, false);
+        boolean hasUnit = water.hasUnit();
+
+        // Assert
+        Assertions.assertTrue(hasUnit, "Water should report having a unit after placement.");
+    }
+
+    @Test
+    public void testWaterHasMechAfterPlacement() {
+        // Arrange
+        Unit mech = Mockito.mock(Unit.class);
+        Mockito.when(mech.canMoveToWater()).thenReturn(true);
+        Mockito.when(mech.isMech()).thenReturn(true);
+        Cell water = new Water(new Position2D(0, 0));
+
+        // Act
+        water.tryPlaceUnit(mech, false);
+        boolean hasMech = water.hasMech();
+
+        // Assert
+        Assertions.assertTrue(hasMech, "Water should report having a mech after placement.");
+    }
 }

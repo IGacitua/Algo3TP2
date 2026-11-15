@@ -6,9 +6,9 @@ import game.map.cell.Acid;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
+import game.map.direction.East;
 import game.units.Unit;
 import game.units.movement.FlyingMovement;
-import game.map.direction.East;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -78,7 +78,7 @@ public class AcidIntegrationTest {
                 10
         );
 
-        GameMap.getInstance().pushUnit(
+        GameMap.getInstance().pushUnitTowards(
                 new Position2D(0, 0),
                 new East()
         );
@@ -112,7 +112,7 @@ public class AcidIntegrationTest {
                 new FlyingMovement()
         );
 
-        GameMap.getInstance().pushUnit(
+        GameMap.getInstance().pushUnitTowards(
                 new Position2D(0, 0),
                 new East()
         );

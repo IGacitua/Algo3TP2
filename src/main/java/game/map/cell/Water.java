@@ -25,4 +25,9 @@ public class Water extends Cell {
             unit.kill();
         }
     }
+
+    @Override
+    public boolean isWater() {
+        return true;
+    }
 }

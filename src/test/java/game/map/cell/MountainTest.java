@@ -61,4 +61,28 @@ public class MountainTest {
         // Assert
         Assertions.assertTrue(hasPosition, "Mountain should return true for matching position.");
     }
+
+    @Test
+    public void testMountainIsNotVekTarget() {
+        // Arrange
+        Cell mountain = new Mountain(new Position2D(0, 0));
+
+        // Act
+        boolean isVekTarget = mountain.isVekTarget();
+
+        // Assert
+        Assertions.assertFalse(isVekTarget, "Mountain should not be a Vek target.");
+    }
+
+    @Test
+    public void testMountainIsNotWater() {
+        // Arrange
+        Cell mountain = new Mountain(new Position2D(0, 0));
+
+        // Act
+        boolean isWater = mountain.isWater();
+
+        // Assert
+        Assertions.assertFalse(isWater, "Mountain should not be water.");
+    }
 }

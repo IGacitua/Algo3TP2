@@ -17,7 +17,7 @@ public class ApproachingBuildingRule implements BehaviorRules {
 
         for (Position2D pos : map.getReachablePositions(vek)) {
             // El mapa resuelve la distancia topológica
-            double dist = map.distanceToClosestBuildingFrom(pos);
+            double dist = map.distanceToClosestVekTarget(pos);
 
             // Si encontramos una posición más cerca del edificio, la reemplazamos
             if (dist < minDistance) {

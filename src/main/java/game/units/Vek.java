@@ -1,26 +1,40 @@
 package game.units;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import game.map.GameMap;
 import game.map.Position2D;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
+import game.units.movement.GroundedMovement;
 import game.units.movement.MovementType;
 import game.units.weapons.Weapon;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Vek extends Unit {
-	
-	public Vek(Position2D position, Weapon weapon, int maximumHealth, MovementType movementType) {
+
+    public Vek(Position2D position, Weapon weapon) {
+        this(position, weapon, 3, new GroundedMovement());
+    }
+
+    public Vek(Position2D position, Weapon weapon, int maximumHealth) {
+        this(position, weapon, maximumHealth, new GroundedMovement());
+    }
+
+    public Vek(Position2D position, Weapon weapon, int maximumHealth, MovementType movementType) {
         super(position, weapon, maximumHealth, movementType);
+    }
+
+    @Override
+    public boolean isMech() {
+        return false;
     }
 
     // PRIORIDAD 1: Atacar edificio
     public List<UnitAction> planBuildingAttackFrom(Position2D targetPos, GameMap map) {
-        Position2D targetBuilding = map.findAttackableBuildingFrom(targetPos, this.weapon);
-        
+        Position2D targetBuilding = map.findClosestVekTarget(targetPos);
+
         if (targetBuilding != null) {
             List<UnitAction> plan = new ArrayList<>();
             plan.add(new MoveAction(this, this.getPosition(), targetPos));
@@ -32,8 +46,8 @@ public class Vek extends Unit {
 
     // PRIORIDAD 2: Atacar Mech
     public List<UnitAction> planMechAttackFrom(Position2D targetPos, GameMap map) {
-        Position2D targetMech = map.findAttackableMechFrom(targetPos, this.weapon);
-        
+        Position2D targetMech = map.findAttackableMechFrom(targetPos);
+
         if (targetMech != null) {
             List<UnitAction> plan = new ArrayList<>();
             plan.add(new MoveAction(this, this.getPosition(), targetPos));

@@ -17,14 +17,14 @@ public class Punch extends Weapon {
         }
 
         try {
-            GameMap.getInstance().applyDamage(target, 1);
-            GameMap.getInstance().applyDamage(target, 1);
+            GameMap.getInstance().damageCellAt(target, 1);
+            GameMap.getInstance().damageCellAt(target, 1);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            GameMap.getInstance().pushUnit(target, pushDirection);
+            GameMap.getInstance().pushUnitTowards(target, pushDirection);
         } catch (PositionOutOfBoundsException ignored) {
             // Si la casilla destino del empuje cae fuera del mapa, la unidad permanece en el borde
         }
@@ -54,7 +54,7 @@ public class Punch extends Weapon {
 
     private boolean hasUnitAt(Position2D position) {
         try {
-            Cell cell = GameMap.getInstance().getCell(position);
+            Cell cell = GameMap.getInstance().getCellAt(position);
             return cell != null && cell.hasUnit();
         } catch (PositionOutOfBoundsException e) {
             return false;

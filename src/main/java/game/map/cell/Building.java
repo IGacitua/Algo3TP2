@@ -21,7 +21,7 @@ public class Building extends Cell {
 
     @Override
     public boolean canDamage() {
-        return containedUnit != null || !isDestroyed;
+        return unitSlot.hasUnit() || !isDestroyed;
     }
 
     @Override
@@ -46,6 +46,11 @@ public class Building extends Cell {
     @Override
     protected void onUnitPlaced(Unit unit, boolean pushed) {
         destroyBuilding();
+    }
+
+    @Override
+    public boolean isVekTarget() {
+        return !isDestroyed;
     }
 
 }

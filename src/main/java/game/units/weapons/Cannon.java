@@ -32,7 +32,7 @@ public class Cannon extends Weapon {
         while (true) {
             Cell cell;
             try {
-                cell = GameMap.getInstance().getCell(current);
+                cell = GameMap.getInstance().getCellAt(current);
             } catch (PositionOutOfBoundsException e) {
                 return;
             }
@@ -48,14 +48,14 @@ public class Cannon extends Weapon {
 
     private void impactCell(Position2D position, Cell cell, OrthogonalDirection fireDirection) {
         try {
-            GameMap.getInstance().applyDamage(position, 1);
+            GameMap.getInstance().damageCellAt(position, 1);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e);
         }
 
         if (cell.hasUnit()) {
             try {
-                GameMap.getInstance().pushUnit(position, fireDirection);
+                GameMap.getInstance().pushUnitTowards(position, fireDirection);
             } catch (PositionOutOfBoundsException ignored) {
                 // Si el empuje cae fuera del tablero, la unidad permanece en el borde
             }
@@ -85,7 +85,7 @@ public class Cannon extends Weapon {
 
         while (true) {
             try {
-                Cell cell = GameMap.getInstance().getCell(current);
+                Cell cell = GameMap.getInstance().getCellAt(current);
                 if (cell.hasUnit()) {
                     furthestUnitPosition = current;
                 }

@@ -28,7 +28,7 @@ public class MapTests {
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 try {
-                    System.out.print(map.getCell(new Position2D(x, y)).cellTypeId() + " ");
+                    System.out.print(map.getCellAt(new Position2D(x, y)).cellTypeId() + " ");
                 } catch (PositionOutOfBoundsException e) {
                     Assert.fail("Position out of bounds: " + e.getMessage());
                 }
@@ -39,7 +39,7 @@ public class MapTests {
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 try {
-                    Cell c = map.getCell(new Position2D(x, y));
+                    Cell c = map.getCellAt(new Position2D(x, y));
                     if (x == 0 || y == 0 || x == 7 || y == 7) {
                         Assert.assertEquals("Expected mountain at " + x + ", " + y + ".", new Mountain(null).cellTypeId(), c.cellTypeId());
                     } else if (y == 1 || y == 2) {

@@ -106,7 +106,7 @@ public class CellGrid {
         if (nearest == null) {
             return Double.POSITIVE_INFINITY;
         }
-        return new Position2D(nearest.getX(), nearest.getY()).getDistance(center);
+        return nearest.getOrthogonalDistance(center);
     }
 }
 

@@ -26,7 +26,7 @@ public class MoveAction implements UnitAction {
     public void execute(GameMap map) throws PositionOutOfBoundsException {
         // Le decimos al mapa que actualice la grilla (saque a la unidad de la celda vieja 
         // y la ponga en la nueva, aplicando efectos de terreno si los hay)
-        map.tryMoveUnit(this.origin, this.destination);
+        map.moveUnitTo(this.origin, this.destination);
 
         // Le decimos a la unidad que actualice sus coordenadas internas.
         this.unit.moveTo(this.destination);
@@ -39,7 +39,7 @@ public class MoveAction implements UnitAction {
      */
     public void undone(GameMap map) throws PositionOutOfBoundsException {
         // Deshacer es simplemente mover en reversa: del destino al origen
-        map.tryMoveUnit(this.destination, this.origin);
+        map.moveUnitTo(this.destination, this.origin);
 
         // Se devuelve la coordenada interna de la unidad a como estaba
         this.unit.moveTo(this.origin);

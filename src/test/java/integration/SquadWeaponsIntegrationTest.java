@@ -4,6 +4,7 @@ import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.Position2D;
 import game.map.PositionOutOfBoundsException;
+import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
@@ -32,6 +33,7 @@ public class SquadWeaponsIntegrationTest {
                 mockCells[x][y] = new Cell(new Position2D(x, y));
             }
         }
+        mockCells[1][3] = new Building(new Position2D(1, 3)); // Adjacent obstacle for artillery test
         Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
         GameMap.getInstance().initialize(mockMapImporter, "");
@@ -104,9 +106,7 @@ public class SquadWeaponsIntegrationTest {
         Position2D mechPosition = new Position2D(0, 3);
         Position2D adjacentObstaclePosition = new Position2D(1, 3);
         Position2D targetPosition = new Position2D(4, 3);
-
-        GameMap.getInstance().placeBuilding(adjacentObstaclePosition);
-
+        
         Unit artilleryMech = new Unit(mechPosition, artillery);
         Unit centerVek = new Unit(targetPosition, null);
         Unit northVek = new Unit(new Position2D(4, 2), null);

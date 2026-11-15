@@ -38,7 +38,7 @@ public class Unit {
         this.movementType = movementType;
 
         try {
-            if (!GameMap.getInstance().tryPlaceUnit(this, position)) {
+            if (!GameMap.getInstance().placeUnitAt(this, position)) {
                 throw new IllegalArgumentException(
                         "Cannot place unit at the specified position: " + position
                 );
@@ -113,5 +113,9 @@ public class Unit {
 
     public int getMovementDistance() {
         return 1; // TODO
+    }
+
+    public boolean isMech() {
+        return false;
     }
 }
