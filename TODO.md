@@ -6,7 +6,7 @@ Entrega 1:
   otras unidades.
 - [X] Verificar que el Puño cause 2 de daño a una unidad adyacente y la empuje 1 casilla en la dirección del golpe.
 - [X] Verificar que el Cañón impacte a la primera unidad u obstáculo en línea recta y no a las que están detrás.
-- [ ] Verificar que la Artillería pueda atacar por encima de obstáculos, que no pueda atacar casillas adyacentes y que
+- [X] Verificar que la Artillería pueda atacar por encima de obstáculos, que no pueda atacar casillas adyacentes y que
   dañe la casilla objetivo y empuje hacia afuera a las unidades de las 4 casillas adyacentes.
 - [X] Verificar que un Mech no pueda moverse ni atacar dos veces en el mismo turno.
 - [X] Verificar que se pueda deshacer el movimiento de un Mech que todavía no atacó y que vuelva a su posición anterior.
@@ -17,7 +17,8 @@ Entrega 2:
 - [ ] Verificar que al empujar una unidad contra otra unidad u obstáculo, la unidad no se mueva y se aplique el daño de
   colisión.
 - [ ] Verificar que el daño a un edificio reduzca la Red Eléctrica en 1 punto.
-- [ ] Verificar que un Vek terrestre empujado al Agua muera, que el Avispón no, y que un Mech en el Agua no pueda atacar.
+- [ ] Verificar que un Vek terrestre empujado al Agua muera, que el Avispón no, y que un Mech en el Agua no pueda
+  atacar.
 - [X] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
   Avispón no se contamine.
 - [ ] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
