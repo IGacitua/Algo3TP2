@@ -13,10 +13,10 @@ public class AttackAction implements UnitAction {
         this(weapon, null, target);
     }
 
-    public AttackAction(Weapon weapon, Position2D target, Position2D origin) {
+    public AttackAction(Weapon weapon, Position2D origin, Position2D target) {
         this.weapon = weapon;
-        this.target = target;
         this.origin = origin;
+        this.target = target;
     }
 
     @Override
