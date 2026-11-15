@@ -20,13 +20,13 @@ public class Building extends Cell {
     }
 
     @Override
-    protected boolean canDamage() {
+    public boolean canDamage() {
         return containedUnit != null || !isDestroyed;
     }
 
     @Override
-    protected void onDamaged() {
-        super.onDamaged();
+    protected void onDamaged(int damage) {
+        super.onDamaged(damage);
         destroyBuilding();
     }
 

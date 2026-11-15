@@ -3,6 +3,7 @@ package integration;
 import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.Position2D;
+import game.map.PositionOutOfBoundsException;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
@@ -16,10 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SquadWeaponsIntegrationTest {
 
@@ -44,7 +42,7 @@ public class SquadWeaponsIntegrationTest {
      * y la empuje 1 casilla en la dirección del golpe.
      */
     @Test
-    public void punchDealsTwoDamageToAdjacentUnitAndPushesItOneTileInHitDirection() {
+    public void punchDealsTwoDamageToAdjacentUnitAndPushesItOneTileInHitDirection() throws PositionOutOfBoundsException {
         // Arrange
         Weapon punch = new Punch();
         Position2D mechPosition = new Position2D(2, 2);
@@ -57,7 +55,7 @@ public class SquadWeaponsIntegrationTest {
         UnitAction punchAttack = combatMech.getAttack(targetPosition);
 
         // Act
-        punchAttack.execute();
+        punchAttack.execute(GameMap.getInstance());
 
         // Assert
         assertTrue(targetVek.isDamaged(), "Target Vek should take damage from Punch");
@@ -70,7 +68,7 @@ public class SquadWeaponsIntegrationTest {
      * y no a las que están detrás.
      */
     @Test
-    public void cannonHitsFirstUnitOrObstacleInStraightLineAndDoesNotHitBehind() {
+    public void cannonHitsFirstUnitOrObstacleInStraightLineAndDoesNotHitBehind() throws PositionOutOfBoundsException {
         // Arrange
         Weapon cannon = new Cannon();
         Position2D mechPosition = new Position2D(1, 1);
@@ -85,7 +83,7 @@ public class SquadWeaponsIntegrationTest {
         UnitAction cannonAttack = cannonMech.getAttack(aimPosition);
 
         // Act
-        cannonAttack.execute();
+        cannonAttack.execute(GameMap.getInstance());
 
         // Assert
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
@@ -100,7 +98,7 @@ public class SquadWeaponsIntegrationTest {
      * y empuje hacia afuera a las unidades de las 4 casillas adyacentes.
      */
     @Test
-    public void artilleryAttacksOverObstaclesCannotTargetAdjacentTilesAndPushesFourAdjacentUnits() {
+    public void artilleryAttacksOverObstaclesCannotTargetAdjacentTilesAndPushesFourAdjacentUnits() throws PositionOutOfBoundsException {
         // Arrange
         Weapon artillery = new Artillery();
         Position2D mechPosition = new Position2D(0, 3);
@@ -120,10 +118,10 @@ public class SquadWeaponsIntegrationTest {
         UnitAction validArtilleryAttack = artilleryMech.getAttack(targetPosition);
 
         // Act
-        validArtilleryAttack.execute();
+        validArtilleryAttack.execute(GameMap.getInstance());
 
         // Assert
-        assertThrows(RuntimeException.class, adjacentAttack::execute, "Artillery should not be able to target adjacent tiles");
+        assertThrows(RuntimeException.class, () -> adjacentAttack.execute(GameMap.getInstance()), "Artillery should not be able to target adjacent tiles");
         assertTrue(centerVek.isDamaged(), "Unit on target cell should take damage over obstacle");
         assertEquals(2, centerVek.getCurrentHealth(), "Unit on target cell should receive 1 damage over obstacle");
         assertEquals(new Position2D(4, 1), northVek.getPosition(), "North unit should be pushed to (4, 1)");

@@ -1,12 +1,13 @@
 package game.units.behavior;
 
 import game.map.GameMap;
+import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
 
 public class PlayerBehavior implements Behavior {
-	private MoveAction previousMovement;
+    private MoveAction previousMovement;
     private boolean hasAttacked = false;
     private boolean hasMoved = false;
 
@@ -18,7 +19,7 @@ public class PlayerBehavior implements Behavior {
         this.previousMovement = null;
     }
 
-    public void executeAction(UnitAction action, GameMap map) {
+    public void executeAction(UnitAction action, GameMap map) throws PositionOutOfBoundsException {
         if (action instanceof MoveAction && !hasMoved) {
             action.execute(map);
             this.previousMovement = (MoveAction) action;
@@ -29,7 +30,7 @@ public class PlayerBehavior implements Behavior {
         }
     }
 
-    public void movementUndone(GameMap map) {
+    public void undoMovement(GameMap map) throws PositionOutOfBoundsException {
         // Solo se puede deshacer si se movió y NO atacó
         if (hasMoved && !hasAttacked && previousMovement != null) {
             previousMovement.undone(map);
@@ -37,5 +38,4 @@ public class PlayerBehavior implements Behavior {
             previousMovement = null;
         }
     }
-
 }

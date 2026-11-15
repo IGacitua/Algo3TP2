@@ -16,21 +16,21 @@ public class Cell {
         return "G";
     }
 
-    public void tryDamage() {
+    public void tryDamage(int damage) {
         if (!canDamage()) {
             return;
         }
 
-        this.onDamaged();
+        this.onDamaged(damage);
     }
 
-    protected boolean canDamage() {
+    public boolean canDamage() {
         return containedUnit != null;
     }
 
-    protected void onDamaged() {
+    protected void onDamaged(int damage) {
         if (containedUnit != null) {
-            containedUnit.damage();
+            containedUnit.damage(damage);
         }
     }
 
@@ -46,7 +46,7 @@ public class Cell {
         return true;
     }
 
-    protected boolean canPlaceUnit(Unit unit, boolean pushed) {
+    public boolean canPlaceUnit(Unit unit, boolean pushed) {
         return containedUnit == null;
     }
 
@@ -65,5 +65,9 @@ public class Cell {
 
     public boolean hasUnit() {
         return containedUnit != null;
+    }
+
+    public boolean hasMech() {
+        return hasUnit() && containedUnit.getClass() == game.units.Mech.class; // TODO: No deberiamos usar .getClass();
     }
 }

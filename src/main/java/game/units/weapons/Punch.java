@@ -4,12 +4,7 @@ import game.map.GameMap;
 import game.map.Position2D;
 import game.map.PositionOutOfBoundsException;
 import game.map.cell.Cell;
-import game.map.direction.East;
-import game.map.direction.NoDirection;
-import game.map.direction.North;
-import game.map.direction.OrthogonalDirection;
-import game.map.direction.South;
-import game.map.direction.West;
+import game.map.direction.*;
 
 public class Punch extends Weapon {
 
@@ -22,8 +17,8 @@ public class Punch extends Weapon {
         }
 
         try {
-            GameMap.getInstance().damage(target);
-            GameMap.getInstance().damage(target);
+            GameMap.getInstance().applyDamage(target, 1);
+            GameMap.getInstance().applyDamage(target, 1);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e);
         }

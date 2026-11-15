@@ -152,7 +152,7 @@ public class WaterTest {
         water.tryPlaceUnit(unit, false);
 
         // Act
-        water.tryDamage();
+        water.tryDamage(1);
 
         // Assert
         Mockito.verify(unit).damage();

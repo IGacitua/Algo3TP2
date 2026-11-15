@@ -100,7 +100,7 @@ public class BuildingTest {
         Cell building = new Building(new Position2D(0, 0));
 
         // Act
-        building.tryDamage(); // This destroys the building
+        building.tryDamage(1); // This destroys the building
         boolean canDamage = building.canDamage();
 
         // Assert
@@ -129,7 +129,7 @@ public class BuildingTest {
         building.tryPlaceUnit(unit, false);
 
         // Act
-        building.tryDamage();
+        building.tryDamage(1);
 
         // Assert
         Mockito.verify(unit).damage();
@@ -141,7 +141,7 @@ public class BuildingTest {
         Building building = new Building(new Position2D(0, 0));
 
         // Act
-        building.tryDamage(); // This should destroy the building
+        building.tryDamage(1); // This should destroy the building
 
         // Assert
         Assertions.assertTrue(building.isDestroyed(), "Building cell should be destroyed.");
@@ -155,7 +155,7 @@ public class BuildingTest {
 
         // Act
         int initialPower = ElectricalNetwork.getInstance().getPower();
-        building.tryDamage(); // This should destroy the building
+        building.tryDamage(1); // This should destroy the building
         int finalPower = ElectricalNetwork.getInstance().getPower();
 
         // Assert
@@ -166,12 +166,12 @@ public class BuildingTest {
     public void testDamagingDestroyedBuildingDoesNotReduceElectricalNetwork() {
         // Arrange
         Building building = new Building(new Position2D(0, 0));
-        building.tryDamage(); // Destroy the building
+        building.tryDamage(1); // Destroy the building
         ElectricalNetwork.getInstance().reset();
 
         // Act
         int initialPower = ElectricalNetwork.getInstance().getPower();
-        building.tryDamage(); // Try to damage again
+        building.tryDamage(1); // Try to damage again
         int finalPower = ElectricalNetwork.getInstance().getPower();
 
         // Assert

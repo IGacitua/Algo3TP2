@@ -115,7 +115,7 @@ public class CellTest {
         cell.tryPlaceUnit(unit, false);
 
         // Act
-        cell.tryDamage();
+        cell.tryDamage(1);
 
         // Assert
         Mockito.verify(unit).damage();

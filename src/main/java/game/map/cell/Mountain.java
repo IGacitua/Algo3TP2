@@ -15,12 +15,12 @@ public class Mountain extends Cell {
     }
 
     @Override
-    protected boolean canDamage() {
+    public boolean canDamage() {
         return false;
     }
 
     @Override
-    protected boolean canPlaceUnit(Unit unit, boolean pushed) {
+    public boolean canPlaceUnit(Unit unit, boolean pushed) {
         return false;
     }
 }

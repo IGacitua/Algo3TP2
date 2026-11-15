@@ -15,14 +15,8 @@ public class Water extends Cell {
     }
 
     @Override
-    protected boolean canDamage() {
-        return containedUnit != null;
-    }
-
-    @Override
-    protected boolean canPlaceUnit(Unit unit, boolean pushed) {
-        return super.canPlaceUnit(unit, pushed)
-                && (unit.canMoveToWater() || pushed);
+    public boolean canPlaceUnit(Unit unit, boolean pushed) {
+        return super.canPlaceUnit(unit, pushed) && (unit.canMoveToWater() || pushed);
     }
 
     @Override

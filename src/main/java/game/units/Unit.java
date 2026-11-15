@@ -6,17 +6,17 @@ import game.map.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
-import game.units.weapons.Weapon;
-import game.units.movement.MovementType;
 import game.units.movement.GroundedMovement;
+import game.units.movement.MovementType;
+import game.units.weapons.Weapon;
 
 public class Unit {
     protected final Weapon weapon;
     private final Position2D position;
     private final Health health;
+    private final MovementType movementType;
     private boolean isDamaged = false;
     private boolean contaminated = false;
-    private final MovementType movementType;
 
     public Unit(Position2D position, Weapon weapon) {
         this(position, weapon, 3, new GroundedMovement());
@@ -26,8 +26,7 @@ public class Unit {
         this(position, weapon, maximumHealth, new GroundedMovement());
     }
 
-    public Unit(Position2D position, Weapon weapon, int maximumHealth,
-                MovementType movementType) {
+    public Unit(Position2D position, Weapon weapon, int maximumHealth, MovementType movementType) {
 
         if (movementType == null) {
             throw new IllegalArgumentException("Movement type cannot be null");
@@ -110,5 +109,9 @@ public class Unit {
 
     public void kill() {
         health.kill();
+    }
+
+    public int getMovementDistance() {
+        return 1; // TODO
     }
 }

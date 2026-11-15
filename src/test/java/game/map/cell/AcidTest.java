@@ -115,10 +115,10 @@ public class AcidTest {
         acid.tryPlaceUnit(unit, false);
 
         // Act
-        acid.tryDamage();
+        acid.tryDamage(1);
 
         // Assert
-        Mockito.verify(unit).damage();
+        Mockito.verify(unit).damage(Mockito.any());
     }
 
     @Test

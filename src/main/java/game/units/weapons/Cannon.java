@@ -6,12 +6,7 @@ import game.map.PositionOutOfBoundsException;
 import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.cell.Mountain;
-import game.map.direction.East;
-import game.map.direction.NoDirection;
-import game.map.direction.North;
-import game.map.direction.OrthogonalDirection;
-import game.map.direction.South;
-import game.map.direction.West;
+import game.map.direction.*;
 
 import java.util.List;
 
@@ -53,7 +48,7 @@ public class Cannon extends Weapon {
 
     private void impactCell(Position2D position, Cell cell, OrthogonalDirection fireDirection) {
         try {
-            GameMap.getInstance().damage(position);
+            GameMap.getInstance().applyDamage(position, 1);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e);
         }

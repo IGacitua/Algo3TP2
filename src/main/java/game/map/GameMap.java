@@ -1,20 +1,17 @@
 package game.map;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-
 import game.SingletonNotInitializedException;
 import game.map.cell.Building;
 import game.map.cell.Cell;
+import game.map.cell.Water;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
 import game.map.direction.*;
 import game.units.Unit;
 import game.units.weapons.Weapon;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 public class GameMap {
     private static final GameMap instance = new GameMap();
@@ -34,6 +31,18 @@ public class GameMap {
         initialized = true;
     }
 
+    public boolean tryMoveUnit(Position2D origin, Position2D destination) throws PositionOutOfBoundsException {
+        ensureInitialized();
+        Cell originCell = getCell(origin);
+        Cell destinationCell = getCell(destination);
+
+        Unit unitToMove = originCell.popUnit();
+        if (unitToMove != null) {
+            return destinationCell.tryPlaceUnit(unitToMove, true);
+        }
+        return false;
+    }
+
     public boolean tryPlaceUnit(Unit unit, Position2D position) throws PositionOutOfBoundsException {
         ensureInitialized();
         return getCell(position).tryPlaceUnit(unit, false);
@@ -50,9 +59,9 @@ public class GameMap {
         return grid.getCell(position);
     }
 
-    public void damage(Position2D target) throws PositionOutOfBoundsException {
+    public void applyDamage(Position2D target, int damage) throws PositionOutOfBoundsException {
         ensureInitialized();
-        getCell(target).tryDamage();
+        getCell(target).tryDamage(damage);
     }
 
     public void pushUnit(Position2D unit, OrthogonalDirection direction) throws PositionOutOfBoundsException {
@@ -85,51 +94,55 @@ public class GameMap {
         }
     }
 
+    public boolean hasMech(Position2D position) throws PositionOutOfBoundsException {
+        ensureInitialized();
+        return getCell(position).hasMech();
+    }
+
+    public boolean hasBuilding(Position2D position) throws PositionOutOfBoundsException {
+        ensureInitialized();
+        return getCell(position).getClass() == Building.class; // TODO: Same as hasMech().
+    }
+
+    public boolean hasWater(Position2D position) throws PositionOutOfBoundsException {
+        ensureInitialized();
+        return getCell(position).getClass() == Water.class; // TODO: Same as hasMech().
+    }
+
     private void ensureInitialized() {
         if (!initialized) {
             throw new SingletonNotInitializedException(GameMap.class);
         }
     }
 
+    public List<Position2D> getReachablePositions(Unit unit) {
+        Position2D unitPosition = unit.getPosition();
+        int movementDistance = unit.getMovementDistance();
+        Predicate<Cell> canMoveTo = (c) -> c.canPlaceUnit(unit, false);
 
-    // CONSULTAS DE ESTADO (Para reglas de comportamiento y restricciones de armas)
-    
-    // Devuelve true si hay un Mech en la posición (usado por Vek Prioridad 2).
-    public boolean hasMechAt(Position2D pos); 
-    
-    // Devuelve true si hay un Edificio en la posición (usado por Vek Prioridad 1).
-    public boolean hasBuildingAt(Position2D pos); 
-    
-    // Devuelve true si la celda es Agua (usado para saber si un Mech puede atacar).
-    public boolean isWaterAt(Position2D pos); 
-    
-    // Devuelve true si la celda está ocupada por cualquier unidad (usado para colisiones).
-    public boolean hasUnitAt(Position2D pos); 
+        return grid.getCellsInRadius(unitPosition, movementDistance, canMoveTo);
+    }
 
-    
-    // BÚSQUEDA Y DISTANCIAS (Para la Inteligencia Artificial de los Vek)
-
-    // Ejecuta BFS y devuelve las coordenadas transitables según el movimiento de la unidad.
-    public List<Position2D> getReachablePositions(Unit unit); 
-    
     // Devuelve la coordenada de un Edificio si el arma lo alcanza disparando desde 'origin'.
-    public Position2D findAttackableBuildingFrom(Position2D origin, Weapon weapon); 
-    
+    public Position2D findAttackableBuildingFrom(Position2D origin, Weapon weapon) {
+        Predicate<Cell> isBuilding = (c) -> c.getClass() == Building.class; // TODO: Same as hasBuilding().
+        Predicate<Cell> canAttack = Cell::canDamage;
+
+        return grid.getNearestCell(origin, isBuilding.and(canAttack));
+    }
+
     // Devuelve la coordenada de un Mech si el arma lo alcanza disparando desde 'origin'.
-    public Position2D findAttackableMechFrom(Position2D origin, Weapon weapon); 
-    
+    public Position2D findAttackableMechFrom(Position2D origin, Weapon weapon) {
+        Predicate<Cell> hasMech = Cell::hasMech;
+        Predicate<Cell> canAttack = Cell::canDamage;
+
+        return grid.getNearestCell(origin, hasMech.and(canAttack));
+    }
+
     // Calcula la distancia Manhattan desde 'pos' hasta el edificio más cercano del tablero.
-    public int distanceToClosestBuildingFrom(Position2D pos); 
+    public double distanceToClosestBuildingFrom(Position2D pos) {
+        Predicate<Cell> isBuilding = (c) -> c.getClass() == Building.class; // TODO: Same as hasBuilding().
+        return grid.getDistanceToNearestCell(pos, isBuilding);
+    }
 
-
-    // EJECUCIÓN DE ACCIONES (Para que MoveAction y AttackAction alteren el tablero)
-    
-    // Mueve la unidad y aplica efectos de terreno al llegar (ej. contaminación por Ácido).
-    public void moveUnit(Position2D origin, Position2D destination); 
-    
-    // Aplica daño a la celda (resta vida si hay unidad, o baja Red Eléctrica si es Edificio).
-    public void applyDamage(Position2D target, int damage); 
-    
-    // Empuja la unidad 1 celda. Si choca contra algo, NO la mueve y aplica 1 de daño a ambos.
-    public void pushUnit(Position2D target, OrthogonalDirection direction);
 }
