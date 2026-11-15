@@ -10,7 +10,7 @@ import game.units.movement.MovementType;
 import game.units.movement.GroundedMovement;
 
 public class Unit {
-    private final Weapon weapon;
+    protected final Weapon weapon;
     private final Position2D position;
     private final Health health;
     private boolean isDamaged = false;

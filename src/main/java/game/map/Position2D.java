@@ -83,4 +83,11 @@ public class Position2D {
     public Position2D getAdjacent(OrthogonalDirection direction) {
         return new Position2D(getX() + direction.getDeltaX(), getY() + direction.getDeltaY());
     }
+    
+    // Criterio de desempate para el Vek en caso de tener opciones validas con la misma prioridad en su fase
+    public boolean isHigherPriorityThan(Position2D other) {
+        if (this.y < other.y) return true; // Menor fila
+        if (this.y == other.y) return this.x < other.x; // Menor columna
+        return false;
+    }
 }

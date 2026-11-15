@@ -23,5 +23,9 @@ public class MoveAction implements UnitAction {
 	public void undone(GameMap map) {
 		// map.moveUnit(destination, origin);
 	}
+
+	public Position2D getDestination() {
+		return this.destination;
+	}
 }
 
