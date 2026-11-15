@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PlayerBehaviorTest {
-    private PlayerBehavior player; // TODO: crear la clase PlayerBehavior
+    private PlayerBehavior player;
     private Unit combatMech;
     private Position2D origin;
 
@@ -46,7 +46,7 @@ public class PlayerBehaviorTest {
     }
 
     @Test
-    public void mechCannotMoveTwiceInSameTurn() throws PositionOutOfBoundsException {
+    public void mechCannotMoveTwiceInSameTurn() throws IllegalStateException {
         // Arrange
         Position2D firstMoveDestination = new Position2D(0, 1);
         Position2D secondMoveDestination = new Position2D(0, 2);
@@ -63,7 +63,7 @@ public class PlayerBehaviorTest {
     }
 
     @Test
-    public void mechCannotAttackTwiceInSameTurn() throws PositionOutOfBoundsException {
+    public void mechCannotAttackTwiceInSameTurn() throws IllegalStateException {
         // Arrange
         Position2D attackedPosition = new Position2D(0, 1);
 
@@ -79,18 +79,18 @@ public class PlayerBehaviorTest {
     }
 
     @Test
-    public void mechCanUndoMovementBeforeAttacking() throws PositionOutOfBoundsException {
+    public void mechCanUndoMovementBeforeAttacking() throws IllegalStateException {
         // Arrange
         Position2D moveDestination = new Position2D(0, 1);
 
         // Act
         UnitAction moveAction = this.combatMech.getMove(moveDestination);
         this.player.executeAction(moveAction, GameMap.getInstance());
-        this.player.undoMovement(GameMap.getInstance());     // undoMovement deberia recibir la posicion original como argumento, o ya la deberia saber internamente?
+        this.player.undoMovement(GameMap.getInstance());
 
         // Assert
         assertEquals(this.origin, this.combatMech.getPosition(),
-                "Mech should be back to its original position after undoing the move");
+            "Mech should be back to its original position after undoing the move");
     }
 
     @Test
