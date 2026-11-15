@@ -18,7 +18,7 @@ import java.util.List;
 public class Cannon extends Weapon {
 
     @Override
-    public void attack(Position2D target) {
+    public void attack(Position2D target, GameMap map) {
         OrthogonalDirection directionToShooter = getDirectionToShooter(target);
 
         if (directionToShooter instanceof NoDirection) {

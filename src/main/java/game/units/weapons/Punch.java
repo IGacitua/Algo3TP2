@@ -14,7 +14,7 @@ import game.map.direction.West;
 public class Punch extends Weapon {
 
     @Override
-    public void attack(Position2D target) {
+    public void attack(Position2D target, GameMap map) {
         OrthogonalDirection pushDirection = getPushDirection(target);
 
         if (pushDirection instanceof NoDirection) {

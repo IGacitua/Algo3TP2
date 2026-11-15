@@ -1,5 +1,7 @@
 package game.units.actions;
 
-public abstract class UnitAction {
-    public abstract void execute();
+import game.map.GameMap;
+
+public interface UnitAction {
+	void execute(GameMap map);
 }

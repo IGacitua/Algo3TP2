@@ -11,7 +11,7 @@ import game.units.movement.MovementType;
 import game.units.movement.GroundedMovement;
 
 public class Unit {
-    private final Weapon weapon;
+    protected final Weapon weapon;
     private final Position2D position;
     private final Health health;
     private boolean isDamaged = false;
@@ -50,7 +50,8 @@ public class Unit {
     }
 
     public UnitAction getAttack(Position2D target) {
-        return new AttackAction(weapon, target);
+        Position2D origin = new Position2D(this.position.getX(), this.position.getY());
+        return new AttackAction(weapon, origin, target);
     }
 
     public UnitAction getMove(Position2D destination) {
