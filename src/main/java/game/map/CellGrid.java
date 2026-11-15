@@ -1,8 +1,11 @@
 package game.map;
 
 import game.map.cell.Cell;
+import game.map.direction.*;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -48,11 +51,33 @@ public class CellGrid {
 
     public List<Position2D> getCellsInRadius(Position2D center, double radius, Predicate<Cell> requirement) {
         List<Position2D> result = new ArrayList<>();
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                if (new Position2D(row, col).getDistance(center) <= radius
-                        && requirement.test(matrix[row][col])) {
-                    result.add(new Position2D(row, col));
+        boolean[][] visited = new boolean[matrix.length][];
+        for (int i = 0; i < matrix.length; i++) {
+            visited[i] = new boolean[matrix[i].length];
+        }
+
+        Deque<Position2D> queue = new ArrayDeque<>();
+        queue.add(center);
+        visited[center.getX()][center.getY()] = true;
+
+        OrthogonalDirection[] directions = {new North(), new South(), new East(), new West()};
+
+        while (!queue.isEmpty()) {
+            Position2D current = queue.poll();
+            for (OrthogonalDirection direction : directions) {
+                int row = current.getX() + direction.getDeltaX();
+                int col = current.getY() + direction.getDeltaY();
+                if (row < 0 || row >= matrix.length || col < 0 || col >= matrix[row].length) {
+                    continue;
+                }
+                if (visited[row][col]) {
+                    continue;
+                }
+                Position2D next = new Position2D(row, col);
+                if (next.getDistance(center) <= radius && requirement.test(matrix[row][col])) {
+                    visited[row][col] = true;
+                    result.add(next);
+                    queue.add(next);
                 }
             }
         }

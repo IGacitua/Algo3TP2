@@ -118,7 +118,7 @@ public class AcidTest {
         acid.tryDamage(1);
 
         // Assert
-        Mockito.verify(unit).damage(Mockito.any());
+        Mockito.verify(unit).damage(1);
     }
 
     @Test

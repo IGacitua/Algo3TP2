@@ -107,9 +107,7 @@ public class PlayerBehaviorTest {
         this.player.executeAction(attackAction, GameMap.getInstance());
 
         // Assert
-        assertThrows(IllegalStateException.class, () -> {
-            this.player.undoMovement(GameMap.getInstance());
-        }, "Expected an IllegalStateException when trying to undo movement after attacking");
+        assertThrows(IllegalStateException.class, () -> this.player.undoMovement(GameMap.getInstance()), "Expected an IllegalStateException when trying to undo movement after attacking");
     }
 
     @Test

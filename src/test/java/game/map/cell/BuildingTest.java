@@ -132,7 +132,7 @@ public class BuildingTest {
         building.tryDamage(1);
 
         // Assert
-        Mockito.verify(unit).damage();
+        Mockito.verify(unit).damage(1);
     }
 
     @Test
