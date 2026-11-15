@@ -41,11 +41,13 @@ public class Cell {
             return false;
         }
 
-        unit.moveTo(position);
-        unitSlot.tryPlace(unit);
-
-        onUnitPlaced(unit, pushed);
-        return true;
+        if (unitSlot.tryPlace(unit)) {
+            unit.moveTo(position);
+            onUnitPlaced(unit, pushed);
+            return true;
+        }
+        
+        return false;
     }
 
     public boolean canPlaceUnit(Unit unit, boolean pushed) {

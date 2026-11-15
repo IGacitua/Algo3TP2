@@ -8,7 +8,7 @@ import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
 import game.map.direction.East;
 import game.units.Unit;
-import game.units.movement.FlyingMovement;
+import game.units.movement.Flying;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -49,7 +49,7 @@ public class AcidIntegrationTest {
                 new Position2D(0, 0),
                 null,
                 10,
-                new FlyingMovement()
+                new Flying()
         );
 
         unit.damage(2);
@@ -109,7 +109,7 @@ public class AcidIntegrationTest {
                 new Position2D(0, 0),
                 null,
                 10,
-                new FlyingMovement()
+                new Flying()
         );
 
         GameMap.getInstance().pushUnitTowards(

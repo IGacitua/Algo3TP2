@@ -26,7 +26,7 @@ public class VekBehavior implements Behavior {
         if (actionsToExecute != null) {
             // VekBehavior asume la responsabilidad de ejecutar la secuencia
             for (UnitAction action : actionsToExecute) {
-                action.execute(map);
+                action.tryExecute(map);
             }
         }
     }

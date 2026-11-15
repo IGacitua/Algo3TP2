@@ -23,13 +23,8 @@ public class MoveAction implements UnitAction {
      * @param map The game map where the action is executed.
      */
     @Override
-    public void execute(GameMap map) throws PositionOutOfBoundsException {
-        // Le decimos al mapa que actualice la grilla (saque a la unidad de la celda vieja 
-        // y la ponga en la nueva, aplicando efectos de terreno si los hay)
-        map.moveUnitTo(this.origin, this.destination);
-
-        // Le decimos a la unidad que actualice sus coordenadas internas.
-        this.unit.moveTo(this.destination);
+    public boolean tryExecute(GameMap map) throws PositionOutOfBoundsException {
+        return map.moveUnitTo(this.origin, this.destination);
     }
 
     /**

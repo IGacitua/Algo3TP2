@@ -12,51 +12,65 @@ import org.junit.Test;
 
 public class MapTests {
 
-    @SuppressWarnings("ConstantValue")
     @Test
     public void testMapZeroLoadsCorrectly() {
+        testMapLoadsCorrectly("src/test/resources/testMap0.txt", buildExpectedMapZero());
+    }
+
+    @Test
+    public void testMapOneLoadsCorrectly() {
+        testMapLoadsCorrectly("src/test/resources/testMap1.txt", buildExpectedMapOne());
+    }
+
+    private Cell[][] buildExpectedMapZero() {
+        Cell[][] expected = new Cell[8][8];
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                if (x == 0 || y == 0 || x == 7 || y == 7) {
+                    expected[y][x] = new Mountain(null);
+                } else if (y == 1 || y == 2) {
+                    expected[y][x] = new Water(null);
+                } else if (y == 3 || y == 4) {
+                    expected[y][x] = new Cell(null);
+                } else if (x == 1 || x == 2) {
+                    expected[y][x] = new Acid(null);
+                } else if (x == 3 || x == 4) {
+                    expected[y][x] = new Cell(null);
+                } else {
+                    expected[y][x] = new Building(null);
+                }
+            }
+        }
+        return expected;
+    }
+
+    private Cell[][] buildExpectedMapOne() {
+        return new Cell[][]{
+                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)},
+                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)},
+                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)},
+                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)}
+        };
+    }
+
+    private void testMapLoadsCorrectly(String mapPath, Cell[][] expected) {
         FileHandler fileHandler = FileHandler.getInstance();
         CellFactory cellFactory = new CellFactory();
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
         GameMap map = GameMap.getInstance();
         try {
-            map.initialize(mapImporter, "src/test/resources/testMap0.txt");
+            map.initialize(mapImporter, mapPath);
         } catch (Exception e) {
             Assert.fail("Map failed to load: " + e.getMessage());
         }
 
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < expected.length; y++) {
+            for (int x = 0; x < expected[y].length; x++) {
                 try {
-                    System.out.print(map.getCellAt(new Position2D(x, y)).cellTypeId() + " ");
+                    Cell actual = map.getCellAt(new Position2D(x, y));
+                    Assert.assertEquals("Unexpected cell type at " + x + ", " + y + ".", expected[y][x].cellTypeId(), actual.cellTypeId());
                 } catch (PositionOutOfBoundsException e) {
-                    Assert.fail("Position out of bounds: " + e.getMessage());
-                }
-            }
-            System.out.println();
-        }
-
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                try {
-                    Cell c = map.getCellAt(new Position2D(x, y));
-                    if (x == 0 || y == 0 || x == 7 || y == 7) {
-                        Assert.assertEquals("Expected mountain at " + x + ", " + y + ".", new Mountain(null).cellTypeId(), c.cellTypeId());
-                    } else if (y == 1 || y == 2) {
-                        Assert.assertEquals("Expected water at " + x + ", " + y + ".", new Water(null).cellTypeId(), c.cellTypeId());
-                    } else if (y == 3 || y == 4) {
-                        Assert.assertEquals("Expected generic cell at " + x + ", " + y + ".", new Cell(null).cellTypeId(), c.cellTypeId());
-                    } else if (y == 5 || y == 6) {
-                        if (x == 1 || x == 2) {
-                            Assert.assertEquals("Expected acid at " + x + ", " + y + ".", new Acid(null).cellTypeId(), c.cellTypeId());
-                        } else if (x == 3 || x == 4) {
-                            Assert.assertEquals("Expected generic cell at " + x + ", " + y + ".", new Cell(null).cellTypeId(), c.cellTypeId());
-                        } else if (x == 5 || x == 6) {
-                            Assert.assertEquals("Expected building at " + x + ", " + y + ".", new Building(null).cellTypeId(), c.cellTypeId());
-                        }
-                    }
-                } catch (PositionOutOfBoundsException e) {
-                    Assert.fail("Position out of bounds: " + e.getMessage());
+                    Assert.fail("Position out of bounds at " + x + ", " + y + ": " + e.getMessage());
                 }
             }
         }

@@ -57,7 +57,7 @@ public class SquadWeaponsIntegrationTest {
         UnitAction punchAttack = combatMech.getAttack(targetPosition);
 
         // Act
-        punchAttack.execute(GameMap.getInstance());
+        punchAttack.tryExecute(GameMap.getInstance());
 
         // Assert
         assertTrue(targetVek.isDamaged(), "Target Vek should take damage from Punch");
@@ -85,7 +85,7 @@ public class SquadWeaponsIntegrationTest {
         UnitAction cannonAttack = cannonMech.getAttack(aimPosition);
 
         // Act
-        cannonAttack.execute(GameMap.getInstance());
+        cannonAttack.tryExecute(GameMap.getInstance());
 
         // Assert
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
@@ -106,7 +106,7 @@ public class SquadWeaponsIntegrationTest {
         Position2D mechPosition = new Position2D(0, 3);
         Position2D adjacentObstaclePosition = new Position2D(1, 3);
         Position2D targetPosition = new Position2D(4, 3);
-        
+
         Unit artilleryMech = new Unit(mechPosition, artillery);
         Unit centerVek = new Unit(targetPosition, null);
         Unit northVek = new Unit(new Position2D(4, 2), null);
@@ -118,10 +118,10 @@ public class SquadWeaponsIntegrationTest {
         UnitAction validArtilleryAttack = artilleryMech.getAttack(targetPosition);
 
         // Act
-        validArtilleryAttack.execute(GameMap.getInstance());
+        validArtilleryAttack.tryExecute(GameMap.getInstance());
 
         // Assert
-        assertThrows(RuntimeException.class, () -> adjacentAttack.execute(GameMap.getInstance()), "Artillery should not be able to target adjacent tiles");
+        assertThrows(RuntimeException.class, () -> adjacentAttack.tryExecute(GameMap.getInstance()), "Artillery should not be able to target adjacent tiles");
         assertTrue(centerVek.isDamaged(), "Unit on target cell should take damage over obstacle");
         assertEquals(2, centerVek.getCurrentHealth(), "Unit on target cell should receive 1 damage over obstacle");
         assertEquals(new Position2D(4, 1), northVek.getPosition(), "North unit should be pushed to (4, 1)");

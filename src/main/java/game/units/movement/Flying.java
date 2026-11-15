@@ -1,6 +1,14 @@
 package game.units.movement;
 
-public class FlyingMovement implements MovementType {
+public class Flying extends Movement {
+
+    public Flying() {
+        super(1);
+    }
+
+    public Flying(int movementDistance) {
+        super(movementDistance);
+    }
 
     @Override
     public boolean canMoveToWater() {
@@ -11,4 +19,5 @@ public class FlyingMovement implements MovementType {
     public boolean canBeContaminated() {
         return false;
     }
+
 }

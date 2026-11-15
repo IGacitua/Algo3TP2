@@ -2,7 +2,7 @@ Entrega 1:
 
 - [X] Verificar que el tablero se cargue con 8x8 casillas a partir de un mapa predefinido, con los tipos de casilla en
   las posiciones correctas.
-- [ ] Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento, sin atravesar obstáculos ni
+- [X] Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento, sin atravesar obstáculos ni
   otras unidades.
 - [X] Verificar que el Puño cause 2 de daño a una unidad adyacente y la empuje 1 casilla en la dirección del golpe.
 - [X] Verificar que el Cañón impacte a la primera unidad u obstáculo en línea recta y no a las que están detrás.

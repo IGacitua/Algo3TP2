@@ -4,8 +4,8 @@ import game.map.GameMap;
 import game.map.Position2D;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
-import game.units.movement.GroundedMovement;
-import game.units.movement.MovementType;
+import game.units.movement.Grounded;
+import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
 import java.util.ArrayList;
@@ -15,15 +15,15 @@ import java.util.List;
 public class Vek extends Unit {
 
     public Vek(Position2D position, Weapon weapon) {
-        this(position, weapon, 3, new GroundedMovement());
+        this(position, weapon, 3, new Grounded(1));
     }
 
     public Vek(Position2D position, Weapon weapon, int maximumHealth) {
-        this(position, weapon, maximumHealth, new GroundedMovement());
+        this(position, weapon, maximumHealth, new Grounded(1));
     }
 
-    public Vek(Position2D position, Weapon weapon, int maximumHealth, MovementType movementType) {
-        super(position, weapon, maximumHealth, movementType);
+    public Vek(Position2D position, Weapon weapon, int maximumHealth, Movement movement) {
+        super(position, weapon, maximumHealth, movement);
     }
 
     @Override

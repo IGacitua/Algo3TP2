@@ -7,7 +7,7 @@ import game.map.cell.Water;
 import game.map.creation.MapImporter;
 import game.map.direction.East;
 import game.units.Unit;
-import game.units.movement.FlyingMovement;
+import game.units.movement.Flying;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -59,7 +59,7 @@ public class WaterIntegrationTest {
                 new Position2D(0, 0),
                 null,
                 3,
-                new FlyingMovement()
+                new Flying()
         );
 
         GameMap.getInstance().pushUnitTowards(

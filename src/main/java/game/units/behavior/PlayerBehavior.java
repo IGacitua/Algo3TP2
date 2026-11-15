@@ -21,11 +21,11 @@ public class PlayerBehavior implements Behavior {
 
     public void executeAction(UnitAction action, GameMap map) throws PositionOutOfBoundsException {
         if (action instanceof MoveAction && !hasMoved) {
-            action.execute(map);
+            action.tryExecute(map);
             this.previousMovement = (MoveAction) action;
             this.hasMoved = true;
         } else if (action instanceof AttackAction && !hasAttacked) {
-            action.execute(map);
+            action.tryExecute(map);
             this.hasAttacked = true;
         }
     }

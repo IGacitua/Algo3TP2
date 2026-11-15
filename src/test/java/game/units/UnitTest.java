@@ -1,4 +1,3 @@
-
 package game.units;
 
 import game.map.GameMap;
@@ -6,14 +5,12 @@ import game.map.Position2D;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import game.units.movement.Flying;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import game.units.movement.FlyingMovement;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitTest {
 
@@ -127,7 +124,7 @@ public class UnitTest {
                 new Position2D(0, 0),
                 null,
                 10,
-                new FlyingMovement()
+                new Flying()
         );
 
         unit.contaminate();
@@ -142,7 +139,7 @@ public class UnitTest {
                 new Position2D(0, 0),
                 null,
                 3,
-                new FlyingMovement()
+                new Flying()
         );
 
         assertTrue(unit.canMoveToWater());
