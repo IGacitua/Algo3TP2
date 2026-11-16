@@ -1,9 +1,9 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
-import game.map.direction.NoDirection;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
+import game.position.direction.NoDirection;
 
 public class Artillery extends Weapon {
 

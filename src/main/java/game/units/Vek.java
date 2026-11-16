@@ -1,7 +1,7 @@
 package game.units;
 
 import game.map.GameMap;
-import game.map.Position2D;
+import game.position.Position2D;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
 import game.units.movement.Grounded;

@@ -1,0 +1,73 @@
+@startuml
+hide empty members
+
+package game.position
+{
+}
+
+package game.units
+{
+}
+
+package game.map.cell
+{
+}
+
+package game.map.creation
+{
+}
+
+package game.map
+{
+    class GameMap <<Singleton>>
+    {
+        - initialized: boolean
+
+        + initialize(importer: MapImporter, mapFilePath: String)
+        - ensureInitialized()
+
+        + getCellAt(position: Position2D): Cell
+        + hasMechAt(position: Position2D): Boolean
+        + hasVekTargetAt(position: Position2D): Boolean
+        + hasWaterAt(position: Position2D): Boolean
+
+        + damageCellAt(target: Position2D, damage: Integer)
+
+        + placeUnitAt(unit: Unit, position: Position2D): Boolean
+        + moveUnitTo(origin: Position2D, destination: Position2D): Boolean
+        + pushUnitTowards(unit: Position2D, direction: OrthogonalDirection)
+        + pushAllAdjacent(target: Position2D)
+        - pushAway(target: Position2D, direction: OrthogonalDirection)
+
+        + getReachablePositions(unitPosition: Position2D): Position2D[]
+        + findClosestVekTarget(origin: Position2D): Position2D
+        + findAttackableMechFrom(origin: Position2D): Position2D
+        + distanceToClosestVekTarget(pos: Position2D): Double
+    }
+
+    class CellGrid
+    {
+        + CellGrid(cells: Cell[][])
+
+        + replaceCell(cell: Cell, pos: Position2D)
+        - replaceCell(cell: Cell, row: Integer, col: Integer)
+
+        + getCell(position: Position2D): Cell
+        + getCell(row: Integer, col: Integer): Cell
+        + getCellsInRadius(center: Position2D, radius: Double, requirement: Predicate<Cell>): Position2D[]
+        + getNearestCell(center: Position2D, requirement: Predicate<Cell>): Position2D
+        + getDistanceToNearestCell(center: Position2D, requirement: Predicate<Cell>): Double
+    }
+}
+
+GameMap "1" o-- "1" CellGrid
+
+GameMap .left.> game.map.creation
+GameMap .up.> game.units
+
+CellGrid "1" *-up- "0..*" game.map.cell
+GameMap .down.> game.map.cell
+
+GameMap .right.> game.position
+CellGrid .right.> game.position
+@enduml

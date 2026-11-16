@@ -1,0 +1,118 @@
+@startuml
+hide empty members
+
+package game.position
+{
+}
+
+package game.electricalNetwork
+{
+}
+
+package game.units
+{
+    class Unit
+}
+
+package game.map.cell
+{
+    class Cell
+    {
+        + Cell(position: Position2D)
+        + cellTypeId(): String
+
+        # createUnitSlot(): UnitSlot
+
+        + tryDamage(damage: Integer)
+        + canDamage(): Boolean
+        # onDamaged(damage: Integer)
+
+        + tryPlaceUnit(unit: Unit, pushed: Boolean): Boolean
+        + canPlaceUnit(unit: Unit, pushed: Boolean): Boolean
+        # onUnitPlaced(unit: Unit, pushed: Boolean)
+
+        + popUnit(): Unit
+
+        + hasPosition(position: Position2D): Boolean
+        + hasUnit(): Boolean
+        + hasMech(): Boolean
+        + isVekTarget(): Boolean
+        + isWater(): Boolean
+    }
+
+    class Acid
+    {
+        + Acid(position: Position2D)
+        + cellTypeId(): String
+
+        # onUnitPlaced(unit: Unit, pushed: Boolean)
+    }
+
+    class Building
+    {
+        # isDestroyed: Boolean
+
+        + Building(position: Position2D)
+        + cellTypeId(): String
+
+        + canDamage(): Boolean
+        # onDamaged(damage: Integer)
+        # destroyBuilding()
+
+        # onUnitPlaced(unit: Unit, pushed: Boolean)
+
+        + isDestroyed(): Boolean
+        + isVekTarget(): Boolean
+    }
+
+    class Mountain
+    {
+        + Mountain(position: Position2D)
+        + cellTypeId(): String
+
+        # createUnitSlot(): UnitSlot
+
+        + canDamage(): Boolean
+    }
+
+    class Water
+    {
+        + Water(position: Position2D)
+        + cellTypeId(): String
+
+        + canPlaceUnit(unit: Unit, pushed: Boolean): Boolean
+        # onUnitPlaced(unit: Unit, pushed: Boolean)
+
+        + isWater(): Boolean
+    }
+
+    class UnitSlot
+    {
+        - maximumUnits: Integer
+        - containedUnits: Unit[]
+
+        + UnitSlot(maximumUnits: Integer)
+
+        + tryPlace(unit: Unit): Boolean
+        + popUnit(): Unit
+
+        + isFull(): Boolean
+        + hasUnit(): Boolean
+        + hasUnit(predicate: Predicate<Unit>): Boolean
+
+        + damage(damage: Integer)
+    }
+}
+
+Acid --|> Cell
+Building --|> Cell
+Mountain --|> Cell
+Water --|> Cell
+
+Cell "1" o-left-- "1" UnitSlot
+Cell -right-> game.position
+Building ..up..> game.electricalNetwork
+
+UnitSlot "1" o-- "0..*" Unit
+Cell ..> Unit
+@enduml

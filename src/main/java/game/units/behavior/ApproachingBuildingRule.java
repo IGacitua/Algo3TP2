@@ -1,8 +1,8 @@
 package game.units.behavior;
 
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
 import game.units.Vek;
 import game.units.actions.UnitAction;
 

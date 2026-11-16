@@ -1,8 +1,8 @@
 package game.units.actions;
 
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
 
 

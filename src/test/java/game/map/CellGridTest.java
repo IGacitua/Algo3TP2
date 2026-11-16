@@ -1,6 +1,7 @@
 package game.map;
 
 import game.map.cell.Cell;
+import game.position.Position2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

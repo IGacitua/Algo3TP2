@@ -1,7 +1,7 @@
 package game.map.creation;
 
-import game.map.Position2D;
 import game.map.cell.*;
+import game.position.Position2D;
 
 public class CellFactory {
 

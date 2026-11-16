@@ -1,6 +1,6 @@
 package game.map.cell;
 
-import game.map.Position2D;
+import game.position.Position2D;
 import game.units.Unit;
 
 public class Cell {
@@ -46,7 +46,7 @@ public class Cell {
             onUnitPlaced(unit, pushed);
             return true;
         }
-        
+
         return false;
     }
 

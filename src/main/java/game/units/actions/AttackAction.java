@@ -1,7 +1,7 @@
 package game.units.actions;
 
 import game.map.GameMap;
-import game.map.Position2D;
+import game.position.Position2D;
 import game.units.weapons.Weapon;
 
 public class AttackAction implements UnitAction {

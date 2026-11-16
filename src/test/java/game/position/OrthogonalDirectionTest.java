@@ -1,8 +1,7 @@
-package game.map;
+package game.position;
 
-import game.map.direction.*;
+import game.position.direction.*;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,13 +36,14 @@ public class OrthogonalDirectionTest {
     public void testEastMovesPositionCorrectly() {
         // Arrange
         OrthogonalDirection direction = new East();
-        Position2D position = Mockito.mock(Position2D.class);
+        Position2D position = new Position2D(3, 3);
 
         // Act
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveTo(1, 0);
+        assertEquals(4, position.getX(), "Expected position to be (4, 3), is (" + position.getX() + ", " + position.getY() + ")");
+        assertEquals(3, position.getY(), "Expected position to be (4, 3), is (" + position.getX() + ", " + position.getY() + ")");
     }
 
     @Test
@@ -76,13 +76,14 @@ public class OrthogonalDirectionTest {
     public void testNorthMovesPositionCorrectly() {
         // Arrange
         OrthogonalDirection direction = new North();
-        Position2D position = Mockito.mock(Position2D.class);
+        Position2D position = new Position2D(3, 3);
 
         // Act
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveTo(0, -1);
+        assertEquals(3, position.getX(), "Expected position to be (3, 2), is (" + position.getX() + ", " + position.getY() + ")");
+        assertEquals(2, position.getY(), "Expected position to be (3, 2), is (" + position.getX() + ", " + position.getY() + ")");
     }
 
     @Test
@@ -115,13 +116,14 @@ public class OrthogonalDirectionTest {
     public void testSouthMovesPositionCorrectly() {
         // Arrange
         OrthogonalDirection direction = new South();
-        Position2D position = Mockito.mock(Position2D.class);
+        Position2D position = new Position2D(3, 3);
 
         // Act
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveTo(0, 1);
+        assertEquals(3, position.getX(), "Expected position to be (3, 4), is (" + position.getX() + ", " + position.getY() + ")");
+        assertEquals(4, position.getY(), "Expected position to be (3, 4), is (" + position.getX() + ", " + position.getY() + ")");
     }
 
     @Test
@@ -154,13 +156,14 @@ public class OrthogonalDirectionTest {
     public void testWestMovesPositionCorrectly() {
         // Arrange
         OrthogonalDirection direction = new West();
-        Position2D position = Mockito.mock(Position2D.class);
+        Position2D position = new Position2D(3, 3);
 
         // Act
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position).moveTo(-1, 0);
+        assertEquals(2, position.getX(), "Expected position to be (2, 3), is (" + position.getX() + ", " + position.getY() + ")");
+        assertEquals(3, position.getY(), "Expected position to be (2, 3), is (" + position.getX() + ", " + position.getY() + ")");
     }
 
     @Test
@@ -193,12 +196,13 @@ public class OrthogonalDirectionTest {
     public void testNoDirectionDoesNotMovePosition() {
         // Arrange
         OrthogonalDirection direction = new NoDirection();
-        Position2D position = Mockito.mock(Position2D.class);
+        Position2D position = new Position2D(3, 3);
 
         // Act
         direction.movePosition(position);
 
         // Assert
-        Mockito.verify(position, Mockito.times(0)).moveTo(Mockito.any(int.class), Mockito.any(int.class));
+        assertEquals(3, position.getX(), "Expected position to be (3, 3), is (" + position.getX() + ", " + position.getY() + ")");
+        assertEquals(3, position.getY(), "Expected position to be (3, 3), is (" + position.getX() + ", " + position.getY() + ")");
     }
 }

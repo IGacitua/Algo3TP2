@@ -1,4 +1,4 @@
-package game.map;
+package game.position;
 
 public class PositionOutOfBoundsException extends Exception {
     public PositionOutOfBoundsException(Position2D position) {

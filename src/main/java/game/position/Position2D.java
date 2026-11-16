@@ -1,8 +1,6 @@
-package game.map;
+package game.position;
 
-import game.map.direction.East;
-import game.map.direction.NoDirection;
-import game.map.direction.OrthogonalDirection;
+import game.position.direction.*;
 
 public class Position2D {
     private int x;
@@ -43,6 +41,10 @@ public class Position2D {
         this.y = y;
     }
 
+    public void moveDelta(int dx, int dy) {
+        moveTo(getX() + dx, getY() + dy);
+    }
+
     public double getDistance(Position2D other) {
         return other.getDistance(getX(), getY());
     }
@@ -74,15 +76,15 @@ public class Position2D {
             return new East();
         }
         if (dx < 0 && dy == 0) {
-            return new game.map.direction.West();
+            return new West();
         }
 
         if (dx == 0 && dy > 0) {
-            return new game.map.direction.South();
+            return new South();
         }
 
         if (dx == 0 && dy < 0) {
-            return new game.map.direction.North();
+            return new North();
         }
 
         return new NoDirection();

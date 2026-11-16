@@ -1,10 +1,10 @@
 package game.units;
 
 import game.map.GameMap;
-import game.map.Position2D;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
+import game.position.Position2D;
 import game.units.movement.Flying;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

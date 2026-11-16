@@ -1,0 +1,101 @@
+@startuml
+hide empty members
+
+package game.position
+{
+    class Position2D
+    {
+        - x: Integer
+        - y: Integer
+
+        + Position2D(x: Integer, y: Integer)
+
+        + getX(): Integer
+        + getY(): Integer
+        + moveTo(x: Integer, y: Integer)
+        + moveDelta(dx: Integer, dy: Integer)
+
+        + getDistance(other: Position2D): Double
+        + getDistance(x: Integer, y: Integer): Double
+        + getOrthogonalDistance(other: Position2D): Double
+        + getOrthogonalDistance(x: Integer, y: Integer): Double
+
+        + getDirectionTo(other: Position2D): OrthogonalDirection
+        + getDirectionTo(x: Integer, y: Integer): OrthogonalDirection
+        + getAdjacent(direction: OrthogonalDirection): Position2D
+
+        + isHigherPriorityThan(other: Position2D): Boolean
+    }
+}
+
+package game.position.direction
+{
+    interface OrthogonalDirection
+    {
+        + movePosition(position: Position2D)
+
+        + getDeltaX(): Integer
+        + getDeltaY(): Integer
+
+        + invert(): OrthogonalDirection
+    }
+
+    class North
+    {
+        + movePosition(position: Position2D)
+
+        + getDeltaX(): Integer
+        + getDeltaY(): Integer
+
+        + invert(): OrthogonalDirection
+    }
+
+    class South
+    {
+        + movePosition(position: Position2D)
+
+        + getDeltaX(): Integer
+        + getDeltaY(): Integer
+
+        + invert(): OrthogonalDirection
+    }
+
+    class East
+    {
+        + movePosition(position: Position2D)
+
+        + getDeltaX(): Integer
+        + getDeltaY(): Integer
+
+        + invert(): OrthogonalDirection
+    }
+
+    class West
+    {
+        + movePosition(position: Position2D)
+
+        + getDeltaX(): Integer
+        + getDeltaY(): Integer
+
+        + invert(): OrthogonalDirection
+    }
+
+    class NoDirection
+    {
+        + movePosition(position: Position2D)
+
+        + getDeltaX(): Integer
+        + getDeltaY(): Integer
+
+        + invert(): OrthogonalDirection
+    }
+}
+
+North ..|> OrthogonalDirection
+South ..|> OrthogonalDirection
+East ..|> OrthogonalDirection
+West ..|> OrthogonalDirection
+NoDirection ..|> OrthogonalDirection
+
+OrthogonalDirection <..right..> Position2D
+@enduml

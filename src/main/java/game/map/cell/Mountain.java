@@ -1,6 +1,6 @@
 package game.map.cell;
 
-import game.map.Position2D;
+import game.position.Position2D;
 
 public class Mountain extends Cell {
 

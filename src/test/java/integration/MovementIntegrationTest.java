@@ -1,10 +1,10 @@
 package integration;
 
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
 import game.map.creation.CellFactory;
 import game.map.creation.MapImporter;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
 import game.units.Mech;
 import game.units.actions.UnitAction;
 import game.units.movement.Grounded;

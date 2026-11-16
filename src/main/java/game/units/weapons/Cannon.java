@@ -1,12 +1,12 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
 import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.cell.Mountain;
-import game.map.direction.*;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
+import game.position.direction.*;
 
 import java.util.List;
 

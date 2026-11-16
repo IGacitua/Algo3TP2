@@ -1,6 +1,6 @@
-package game.map.direction;
+package game.position.direction;
 
-import game.map.Position2D;
+import game.position.Position2D;
 
 public interface OrthogonalDirection {
     void movePosition(Position2D position);

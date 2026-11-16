@@ -1,15 +1,10 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
 import game.map.cell.Cell;
-import game.map.direction.East;
-import game.map.direction.NoDirection;
-import game.map.direction.North;
-import game.map.direction.OrthogonalDirection;
-import game.map.direction.South;
-import game.map.direction.West;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
+import game.position.direction.*;
 
 public class Punch extends Weapon {
 

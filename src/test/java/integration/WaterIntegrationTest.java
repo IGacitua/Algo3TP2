@@ -1,11 +1,11 @@
 package integration;
 
 import game.map.GameMap;
-import game.map.Position2D;
 import game.map.cell.Cell;
 import game.map.cell.Water;
 import game.map.creation.MapImporter;
-import game.map.direction.East;
+import game.position.Position2D;
+import game.position.direction.East;
 import game.units.Unit;
 import game.units.movement.Flying;
 import org.junit.jupiter.api.Test;

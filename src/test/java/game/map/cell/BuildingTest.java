@@ -1,7 +1,7 @@
 package game.map.cell;
 
 import game.electricalNetwork.ElectricalNetwork;
-import game.map.Position2D;
+import game.position.Position2D;
 import game.units.Unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

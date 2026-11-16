@@ -2,12 +2,12 @@ package integration;
 
 import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
-import game.map.Position2D;
-import game.map.PositionOutOfBoundsException;
 import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.weapons.Artillery;

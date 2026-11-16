@@ -1,7 +1,7 @@
 package game.units.behavior;
 
 import game.map.GameMap;
-import game.map.PositionOutOfBoundsException;
+import game.position.PositionOutOfBoundsException;
 
 public interface Behavior {
     void executePhase(GameMap map) throws PositionOutOfBoundsException;

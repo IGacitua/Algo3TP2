@@ -1,10 +1,10 @@
-package game.map.direction;
+package game.position.direction;
 
-import game.map.Position2D;
+import game.position.Position2D;
 
-public class North implements OrthogonalDirection {
+public class South implements OrthogonalDirection {
     public void movePosition(Position2D position) {
-        position.moveTo(getDeltaX(), getDeltaY());
+        position.moveDelta(getDeltaX(), getDeltaY());
     }
 
     public int getDeltaX() {
@@ -12,15 +12,15 @@ public class North implements OrthogonalDirection {
     }
 
     public int getDeltaY() {
-        return -1;
+        return 1;
     }
 
     public OrthogonalDirection invert() {
-        return new South();
+        return new North();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof North;
+        return obj instanceof South;
     }
 }

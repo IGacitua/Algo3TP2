@@ -1,7 +1,9 @@
 package game.map;
 
 import game.map.cell.Cell;
-import game.map.direction.*;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
+import game.position.direction.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

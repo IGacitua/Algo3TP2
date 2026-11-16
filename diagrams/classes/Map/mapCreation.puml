@@ -1,0 +1,45 @@
+@startuml
+hide empty members
+
+package game.utils
+{
+    class FileHandler <<Singleton>>
+    {
+        + writeFile(data: String, path: String)
+        + readFile(path: String) : String
+    }
+}
+
+package game.position
+{
+}
+
+package game.map.cell
+{
+}
+
+package game.map.creation
+{
+    class MapImporter
+    {
+        + MapImporter(fileHandler: FileHandler, cellFactory: CellFactory)
+
+        + importMap(filePath: String): Cell[][]
+        - parseData(map: String): Cell[][]
+        - getColumnCount(rows: String[]): Integer
+    }
+
+    class CellFactory
+    {
+        + createFromId(cellId: String, position: Position2D): Cell
+    }
+}
+
+MapImporter -up-> "1" FileHandler
+MapImporter --down-> "1" CellFactory
+
+CellFactory .left.> game.map.cell: <<creates>>
+
+MapImporter .right.> game.position
+CellFactory .right.> game.position
+@enduml

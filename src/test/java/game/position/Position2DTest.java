@@ -1,6 +1,6 @@
-package game.map;
+package game.position;
 
-import game.map.direction.*;
+import game.position.direction.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,6 +1,6 @@
 package game.map.creation;
 
-import game.map.Position2D;
+import game.position.Position2D;
 import game.utils.FileHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

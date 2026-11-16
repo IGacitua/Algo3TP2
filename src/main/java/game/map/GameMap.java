@@ -4,7 +4,9 @@ import game.SingletonNotInitializedException;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
-import game.map.direction.*;
+import game.position.Position2D;
+import game.position.PositionOutOfBoundsException;
+import game.position.direction.*;
 import game.units.Unit;
 
 import java.util.ArrayList;
