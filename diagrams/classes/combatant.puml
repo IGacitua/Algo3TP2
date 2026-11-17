@@ -1,79 +1,119 @@
-
 @startuml Combatant
 
 skinparam classAttributeIconSize 0
-skinparam packageStyle rectangle
+hide empty members
+top to bottom direction
 
-package Game.Units {
+' ==========================
+' UNIDADES
+' ==========================
 
-    class Combatant {
-        - health: int
-        - contaminated: boolean
+class Unit {
+    # weapon: Weapon
+    - position: Position2D
+    - health: Health
+    - movement: Movement
+    - contaminated: boolean
 
-        + receiveDamage(amount: int)
-        + isAlive(): boolean
-        + attack(target: Position)
-        + contaminate()
-    }
-
-    interface CombatantFactory {
-        + create(id: String): Combatant
-    }
-
-    interface Weapon {
-        + attack(origin: Position, target: Position)
-    }
-
-    class Punch
-    class Cannon
-    class Artillery
-    class Bite
-    class AcidShot
-    class Sting
-
-    class Knockback {
-        + push(target: Combatant, direction: Direction)
-    }
-
-    interface Movement {
-        + canMove(distance: int): boolean
-    }
-
-    class GroundMovement {
-        - range: int
-    }
-
-    class FlyingMovement {
-        - range: int
-    }
-
-    class ForcedMovement {
-        + move(target: Combatant, direction: Direction)
-    }
-
-    Combatant --> Weapon
-    Combatant --> Movement
-    Combatant --> VisualElement
-
-    Weapon <|.. Punch
-    Weapon <|.. Cannon
-    Weapon <|.. Artillery
-    Weapon <|.. Bite
-    Weapon <|.. AcidShot
-    Weapon <|.. Sting
-
-    Weapon --> Knockback
-
-    Movement <|.. GroundMovement
-    Movement <|.. FlyingMovement
-    Movement <|.. ForcedMovement
-
-    Knockback --> ForcedMovement
+    + getAttack(target: Position2D): UnitAction
+    + getMove(destination: Position2D): UnitAction
+    + damage(amount: int): void
+    + isAlive(): boolean
+    + moveTo(position: Position2D): void
+    + contaminate(): void
+    + removeContamination(): void
+    + getMovementDistance(): int
 }
 
-package Game.UI {
-    interface VisualElement
+class Mech {
+    + createMoveCommand(destination: Position2D): MoveAction
+    + canAttack(map: GameMap): boolean
 }
+
+class Vek {
+    + planBuildingAttackFrom(target: Position2D, map: GameMap): List<UnitAction>
+    + planMechAttackFrom(target: Position2D, map: GameMap): List<UnitAction>
+    + planMovementTo(target: Position2D): List<UnitAction>
+}
+
+class Health {
+    - current: int
+    - maximum: int
+
+    + receiveDamage(amount: int): void
+    + isAlive(): boolean
+    + kill(): void
+}
+
+Unit <|-- Mech
+Unit <|-- Vek
+Unit *-- Health
+
+
+' ==========================
+' MOVIMIENTO
+' ==========================
+
+abstract class Movement {
+    # movementDistance: int
+
+    + {abstract} canMoveToWater(): boolean
+    + {abstract} canBeContaminated(): boolean
+    + getMovementDistance(): int
+}
+
+class Grounded
+class Flying
+
+Movement <|-- Grounded
+Movement <|-- Flying
+
+Unit --> Movement
+
+
+' ==========================
+' ARMAS
+' ==========================
+
+abstract class Weapon {
+    + attack(origin: Position2D, target: Position2D, map: GameMap): void
+    + {abstract} attack(target: Position2D, map: GameMap): void
+}
+
+class Punch
+class Cannon
+class Artillery
+
+Weapon <|-- Punch
+Weapon <|-- Cannon
+Weapon <|-- Artillery
+
+Unit --> Weapon
+
+
+' ==========================
+' ACCIONES
+' ==========================
+
+interface UnitAction {
+    + tryExecute(map: GameMap): boolean
+}
+
+class MoveAction {
+    + tryExecute(map: GameMap): boolean
+    + undone(map: GameMap): void
+}
+
+class AttackAction {
+    + tryExecute(map: GameMap): boolean
+}
+
+UnitAction <|.. MoveAction
+UnitAction <|.. AttackAction
+
+Unit ..> UnitAction
+Unit ..> MoveAction
+Unit ..> AttackAction
 
 @enduml
 
