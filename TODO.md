@@ -14,7 +14,7 @@ Entrega 1:
 
 Entrega 2:
 
-- [ ] Verificar que al empujar una unidad contra otra unidad u obstáculo, la unidad no se mueva y se aplique el daño de
+- [X] Verificar que al empujar una unidad contra otra unidad u obstáculo, la unidad no se mueva y se aplique el daño de
   colisión.
 - [ ] Verificar que el daño a un edificio reduzca la Red Eléctrica en 1 punto.
 - [ ] Verificar que un Vek terrestre empujado al Agua muera, que el Avispón no, y que un Mech en el Agua no pueda

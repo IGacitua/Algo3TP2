@@ -98,8 +98,15 @@ public class GameMap {
         Cell toCell = getCellAt(unit.getAdjacent(direction));
 
         Unit unitToPush = fromCell.popUnit();
-        if (unitToPush != null) {
-            toCell.tryPlaceUnit(unitToPush, true);
+        if (unitToPush == null) {
+            return;
+        }
+
+        boolean placed = toCell.tryPlaceUnit(unitToPush, true);
+        if (!placed) {
+            fromCell.tryPlaceUnit(unitToPush, false);
+            unitToPush.damage(1);
+            toCell.tryDamage(1);
         }
     }
 

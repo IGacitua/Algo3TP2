@@ -257,4 +257,31 @@ public class BuildingTest {
         // Assert
         Assertions.assertTrue(hasMech, "Building should report having a mech after placement.");
     }
+
+    @Test
+    public void testCannotPushUnitIntoIntactBuilding() {
+        // Arrange
+        Cell building = new Building(new Position2D(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
+
+        // Act
+        boolean result = building.tryPlaceUnit(unit, true);
+
+        // Assert
+        Assertions.assertFalse(result, "Pushed unit should not be placed into an intact building.");
+    }
+
+    @Test
+    public void testCanPushUnitIntoDestroyedBuilding() {
+        // Arrange
+        Cell building = new Building(new Position2D(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
+
+        // Act
+        boolean result = building.tryPlaceUnit(unit, true);
+
+        // Assert
+        Assertions.assertTrue(result, "Pushed unit should be able to move onto a destroyed building.");
+    }
 }

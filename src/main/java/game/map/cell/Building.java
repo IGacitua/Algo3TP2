@@ -53,4 +53,13 @@ public class Building extends Cell {
         return !isDestroyed;
     }
 
+    @Override
+    public boolean canPlaceUnit(Unit unit, boolean pushed) {
+        if (pushed && !isDestroyed) {
+            return false;
+        }
+
+        return super.canPlaceUnit(unit, pushed);
+    }
+
 }

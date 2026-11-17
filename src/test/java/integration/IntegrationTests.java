@@ -63,7 +63,7 @@ public class IntegrationTests {
         Unit mecha = new Mech(new Position2D(targetX, targetY + 2), artillery);   // South of target (y grows downward)
 
         Unit vekCentro = new Vek(new Position2D(targetX, targetY), null);        // Target
-        Unit vekNorte = new Vek(new Position2D(targetX, targetY - 1), null);    // North of target
+        Unit vekNorte = new Vek(new Position2D(targetX, targetY - 2), null);    // North of target
         Unit vekEste = new Vek(new Position2D(targetX + 1, targetY), null);    // East of target
 
         // Act
