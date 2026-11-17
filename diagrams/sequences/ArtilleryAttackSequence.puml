@@ -1,0 +1,148 @@
+@startuml
+title Sequence Diagram: Artillery Mech Attack (Damage, Adjacent Push, Building Collision & Electrical Network Discount)
+
+autonumber
+skinparam maxMessageSize 160
+
+actor "Player" as Player
+participant "gameMap:GameMap" as GameMap
+participant "cellGrid:CellGrid" as CellGrid
+participant "artilleryWeapon:Artillery" as Artillery
+participant "artilleryMech:Mech" as Mech
+participant "attackAction:AttackAction" as AttackAction
+participant "targetCell:Cell" as TargetCell
+participant "targetVek:Unit" as TargetVek
+participant "adjacentCell:Cell" as AdjacentCell
+participant "adjacentVek:Unit" as AdjacentVek
+participant "vekHealth:Health" as VekHealth
+participant "buildingCell:Building" as Building
+participant "electricalNetwork:ElectricalNetwork" as ElectricalNetwork
+
+== Scenario Initialization ==
+create GameMap
+Player -> GameMap : initialize(importer, mapFilePath)
+create Artillery
+Player -> Artillery : new()
+create Mech
+Player -> Mech : new(mechPos, artilleryWeapon)
+create TargetVek
+Player -> TargetVek : new(targetPos, null)
+create AdjacentVek
+Player -> AdjacentVek : new(adjacentPos, null)
+create Building
+Player -> Building : new(buildingPos)
+
+== Action Creation & Execution ==
+Player -> Mech : getAttack(targetPos)
+activate Mech
+    create AttackAction
+    Mech -> AttackAction : new(artilleryWeapon, targetPos, originPos)
+    Mech -->> Player : attackAction
+deactivate Mech
+
+Player -> AttackAction : tryExecute(gameMap)
+activate AttackAction
+
+    AttackAction -> Artillery : attack(originPos, targetPos, gameMap)
+    activate Artillery
+
+        ' 1. Direct damage to the target tile
+        Note over Artillery, TargetVek : 1. Direct Damage on Target Cell
+        Artillery -> GameMap : damageCellAt(targetPos, 1)
+        activate GameMap
+            GameMap -> CellGrid : getCell(targetPos)
+            activate CellGrid
+                CellGrid -->> GameMap : targetCell
+            deactivate CellGrid
+
+            GameMap -> TargetCell : tryDamage(1)
+            activate TargetCell
+                TargetCell -> TargetVek : damage(1)
+                activate TargetVek
+                    TargetVek -> VekHealth : receiveDamage(1)
+                    activate VekHealth
+                    deactivate VekHealth
+                deactivate TargetVek
+            deactivate TargetCell
+        deactivate GameMap
+
+        ' 2. Push all 4 adjacent units radially outwards
+        Note over Artillery, GameMap : 2. Radial Push of Adjacent Units
+        Artillery -> GameMap : pushAllAdjacent(targetPos)
+        activate GameMap
+
+            loop 4 Orthogonal Directions (North, South, East, West)
+                GameMap -> GameMap : pushAway(targetPos, direction)
+                activate GameMap
+
+                    GameMap -> GameMap : pushUnitTowards(adjacentPos, direction)
+                    activate GameMap
+
+                        GameMap -> CellGrid : getCell(adjacentPos)
+                        activate CellGrid
+                            CellGrid -->> GameMap : adjacentCell
+                        deactivate CellGrid
+
+                        opt adjacentCell.hasUnit() == true
+                            GameMap -> AdjacentCell : popUnit()
+                            activate AdjacentCell
+                                AdjacentCell -->> GameMap : adjacentVek
+                            deactivate AdjacentCell
+
+                            GameMap -> CellGrid : getCell(buildingPos)
+                            activate CellGrid
+                                CellGrid -->> GameMap : buildingCell
+                            deactivate CellGrid
+
+                            ' 3. Attempt to place pushed unit into destination cell
+                            GameMap -> Building : tryPlaceUnit(adjacentVek, true)
+                            activate Building
+                                Building -> Building : canPlaceUnit(adjacentVek, true)
+                                Building -->> GameMap : false
+                            deactivate Building
+
+                            ' 4. Collision against Building & Electrical Network discount
+                            alt Destination is blocked (Building Collision)
+                                Note over GameMap, ElectricalNetwork : 3. Collision Damage & Electrical Network Discount
+
+                                ' Return pushed unit to its original cell and apply collision damage
+                                GameMap -> AdjacentCell : tryPlaceUnit(adjacentVek, false)
+                                activate AdjacentCell
+                                deactivate AdjacentCell
+
+                                GameMap -> AdjacentVek : damage(1)
+                                activate AdjacentVek
+                                    AdjacentVek -> VekHealth : receiveDamage(1)
+                                    activate VekHealth
+                                    deactivate VekHealth
+                                deactivate AdjacentVek
+
+                                ' Apply collision damage to the Building
+                                GameMap -> Building : tryDamage(1)
+                                activate Building
+                                    Building -> Building : onDamaged(1)
+                                    activate Building
+                                        Building -> Building : destroyBuilding()
+                                        Building -> ElectricalNetwork : reducePower(1)
+                                        activate ElectricalNetwork
+                                        deactivate ElectricalNetwork
+                                    deactivate Building
+                                deactivate Building
+
+                            else Destination cell is free
+                                Note over GameMap : Unit is placed in destination cell and updates position
+                            end
+                        end
+
+                    deactivate GameMap
+                deactivate GameMap
+            end
+
+        deactivate GameMap
+
+    Artillery -->> AttackAction : void
+    deactivate Artillery
+
+    AttackAction -->> Player : true
+deactivate AttackAction
+@enduml
