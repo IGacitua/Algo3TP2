@@ -1,3 +1,56 @@
+Correciones (Eliminar al completar):
+
+- Modelo y Codigo:
+    - [Grave] Viola el ocultamiento de la informacion GameMap y ElectricalNetwork son Singletons globales; Mantener solo
+      uno para evitar errores. Cannon y Artillery reciben el map por parametro pero lo ignoran y usan
+      GameMap.getInstance ()
+
+    - [Grave] Viola el encapsulamiento Position2D es mutable.
+
+    - [Medio] Implementa al menos una clase anemica Mech: solo isMech (), createMoveCommand duplicado y canAttack sin
+      uso; no existen los tipos de Mech
+
+    - [Medio] Inicializa objetos en estado inconsistente GameMap existe sin grilla hasta initialize ()
+      (ensureInitialized en cada metodo), pueden separar el singleton de forma que el juego sea singleton y el mapa no
+      asi se puede inicializar correctamente new Mech (pos, arma) se crea con movimiento 1 (Grounded (1)); el enunciado
+      pide 3 CellFactory crea celdas con posicion null para leer el ID, tener los IDs directo en la factory
+
+    - [Medio] Viola Tell don’t ask: GameMap.moveUnitTo saca la unidad, pregunta getMovementDistance y decide afuera; si
+      no, la vuelve a poner
+
+    - [Medio] If en lugar de polimorfismo PlayerBehavior.executeAction: instanceof MoveAction / AttackAction
+      Cannon.isObstacleOrUnit: instanceof Building / Mountain instanceof NoDirection en las armas
+
+    - [Medio] Desnormalizacion del estado PlayerBehavior: hasMoved y previousMovement != null dicen lo mismo; flags
+      hasAttacked/hasUndone (candidato a State)Unit.isDamaged derivable de Health; posicion duplicada en Cell y Unit
+
+    - [Leve] Codigo intrincado Cannon no usa el origen: adivina al tirador buscando la unidad mas lejana en alguna
+      direccion desde el objetivo; Punch adivina la direccion CellGrid/MapImporter mezclan row/col con x/y
+
+    - [Leve] Un nuevo requerimiento implicara alterar varias clases Nuevo tipo de casilla: subclase + CellFactory +
+      isXxx () en Cell + hasXxxAt () en GameMap
+
+- Bugs funcionales:
+    - El movimiento atraviesa montanas (solo compara distancia Manhattan)
+    - Un Mech puede moverse sobre un Edificio: lo destruye y resta Red
+    - Mover/empujar a casilla ocupada: la unidad desaparece del tablero
+    - getReachablePositions borra la unidad del mapa y usa distancia euclidea
+    - Canon: con un Vek detras del Mech, el disparo sale del Vek y dania al Mech
+    - Un Vek terrestre puede moverse voluntariamente al Agua y muere
+    - PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
+
+- Pruebas:
+
+  -[Grave] Tests incorrectos / vacios mechCanUndoMovementBeforeAttacking compara la misma instancia de posicion: pasa
+  sin deshacer nada TestArtilleryShootsVek afirma que el Vek empujado termina SOBRE el edificio MovementIntegrationTest
+  usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
+
+  -[Medio] Testea getters y setters unicamente isWater/isVekTarget/hasPosition en todos los tests de cell; getDeltaX/Y
+
+- Diagramas e informe:
+
+    - [Leve] Utilizacion inapropiada de relaciones Cell o-- UnitSlot y GameMap o-- CellGrid deberian ser composicion;
+
 Entrega 1:
 
 - [X] Verificar que el tablero se cargue con 8x8 casillas a partir de un mapa predefinido, con los tipos de casilla en
