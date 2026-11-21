@@ -47,10 +47,6 @@ Correciones (Eliminar al completar):
 
   -[Medio] Testea getters y setters unicamente isWater/isVekTarget/hasPosition en todos los tests de cell; getDeltaX/Y
 
-- Diagramas e informe:
-
-    - [Leve] Utilizacion inapropiada de relaciones Cell o-- UnitSlot y GameMap o-- CellGrid deberian ser composicion;
-
 Entrega 1:
 
 - [X] Verificar que el tablero se cargue con 8x8 casillas a partir de un mapa predefinido, con los tipos de casilla en

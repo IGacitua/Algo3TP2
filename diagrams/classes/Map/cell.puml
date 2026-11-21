@@ -109,7 +109,7 @@ Building --|> Cell
 Mountain --|> Cell
 Water --|> Cell
 
-Cell "1" o-left-- "1" UnitSlot
+Cell "1" *-left-- "1" UnitSlot
 Cell -right-> game.position
 Building ..up..> game.electricalNetwork
 

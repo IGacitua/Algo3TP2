@@ -60,7 +60,7 @@ package game.map
     }
 }
 
-GameMap "1" o-- "1" CellGrid
+GameMap "1" *-- "1" CellGrid
 
 GameMap .left.> game.map.creation
 GameMap .up.> game.units
