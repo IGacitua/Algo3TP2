@@ -13,7 +13,7 @@ import java.util.List;
 public class Cannon extends Weapon {
 
     @Override
-    public void attack(Position target, GameMap map) {
+    public boolean attack(Position target, GameMap map) {
         OrthogonalDirection directionToShooter = getDirectionToShooter(target, map);
 
         if (directionToShooter instanceof NoDirection) {
@@ -23,10 +23,10 @@ public class Cannon extends Weapon {
         Position shooterOrigin = findFurthestUnitPosition(target, directionToShooter, map);
         OrthogonalDirection fireDirection = directionToShooter.invert();
 
-        fireAlongLine(shooterOrigin, fireDirection, map);
+        return fireAlongLine(shooterOrigin, fireDirection, map);
     }
 
-    private void fireAlongLine(Position origin, OrthogonalDirection fireDirection, GameMap map) {
+    private boolean fireAlongLine(Position origin, OrthogonalDirection fireDirection, GameMap map) {
         Position current = origin.getAdjacent(fireDirection);
 
         while (true) {
@@ -34,12 +34,12 @@ public class Cannon extends Weapon {
             try {
                 cell = map.getCellAt(current);
             } catch (PositionOutOfBoundsException e) {
-                return;
+                return false;
             }
 
             if (isObstacle(cell)) {
                 impactCell(current, cell, fireDirection, map);
-                return;
+                return true;
             }
 
             current = current.getAdjacent(fireDirection);

@@ -11,7 +11,7 @@ public class Punch extends Weapon {
     private static final int DAMAGE = 2;
 
     @Override
-    public void attack(Position origin, Position target, GameMap map) {
+    public boolean attack(Position origin, Position target, GameMap map) {
         if (origin.getDiagonalDistance(target) != 1.0) {
             throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
         }
@@ -21,21 +21,21 @@ public class Punch extends Weapon {
             throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
         }
 
-        applyPunch(target, pushDirection, map);
+        return applyPunch(target, pushDirection, map);
     }
 
     @Override
-    public void attack(Position target, GameMap map) {
+    public boolean attack(Position target, GameMap map) {
         OrthogonalDirection pushDirection = getPushDirection(target, map);
 
         if (pushDirection instanceof NoDirection) {
             throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
         }
 
-        applyPunch(target, pushDirection, map);
+        return applyPunch(target, pushDirection, map);
     }
 
-    private void applyPunch(Position target, OrthogonalDirection pushDirection, GameMap map) {
+    private boolean applyPunch(Position target, OrthogonalDirection pushDirection, GameMap map) {
         try {
             map.damageCellAt(target, DAMAGE);
         } catch (PositionOutOfBoundsException e) {
@@ -47,6 +47,8 @@ public class Punch extends Weapon {
         } catch (PositionOutOfBoundsException ignored) {
             // Si la casilla destino del empuje cae fuera del mapa, la unidad permanece en el borde
         }
+
+        return true;
     }
 
     private OrthogonalDirection getPushDirection(Position target, GameMap map) {

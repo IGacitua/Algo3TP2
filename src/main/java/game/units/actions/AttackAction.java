@@ -17,7 +17,6 @@ public class AttackAction implements UnitAction {
 
     @Override
     public boolean tryExecute(GameMap map) {
-        weapon.attack(origin, target, map); // Se le pasa el origen, el objetivo y el mapa al arma
-        return true; // TODO: Cambiar Weapon::Attack para que devuelva si el ataque se logró o no.
+        return weapon.attack(origin, target, map);
     }
 }

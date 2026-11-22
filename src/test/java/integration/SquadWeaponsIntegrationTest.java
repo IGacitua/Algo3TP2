@@ -61,9 +61,10 @@ public class SquadWeaponsIntegrationTest {
         UnitAction punchAttack = combatMech.getAttack(mechPosition, targetPosition);
 
         // Act
-        punchAttack.tryExecute(gameMap);
+        boolean hit = punchAttack.tryExecute(gameMap);
 
         // Assert
+        assertTrue(hit, "Punch attack on valid adjacent target should return true");
         assertTrue(targetVek.isDamaged(), "Target Vek should take damage from Punch");
         assertEquals(1, targetVek.getCurrentHealth(), "Target Vek health should decrease by 2 points");
         assertTrue(gameMap.hasUnitAt(pushedPosition), "Target Vek should be pushed 1 tile in the hit direction");
@@ -93,13 +94,37 @@ public class SquadWeaponsIntegrationTest {
         UnitAction cannonAttack = cannonMech.getAttack(mechPosition, aimPosition);
 
         // Act
-        cannonAttack.tryExecute(gameMap);
+        boolean hit = cannonAttack.tryExecute(gameMap);
 
         // Assert
+        assertTrue(hit, "Cannon should return true when hitting the first unit in line of sight");
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
         assertEquals(2, firstVek.getCurrentHealth(), "First unit should receive 1 damage from Cannon");
         assertFalse(secondVekBehind.isDamaged(), "Unit behind the first target should not take damage");
         assertEquals(3, secondVekBehind.getCurrentHealth(), "Unit behind should keep its full health");
+    }
+
+    /*
+     * Verificar que el Cañón devuelva false si dispara en línea recta
+     * sin encontrar ninguna unidad u obstáculo hasta el borde del tablero.
+     */
+    @Test
+    public void cannonReturnsFalseWhenNoObstacleOrUnitIsHitBeforeMapEdge() throws PositionOutOfBoundsException {
+        // Arrange
+        Weapon cannon = new Cannon();
+        Position mechPosition = new Position(4, 4);
+        Position aimPosition = new Position(4, 5);
+
+        Unit cannonMech = new Unit(cannon);
+        gameMap.placeUnitAt(cannonMech, mechPosition);
+
+        UnitAction cannonAttack = cannonMech.getAttack(mechPosition, aimPosition);
+
+        // Act
+        boolean hit = cannonAttack.tryExecute(gameMap);
+
+        // Assert
+        assertFalse(hit, "Cannon should return false when reaching map bounds without hitting anything");
     }
 
     /*
@@ -143,9 +168,10 @@ public class SquadWeaponsIntegrationTest {
         UnitAction validArtilleryAttack = artilleryMech.getAttack(mechPosition, targetPosition);
 
         // Act
-        validArtilleryAttack.tryExecute(gameMap);
+        boolean hit = validArtilleryAttack.tryExecute(gameMap);
 
         // Assert
+        assertTrue(hit, "Valid artillery attack should return true");
         assertThrows(RuntimeException.class, () -> adjacentAttack.tryExecute(gameMap), "Artillery should not be able to target adjacent tiles");
         assertTrue(centerVek.isDamaged(), "Unit on target cell should take damage over obstacle");
         assertEquals(2, centerVek.getCurrentHealth(), "Unit on target cell should receive 1 damage over obstacle");
