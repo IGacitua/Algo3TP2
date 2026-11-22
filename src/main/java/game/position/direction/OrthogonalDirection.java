@@ -7,6 +7,10 @@ public abstract class OrthogonalDirection {
         return position.getMoved(getDeltaX(), getDeltaY());
     }
 
+    public boolean isValidDirection() {
+        return true;
+    }
+
     public abstract int getDeltaX();
 
     public abstract int getDeltaY();

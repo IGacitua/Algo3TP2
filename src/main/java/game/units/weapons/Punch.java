@@ -17,7 +17,7 @@ public class Punch extends Weapon {
         }
 
         OrthogonalDirection pushDirection = origin.getDirectionTo(target);
-        if (pushDirection instanceof NoDirection) {
+        if (!pushDirection.isValidDirection()) {
             throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
         }
 
@@ -28,7 +28,7 @@ public class Punch extends Weapon {
     public boolean attack(Position target, GameMap map) {
         OrthogonalDirection pushDirection = getPushDirection(target, map);
 
-        if (pushDirection instanceof NoDirection) {
+        if (!pushDirection.isValidDirection()) {
             throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
         }
 

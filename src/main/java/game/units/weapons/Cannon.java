@@ -14,7 +14,7 @@ public class Cannon extends Weapon {
     public boolean attack(Position target, GameMap map) {
         OrthogonalDirection directionToShooter = getDirectionToShooter(target, map);
 
-        if (directionToShooter instanceof NoDirection) {
+        if (!directionToShooter.isValidDirection()) {
             throw new IllegalArgumentException("Cannon can only fire in a straight orthogonal line.");
         }
 

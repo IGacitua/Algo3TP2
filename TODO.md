@@ -13,7 +13,7 @@ Correciones (Eliminar al completar):
 
     - [Medio] If en lugar de polimorfismo:
         - `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
-        - `instanceof NoDirection` en las armas
+        
 
     - [Medio] Desnormalizacion del estado PlayerBehavior:
         - hasMoved y previousMovement != null dicen lo mismo;
