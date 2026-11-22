@@ -1,16 +1,20 @@
 package integration;
 
+import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.cell.*;
 import game.map.creation.CellFactory;
 import game.map.creation.MapImporter;
-import game.position.Position2D;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.utils.FileHandler;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class MapTests {
+
+    private final ElectricalNetwork mockNetwork = Mockito.mock(ElectricalNetwork.class);
 
     @Test
     public void testMapZeroLoadsCorrectly() {
@@ -37,7 +41,7 @@ public class MapTests {
                 } else if (x == 3 || x == 4) {
                     expected[y][x] = new Cell(null);
                 } else {
-                    expected[y][x] = new Building(null);
+                    expected[y][x] = new Building(null, mockNetwork);
                 }
             }
         }
@@ -55,19 +59,15 @@ public class MapTests {
 
     private void testMapLoadsCorrectly(String mapPath, Cell[][] expected) {
         FileHandler fileHandler = FileHandler.getInstance();
-        CellFactory cellFactory = new CellFactory();
+        CellFactory cellFactory = new CellFactory(mockNetwork);
         MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
-        GameMap map = GameMap.getInstance();
-        try {
-            map.initialize(mapImporter, mapPath);
-        } catch (Exception e) {
-            Assert.fail("Map failed to load: " + e.getMessage());
-        }
+
+        GameMap map = new GameMap(mapImporter, mapPath);
 
         for (int y = 0; y < expected.length; y++) {
             for (int x = 0; x < expected[y].length; x++) {
                 try {
-                    Cell actual = map.getCellAt(new Position2D(x, y));
+                    Cell actual = map.getCellAt(new Position(x, y));
                     Assert.assertEquals("Unexpected cell type at " + x + ", " + y + ".", expected[y][x].cellTypeId(), actual.cellTypeId());
                 } catch (PositionOutOfBoundsException e) {
                     Assert.fail("Position out of bounds at " + x + ", " + y + ": " + e.getMessage());

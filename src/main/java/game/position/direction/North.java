@@ -1,20 +1,19 @@
 package game.position.direction;
 
-import game.position.Position2D;
+public class North extends OrthogonalDirection {
 
-public class North implements OrthogonalDirection {
-    public void movePosition(Position2D position) {
-        position.moveDelta(getDeltaX(), getDeltaY());
-    }
 
+    @Override
     public int getDeltaX() {
         return 0;
     }
 
+    @Override
     public int getDeltaY() {
         return -1;
     }
 
+    @Override
     public OrthogonalDirection invert() {
         return new South();
     }

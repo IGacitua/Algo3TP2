@@ -1,18 +1,15 @@
 package game.units;
 
-import game.map.GameMap;
-import game.map.cell.Cell;
-import game.map.creation.InvalidMapFileException;
-import game.map.creation.MapImporter;
-import game.position.Position2D;
 import game.units.movement.Flying;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitTest {
+
+    // TODO: Verify whether it's still needed
+    /*
+    private GameMap gameMap;
 
     @BeforeEach
     public void setUp() throws InvalidMapFileException {
@@ -20,18 +17,18 @@ public class UnitTest {
         MapImporter importer = Mockito.mock(MapImporter.class);
 
         Cell[][] cells = new Cell[1][1];
-        cells[0][0] = new Cell(new Position2D(0, 0));
+        cells[0][0] = new Cell(new Position(0, 0));
 
-        Mockito.when(importer.importMap(Mockito.anyString()))
-                .thenReturn(cells);
+        Mockito.when(importer.importMap(Mockito.anyString())).thenReturn(cells);
 
-        GameMap.getInstance().initialize(importer, "");
+        gameMap = new GameMap(importer, "");
     }
+    */
 
     @Test
     public void testDamageReducesUnitHealth() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null);
+        Unit unit = new Unit(null);
 
         // Act
         unit.damage();
@@ -43,7 +40,7 @@ public class UnitTest {
     @Test
     public void testUnitCanHaveCustomMaximumHealth() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null, 5);
+        Unit unit = new Unit(null, 5);
 
         // Act
         unit.damage();
@@ -55,7 +52,7 @@ public class UnitTest {
     @Test
     public void testUnitCanReceiveDifferentAmountsOfDamage() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null, 5);
+        Unit unit = new Unit(null, 5);
 
         // Act
         unit.damage(2);
@@ -67,7 +64,7 @@ public class UnitTest {
     @Test
     public void testUnitDiesWhenHealthReachesZero() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null, 3);
+        Unit unit = new Unit(null, 3);
 
         // Act
         unit.damage(3);
@@ -80,7 +77,7 @@ public class UnitTest {
     @Test
     public void testContaminatedUnitReceivesDoubleDamage() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null, 10);
+        Unit unit = new Unit(null, 10);
 
         // Act
         unit.contaminate();
@@ -93,7 +90,7 @@ public class UnitTest {
     @Test
     public void testContaminationDoesNotStack() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null, 10);
+        Unit unit = new Unit(null, 10);
 
         // Act
         unit.contaminate();
@@ -107,7 +104,7 @@ public class UnitTest {
     @Test
     public void testRemovingContaminationRestoresNormalDamage() {
         // Arrange
-        Unit unit = new Unit(new Position2D(0, 0), null, 10);
+        Unit unit = new Unit(null, 10);
 
         // Act
         unit.contaminate();
@@ -121,7 +118,7 @@ public class UnitTest {
     @Test
     public void testFlyingUnitCannotBeContaminated() {
         Unit unit = new Unit(
-                new Position2D(0, 0),
+
                 null,
                 10,
                 new Flying()
@@ -136,7 +133,7 @@ public class UnitTest {
     @Test
     public void testFlyingUnitCanMoveToWater() {
         Unit unit = new Unit(
-                new Position2D(0, 0),
+
                 null,
                 3,
                 new Flying()
@@ -148,7 +145,7 @@ public class UnitTest {
     @Test
     public void testGroundedUnitCannotMoveToWater() {
         Unit unit = new Unit(
-                new Position2D(0, 0),
+
                 null,
                 3
         );
@@ -159,7 +156,7 @@ public class UnitTest {
     @Test
     public void testGroundedUnitCanBeContaminated() {
         Unit unit = new Unit(
-                new Position2D(0, 0),
+
                 null,
                 10
         );
@@ -173,7 +170,7 @@ public class UnitTest {
     @Test
     public void testUnitCanBeKilledInstantly() {
         Unit unit = new Unit(
-                new Position2D(0, 0),
+
                 null,
                 10
         );

@@ -1,17 +1,21 @@
 package game.map.cell;
 
 import game.electricalNetwork.ElectricalNetwork;
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 
 public class Building extends Cell {
 
-    private static final int DAMAGE_POWER_REDUCTION = 1;
+    public static final int DAMAGE_POWER_MODIFICATION = -1;
 
+    private final ElectricalNetwork network;
     protected boolean isDestroyed;
 
-    public Building(Position2D position) {
+    public Building(Position position, ElectricalNetwork network) {
         super(position);
+
+        this.network = network;
+        this.isDestroyed = false;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class Building extends Cell {
         }
 
         isDestroyed = true;
-        ElectricalNetwork.getInstance().reducePower(DAMAGE_POWER_REDUCTION);
+        network.modifyPower(DAMAGE_POWER_MODIFICATION);
     }
 
     public boolean isDestroyed() {

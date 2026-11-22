@@ -1,14 +1,16 @@
 package game.position.direction;
 
-import game.position.Position2D;
+import game.position.Position;
 
-public interface OrthogonalDirection {
-    void movePosition(Position2D position);
+public abstract class OrthogonalDirection {
+    public Position getMoved(Position position) {
+        return position.getMoved(getDeltaX(), getDeltaY());
+    }
 
-    int getDeltaX();
+    public abstract int getDeltaX();
 
-    int getDeltaY();
+    public abstract int getDeltaY();
 
-    OrthogonalDirection invert();
+    public abstract OrthogonalDirection invert();
 }
 

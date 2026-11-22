@@ -1,6 +1,6 @@
 package game.map.creation;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.utils.FileHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -69,9 +69,9 @@ public class MapImporterTest {
         Assertions.assertDoesNotThrow(() -> mapImporter.importMap("valid_map.txt"));
 
         // Assert
-        Mockito.verify(cellFactory).createFromId("A", new Position2D(0, 0));
-        Mockito.verify(cellFactory).createFromId("B", new Position2D(1, 0));
-        Mockito.verify(cellFactory).createFromId("C", new Position2D(2, 0));
+        Mockito.verify(cellFactory).createFromId("A", new Position(0, 0));
+        Mockito.verify(cellFactory).createFromId("B", new Position(1, 0));
+        Mockito.verify(cellFactory).createFromId("C", new Position(2, 0));
     }
 
     @Test
@@ -88,11 +88,11 @@ public class MapImporterTest {
         Assertions.assertDoesNotThrow(() -> mapImporter.importMap("valid_map.txt"));
 
         // Assert
-        Mockito.verify(cellFactory).createFromId("A", new Position2D(0, 0));
-        Mockito.verify(cellFactory).createFromId("B", new Position2D(1, 0));
-        Mockito.verify(cellFactory).createFromId("C", new Position2D(2, 0));
-        Mockito.verify(cellFactory).createFromId("D", new Position2D(0, 1));
-        Mockito.verify(cellFactory).createFromId("E", new Position2D(1, 1));
-        Mockito.verify(cellFactory).createFromId("F", new Position2D(2, 1));
+        Mockito.verify(cellFactory).createFromId("A", new Position(0, 0));
+        Mockito.verify(cellFactory).createFromId("B", new Position(1, 0));
+        Mockito.verify(cellFactory).createFromId("C", new Position(2, 0));
+        Mockito.verify(cellFactory).createFromId("D", new Position(0, 1));
+        Mockito.verify(cellFactory).createFromId("E", new Position(1, 1));
+        Mockito.verify(cellFactory).createFromId("F", new Position(2, 1));
     }
 }

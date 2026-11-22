@@ -1,11 +1,11 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 
 public class Acid extends Cell {
 
-    public Acid(Position2D position) {
+    public Acid(Position position) {
         super(position);
     }
 

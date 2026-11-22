@@ -20,8 +20,4 @@ public class Grounded extends Movement {
         return true;
     }
 
-    @Override
-    public int getMovementDistance() {
-        return movementDistance;
-    }
 }

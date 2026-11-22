@@ -1,7 +1,7 @@
 package game.map;
 
 import game.map.cell.Cell;
-import game.position.Position2D;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.*;
 
@@ -13,71 +13,82 @@ import java.util.function.Predicate;
 
 public class CellGrid {
 
-    private final Cell[][] matrix;
+    private final Cell[][] matrix; // Indexed [x][y]
 
     public CellGrid(Cell[][] cells) {
         this.matrix = cells;
     }
 
-    public void replaceCell(Cell cell, Position2D pos) {
-        int row = pos.getX();
-        int col = pos.getY();
-        replaceCell(cell, row, col);
+    public void replaceCell(Cell cell, Position pos) {
+        int x = pos.getX();
+        int y = pos.getY();
+        replaceCell(cell, x, y);
     }
 
-    private void replaceCell(Cell cell, int row, int col) {
-        if (row < 0 || row >= matrix.length) {
-            throw new IndexOutOfBoundsException("Row index out of bounds: " + row);
+    private void replaceCell(Cell cell, int x, int y) {
+        if (x < 0 || x >= matrix.length) {
+            throw new IndexOutOfBoundsException("X index out of bounds: " + x);
         }
-        if (col < 0 || col >= matrix[row].length) {
-            throw new IndexOutOfBoundsException("Column index out of bounds: " + col);
+        if (y < 0 || y >= matrix[x].length) {
+            throw new IndexOutOfBoundsException("Y index out of bounds: " + y);
         }
-        matrix[row][col] = cell;
+
+        matrix[x][y] = cell;
     }
 
-    public Cell getCell(Position2D position) throws PositionOutOfBoundsException {
-        int row = position.getX();
-        int col = position.getY();
-        return getCell(row, col);
+    public Cell getCell(Position position) throws PositionOutOfBoundsException {
+        int x = position.getX();
+        int y = position.getY();
+        return getCell(x, y);
     }
 
-    public Cell getCell(int row, int col) throws PositionOutOfBoundsException {
-        if (row < 0 || row >= matrix.length) {
-            throw new PositionOutOfBoundsException(row, col);
+    public Cell getCell(int x, int y) throws PositionOutOfBoundsException {
+        if (x < 0 || x >= matrix.length) {
+            throw new PositionOutOfBoundsException(x, y);
         }
-        if (col < 0 || col >= matrix[row].length) {
-            throw new PositionOutOfBoundsException(row, col);
+        if (y < 0 || y >= matrix[x].length) {
+            throw new PositionOutOfBoundsException(x, y);
         }
-        return matrix[row][col];
+        return matrix[x][y];
     }
 
-    public List<Position2D> getCellsInRadius(Position2D center, double radius, Predicate<Cell> requirement) {
-        List<Position2D> result = new ArrayList<>();
+    public List<Position> getCellsInRadius(Position center, double radius, Predicate<Cell> requirement) {
+        List<Position> result = new ArrayList<>();
+
+        int cx = center.getX();
+        int cy = center.getY();
+        if (cx < 0 || cx >= matrix.length || cy < 0 || cy >= matrix[cx].length) {
+            return result;
+        }
+
         boolean[][] visited = new boolean[matrix.length][];
         for (int i = 0; i < matrix.length; i++) {
             visited[i] = new boolean[matrix[i].length];
         }
 
-        Deque<Position2D> queue = new ArrayDeque<>();
+        Deque<Position> queue = new ArrayDeque<>();
         queue.add(center);
-        visited[center.getX()][center.getY()] = true;
+        visited[cx][cy] = true;
 
         OrthogonalDirection[] directions = {new North(), new South(), new East(), new West()};
 
         while (!queue.isEmpty()) {
-            Position2D current = queue.poll();
+            Position current = queue.poll();
             for (OrthogonalDirection direction : directions) {
-                int row = current.getX() + direction.getDeltaX();
-                int col = current.getY() + direction.getDeltaY();
-                if (row < 0 || row >= matrix.length || col < 0 || col >= matrix[row].length) {
+                Position displaced = current.getAdjacent(direction);
+                int x = displaced.getX();
+                int y = displaced.getY();
+
+                if (x < 0 || x >= matrix.length || y < 0 || y >= matrix[x].length) {
                     continue;
                 }
-                if (visited[row][col]) {
+
+                if (visited[x][y]) {
                     continue;
                 }
-                Position2D next = new Position2D(row, col);
-                if (next.getDistance(center) <= radius && requirement.test(matrix[row][col])) {
-                    visited[row][col] = true;
+                Position next = new Position(x, y);
+                if (next.getDiagonalDistance(center) <= radius && requirement.test(matrix[x][y])) {
+                    visited[x][y] = true;
                     result.add(next);
                     queue.add(next);
                 }
@@ -86,16 +97,16 @@ public class CellGrid {
         return result;
     }
 
-    public Position2D getNearestCell(Position2D center, Predicate<Cell> requirement) {
-        Position2D nearest = null;
+    public Position getNearestCell(Position center, Predicate<Cell> requirement) {
+        Position nearest = null;
         double best = Double.POSITIVE_INFINITY;
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                if (requirement.test(matrix[row][col])) {
-                    double d = new Position2D(row, col).getDistance(center);
+        for (int x = 0; x < matrix.length; x++) {
+            for (int y = 0; y < matrix[x].length; y++) {
+                if (requirement.test(matrix[x][y])) {
+                    double d = new Position(x, y).getDiagonalDistance(center);
                     if (d < best) {
                         best = d;
-                        nearest = new Position2D(row, col);
+                        nearest = new Position(x, y);
                     }
                 }
             }
@@ -103,12 +114,11 @@ public class CellGrid {
         return nearest;
     }
 
-    public double getDistanceToNearestCell(Position2D center, Predicate<Cell> requirement) {
-        Position2D nearest = getNearestCell(center, requirement);
+    public double getDistanceToNearestCell(Position center, Predicate<Cell> requirement) {
+        Position nearest = getNearestCell(center, requirement);
         if (nearest == null) {
             return Double.POSITIVE_INFINITY;
         }
         return nearest.getOrthogonalDistance(center);
     }
 }
-

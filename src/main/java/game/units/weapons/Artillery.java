@@ -1,7 +1,7 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.position.Position2D;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.NoDirection;
 
@@ -10,8 +10,8 @@ public class Artillery extends Weapon {
     private static final int MIN_RANGE = 2;
 
     @Override
-    public void attack(Position2D origin, Position2D target, GameMap map) {
-        if (origin.getDistance(target) < MIN_RANGE || origin.getDirectionTo(target) instanceof NoDirection) {
+    public void attack(Position origin, Position target, GameMap map) {
+        if (origin.getDiagonalDistance(target) < MIN_RANGE || origin.getDirectionTo(target) instanceof NoDirection) {
             throw new IllegalArgumentException("Artillery can only target tiles in a straight line at distance 2 or more.");
         }
 
@@ -19,13 +19,12 @@ public class Artillery extends Weapon {
     }
 
     @Override
-    public void attack(Position2D target, GameMap map) {
+    public void attack(Position target, GameMap map) {
         try {
-            GameMap.getInstance().damageCellAt(target, 1);
+            map.damageCellAt(target, 1);
+            map.pushAllAdjacent(target);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e); // TODO: Catch corrctly.
         }
-
-        GameMap.getInstance().pushAllAdjacent(target);
     }
 }

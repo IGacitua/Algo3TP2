@@ -1,10 +1,10 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 
 public class Mountain extends Cell {
 
-    public Mountain(Position2D position) {
+    public Mountain(Position position) {
         super(position);
     }
 

@@ -1,30 +1,24 @@
 package game.electricalNetwork;
 
 public class ElectricalNetwork {
-    private final static ElectricalNetwork instance = new ElectricalNetwork();
-
     private int power;
 
-    private ElectricalNetwork() {
-        power = 5;
-    }
-
-    public static ElectricalNetwork getInstance() {
-        return instance;
-    }
-
-    public void reset() {
-        power = 5;
+    public ElectricalNetwork(int startingPower) {
+        setPower(startingPower);
     }
 
     public int getPower() {
         return power;
     }
 
-    public void reducePower(int amount) {
-        power -= amount;
+    private void setPower(int value) {
+        power = value;
         if (power < 0) {
             power = 0;
         }
+    }
+
+    public void modifyPower(int amount) {
+        setPower(getPower() + amount);
     }
 }

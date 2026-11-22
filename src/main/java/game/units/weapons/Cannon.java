@@ -4,7 +4,7 @@ import game.map.GameMap;
 import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.cell.Mountain;
-import game.position.Position2D;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.*;
 
@@ -13,32 +13,32 @@ import java.util.List;
 public class Cannon extends Weapon {
 
     @Override
-    public void attack(Position2D target, GameMap map) {
-        OrthogonalDirection directionToShooter = getDirectionToShooter(target);
+    public void attack(Position target, GameMap map) {
+        OrthogonalDirection directionToShooter = getDirectionToShooter(target, map);
 
         if (directionToShooter instanceof NoDirection) {
             throw new IllegalArgumentException("Cannon can only fire in a straight orthogonal line.");
         }
 
-        Position2D shooterOrigin = findFurthestUnitPosition(target, directionToShooter);
+        Position shooterOrigin = findFurthestUnitPosition(target, directionToShooter, map);
         OrthogonalDirection fireDirection = directionToShooter.invert();
 
-        fireAlongLine(shooterOrigin, fireDirection);
+        fireAlongLine(shooterOrigin, fireDirection, map);
     }
 
-    private void fireAlongLine(Position2D origin, OrthogonalDirection fireDirection) {
-        Position2D current = origin.getAdjacent(fireDirection);
+    private void fireAlongLine(Position origin, OrthogonalDirection fireDirection, GameMap map) {
+        Position current = origin.getAdjacent(fireDirection);
 
         while (true) {
             Cell cell;
             try {
-                cell = GameMap.getInstance().getCellAt(current);
+                cell = map.getCellAt(current);
             } catch (PositionOutOfBoundsException e) {
                 return;
             }
 
-            if (isObstacleOrUnit(cell)) {
-                impactCell(current, cell, fireDirection);
+            if (isObstacle(cell)) {
+                impactCell(current, cell, fireDirection, map);
                 return;
             }
 
@@ -46,32 +46,27 @@ public class Cannon extends Weapon {
         }
     }
 
-    private void impactCell(Position2D position, Cell cell, OrthogonalDirection fireDirection) {
+    private void impactCell(Position position, Cell cell, OrthogonalDirection fireDirection, GameMap map) {
         try {
-            GameMap.getInstance().damageCellAt(position, 1);
+            map.damageCellAt(position, 1);
         } catch (PositionOutOfBoundsException e) {
             throw new RuntimeException(e);
         }
 
         if (cell.hasUnit()) {
             try {
-                GameMap.getInstance().pushUnitTowards(position, fireDirection);
+                map.pushUnitTowards(position, fireDirection);
             } catch (PositionOutOfBoundsException ignored) {
                 // Si el empuje cae fuera del tablero, la unidad permanece en el borde
             }
         }
     }
 
-    private OrthogonalDirection getDirectionToShooter(Position2D target) {
-        List<OrthogonalDirection> directions = List.of(
-                new North(),
-                new East(),
-                new South(),
-                new West()
-        );
+    private OrthogonalDirection getDirectionToShooter(Position target, GameMap map) {
+        List<OrthogonalDirection> directions = List.of(new North(), new East(), new South(), new West());
 
         for (OrthogonalDirection direction : directions) {
-            if (findFurthestUnitPosition(target, direction) != null) {
+            if (findFurthestUnitPosition(target, direction, map) != null) {
                 return direction;
             }
         }
@@ -79,13 +74,13 @@ public class Cannon extends Weapon {
         return new NoDirection();
     }
 
-    private Position2D findFurthestUnitPosition(Position2D start, OrthogonalDirection direction) {
-        Position2D current = start.getAdjacent(direction);
-        Position2D furthestUnitPosition = null;
+    private Position findFurthestUnitPosition(Position start, OrthogonalDirection direction, GameMap map) {
+        Position current = start.getAdjacent(direction);
+        Position furthestUnitPosition = null;
 
         while (true) {
             try {
-                Cell cell = GameMap.getInstance().getCellAt(current);
+                Cell cell = map.getCellAt(current);
                 if (cell.hasUnit()) {
                     furthestUnitPosition = current;
                 }
@@ -98,7 +93,21 @@ public class Cannon extends Weapon {
         return furthestUnitPosition;
     }
 
-    private boolean isObstacleOrUnit(Cell cell) {
-        return cell != null && (cell.hasUnit() || cell instanceof Building || cell instanceof Mountain);
+    private boolean isObstacle(Cell cell) {
+        // TODO: Change checks to check for non-forced movement availability for a new
+        // TODO: MovementType that ignores water and such.
+        if (cell == null) {
+            return false;
+        }
+
+        if (cell.hasUnit()) {
+            return true;
+        }
+
+        if (cell instanceof Building) {
+            return true;
+        }
+
+        return cell instanceof Mountain;
     }
 }

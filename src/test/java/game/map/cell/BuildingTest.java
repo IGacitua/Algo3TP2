@@ -1,7 +1,7 @@
 package game.map.cell;
 
 import game.electricalNetwork.ElectricalNetwork;
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,10 +9,14 @@ import org.mockito.Mockito;
 
 public class BuildingTest {
 
+    private static ElectricalNetwork mockNetwork() {
+        return Mockito.mock(ElectricalNetwork.class);
+    }
+
     @Test
     public void testCanPlaceOneUnitInBuildingCell() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -25,7 +29,7 @@ public class BuildingTest {
     @Test
     public void testCannotPlaceMultipleUnitsInBuildingCell() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -39,23 +43,9 @@ public class BuildingTest {
     }
 
     @Test
-    public void testPlacingUnitMovesItToPosition() {
-        // Arrange
-        Position2D position = new Position2D(0, 0);
-        Cell building = new Building(position);
-        Unit unit = Mockito.mock(Unit.class);
-
-        // Act
-        building.tryPlaceUnit(unit, false);
-
-        // Assert
-        Mockito.verify(unit).moveTo(position);
-    }
-
-    @Test
     public void testPopUnitReturnsCorrectUnit() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
         building.tryPlaceUnit(unit, false);
 
@@ -69,7 +59,7 @@ public class BuildingTest {
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
 
@@ -85,7 +75,7 @@ public class BuildingTest {
     @Test
     public void testNotDestroyedBuildingWithoutUnitCanBeDamaged() {
         // Arrange
-        Cell building = new Building(null);
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         boolean canDamage = building.canDamage();
@@ -97,7 +87,7 @@ public class BuildingTest {
     @Test
     public void testDestroyedBuildingWithoutUnitCannotBeDamaged() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         building.tryDamage(1); // This destroys the building
@@ -111,7 +101,7 @@ public class BuildingTest {
     public void testBuildingWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         building.tryPlaceUnit(unit, false);
@@ -125,7 +115,7 @@ public class BuildingTest {
     public void testBuildingDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         building.tryPlaceUnit(unit, false);
 
         // Act
@@ -138,7 +128,7 @@ public class BuildingTest {
     @Test
     public void testDamageBuildingDestroysIt() {
         // Arrange
-        Building building = new Building(new Position2D(0, 0));
+        Building building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         building.tryDamage(1); // This should destroy the building
@@ -150,52 +140,47 @@ public class BuildingTest {
     @Test
     public void testDestroyingBuildingReducesElectricalNetwork() {
         // Arrange
-        Building building = new Building(new Position2D(0, 0));
-        ElectricalNetwork.getInstance().reset();
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Building building = new Building(new Position(0, 0), network);
 
         // Act
-        int initialPower = ElectricalNetwork.getInstance().getPower();
-        building.tryDamage(1); // This should destroy the building
-        int finalPower = ElectricalNetwork.getInstance().getPower();
+        building.tryDamage(1);
 
         // Assert
-        Assertions.assertTrue(finalPower < initialPower, "Destroying the building should reduce power.");
+        Mockito.verify(network).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
     }
 
     @Test
     public void testDamagingDestroyedBuildingDoesNotReduceElectricalNetwork() {
         // Arrange
-        Building building = new Building(new Position2D(0, 0));
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Building building = new Building(new Position(0, 0), network);
         building.tryDamage(1); // Destroy the building
-        ElectricalNetwork.getInstance().reset();
 
         // Act
-        int initialPower = ElectricalNetwork.getInstance().getPower();
         building.tryDamage(1); // Try to damage again
-        int finalPower = ElectricalNetwork.getInstance().getPower();
 
-        // Assert
-        Assertions.assertEquals(initialPower, finalPower, "Damaging a destroyed building should not reduce power.");
+        // Assert (Should only be called once)
+        Mockito.verify(network, Mockito.times(1)).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
     }
-
 
     @Test
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
-        Position2D position = new Position2D(1, 1);
-        Cell cell = new Building(position);
+        Position position = new Position(1, 1);
+        Cell cell = new Building(position, mockNetwork());
 
         // Act
-        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+        boolean hasPosition = cell.hasPosition(new Position(1, 1));
 
         // Assert
         Assertions.assertTrue(hasPosition, "Building should return true for matching position.");
     }
 
     @Test
-    public void testBuildingIsVekTarget() {
+    public void testIntactBuildingIsVekTarget() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         boolean isVekTarget = building.isVekTarget();
@@ -207,7 +192,7 @@ public class BuildingTest {
     @Test
     public void testDestroyedBuildingIsNotVekTarget() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         building.tryDamage(1);
 
         // Act
@@ -218,22 +203,10 @@ public class BuildingTest {
     }
 
     @Test
-    public void testBuildingIsNotWater() {
-        // Arrange
-        Cell building = new Building(new Position2D(0, 0));
-
-        // Act
-        boolean isWater = building.isWater();
-
-        // Assert
-        Assertions.assertFalse(isWater, "Building should not be water.");
-    }
-
-    @Test
     public void testBuildingHasUnitAfterPlacement() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         building.tryPlaceUnit(unit, false);
@@ -248,7 +221,8 @@ public class BuildingTest {
         // Arrange
         Unit mechUnit = Mockito.mock(Unit.class);
         Mockito.when(mechUnit.isMech()).thenReturn(true);
-        Cell building = new Acid(new Position2D(0, 0));
+
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         building.tryPlaceUnit(mechUnit, false);
@@ -261,8 +235,8 @@ public class BuildingTest {
     @Test
     public void testCannotPushUnitIntoIntactBuilding() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
         Unit unit = Mockito.mock(Unit.class);
+        Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
         boolean result = building.tryPlaceUnit(unit, true);
@@ -274,7 +248,7 @@ public class BuildingTest {
     @Test
     public void testCanPushUnitIntoDestroyedBuilding() {
         // Arrange
-        Cell building = new Building(new Position2D(0, 0));
+        Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
         building.tryDamage(1);
 

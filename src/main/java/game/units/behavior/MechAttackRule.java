@@ -1,8 +1,7 @@
 package game.units.behavior;
 
 import game.map.GameMap;
-import game.position.Position2D;
-import game.position.PositionOutOfBoundsException;
+import game.position.Position;
 import game.units.Vek;
 import game.units.actions.UnitAction;
 
@@ -13,23 +12,29 @@ public class MechAttackRule implements BehaviorRules {
     @Override
     public List<UnitAction> evaluate(Vek vek, GameMap map) {
         List<UnitAction> bestPlan = new ArrayList<>();
-        Position2D bestPos = null;
+        Position bestPos = null;
 
         try {
-            for (Position2D pos : map.getReachablePositions(vek.getPosition())) {
+            // TODO! (See ApproachingBuildingRule)
+
+            /*
+            for (Position pos : map.getReachablePositions(vek.getPosition())) {
                 // El Vek intenta armar el plan de ataque a Mech
-                List<UnitAction> plan = vek.planMechAttackFrom(pos, map);
+                List<UnitAction> plan = vek.planMechAttackFrom(, pos, map);
 
                 if (!plan.isEmpty()) {
-                    if (bestPos == null || pos.isHigherPriorityThan(bestPos)) {
+                    if (bestPos == null || pos.isCloserToOrigin(bestPos)) {
                         bestPlan = plan;
                         bestPos = pos;
                     }
                 }
-            }
-        } catch (PositionOutOfBoundsException e) {
-            throw new RuntimeException(e); // TODO: Handle properly
+            }*/
+        } catch (Exception e) {
+            throw new RuntimeException(e); // TODO: Delete once we un-comment below.
         }
+        //catch (PositionOutOfBoundsException e) {
+        //    throw new RuntimeException(e); // TODO: Handle properly
+        //}
         if (bestPlan.isEmpty()) {
             return null;
         } else {

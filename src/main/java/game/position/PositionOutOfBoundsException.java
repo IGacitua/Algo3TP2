@@ -1,11 +1,11 @@
 package game.position;
 
 public class PositionOutOfBoundsException extends Exception {
-    public PositionOutOfBoundsException(Position2D position) {
-        super("Position " + position.getX() + ", " + position.getY() + "is out of bounds.");
+    public PositionOutOfBoundsException(Position position) {
+        super(position + "is out of bounds.");
     }
 
-    public PositionOutOfBoundsException(double x, double y) {
-        super("Position " + x + ", " + y + "is out of bounds.");
+    public PositionOutOfBoundsException(int x, int y) {
+        super(new Position(x, y) + "is out of bounds.");
     }
 }

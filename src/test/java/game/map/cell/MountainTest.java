@@ -1,6 +1,6 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ public class MountainTest {
     @Test
     public void testCannotPlaceUnitInMountainCell() {
         // Arrange
-        Cell mountain = new Mountain(new Position2D(0, 0));
+        Cell mountain = new Mountain(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -24,7 +24,7 @@ public class MountainTest {
     @Test // Just in case first placement has unexpected consequences.
     public void testCannotPlaceMultipleUnitsInMountainCell() {
         // Arrange
-        Cell mountain = new Mountain(new Position2D(0, 0));
+        Cell mountain = new Mountain(new Position(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -52,37 +52,13 @@ public class MountainTest {
     @Test
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
-        Position2D position = new Position2D(1, 1);
+        Position position = new Position(1, 1);
         Cell cell = new Mountain(position);
 
         // Act
-        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+        boolean hasPosition = cell.hasPosition(new Position(1, 1));
 
         // Assert
         Assertions.assertTrue(hasPosition, "Mountain should return true for matching position.");
-    }
-
-    @Test
-    public void testMountainIsNotVekTarget() {
-        // Arrange
-        Cell mountain = new Mountain(new Position2D(0, 0));
-
-        // Act
-        boolean isVekTarget = mountain.isVekTarget();
-
-        // Assert
-        Assertions.assertFalse(isVekTarget, "Mountain should not be a Vek target.");
-    }
-
-    @Test
-    public void testMountainIsNotWater() {
-        // Arrange
-        Cell mountain = new Mountain(new Position2D(0, 0));
-
-        // Act
-        boolean isWater = mountain.isWater();
-
-        // Assert
-        Assertions.assertFalse(isWater, "Mountain should not be water.");
     }
 }

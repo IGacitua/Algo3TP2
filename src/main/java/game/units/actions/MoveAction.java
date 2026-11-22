@@ -1,18 +1,15 @@
 package game.units.actions;
 
 import game.map.GameMap;
-import game.position.Position2D;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.units.Unit;
 
 
 public class MoveAction implements UnitAction {
-    private final Unit unit;
-    private final Position2D origin;
-    private final Position2D destination;
+    private final Position origin;
+    private final Position destination;
 
-    public MoveAction(Unit unit, Position2D origin, Position2D destination) {
-        this.unit = unit;
+    public MoveAction(Position origin, Position destination) {
         this.origin = origin;
         this.destination = destination;
     }
@@ -37,10 +34,10 @@ public class MoveAction implements UnitAction {
         map.moveUnitTo(this.destination, this.origin);
 
         // Se devuelve la coordenada interna de la unidad a como estaba
-        this.unit.moveTo(this.origin);
+        // TODO: Undo movement (Unit can no longer move, MoveAction must store what was done)
     }
 
-    public Position2D getDestination() {
+    public Position getDestination() {
         return this.destination;
     }
 

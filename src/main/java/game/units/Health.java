@@ -2,8 +2,9 @@ package game.units;
 
 public class Health {
 
-    private int current;
     private final int maximum;
+    private boolean isDamaged;
+    private int current;
 
     public Health(int maximum) {
         if (maximum <= 0) {
@@ -14,16 +15,16 @@ public class Health {
 
         this.maximum = maximum;
         this.current = maximum;
+        this.isDamaged = false;
     }
 
     public void receiveDamage(int amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException(
-                    "Damage cannot be negative"
-            );
+            throw new IllegalArgumentException("Damage cannot be negative");
         }
 
         current = Math.max(0, current - amount);
+        isDamaged = true;
     }
 
     public boolean isAlive() {
@@ -40,6 +41,10 @@ public class Health {
 
     public void kill() {
         current = 0;
+    }
+
+    public boolean isDamaged() {
+        return isDamaged;
     }
 }
 

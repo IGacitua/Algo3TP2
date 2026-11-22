@@ -1,16 +1,25 @@
 package game.map.creation;
 
+import game.electricalNetwork.ElectricalNetwork;
 import game.map.cell.Acid;
 import game.map.cell.Cell;
+import game.position.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class CellFactoryTest {
+
+    private static ElectricalNetwork mockNetwork() {
+        return Mockito.mock(ElectricalNetwork.class);
+    }
+
+
     @Test
     public void testCreateAcid() {
         // Arrange
-        CellFactory cellFactory = new CellFactory();
-        String acidId = new Acid(null).cellTypeId();
+        CellFactory cellFactory = new CellFactory(mockNetwork());
+        String acidId = new Acid(new Position(0, 0)).cellTypeId();
 
         // Act
         Cell acidCell = cellFactory.createFromId(acidId, null);
@@ -23,8 +32,8 @@ public class CellFactoryTest {
     @Test
     public void testCreateGround() {
         // Arrange
-        CellFactory cellFactory = new CellFactory();
-        String groundId = new Cell(null).cellTypeId();
+        CellFactory cellFactory = new CellFactory(mockNetwork());
+        String groundId = new Cell(new Position(0, 0)).cellTypeId();
 
         // Act
         Cell groundCell = cellFactory.createFromId(groundId, null);
@@ -37,8 +46,8 @@ public class CellFactoryTest {
     @Test
     public void testCreateMountain() {
         // Arrange
-        CellFactory cellFactory = new CellFactory();
-        String mountainId = new game.map.cell.Mountain(null).cellTypeId();
+        CellFactory cellFactory = new CellFactory(mockNetwork());
+        String mountainId = new game.map.cell.Mountain(new Position(0, 0)).cellTypeId();
 
         // Act
         Cell mountainCell = cellFactory.createFromId(mountainId, null);
@@ -51,8 +60,8 @@ public class CellFactoryTest {
     @Test
     public void testCreateWater() {
         // Arrange
-        CellFactory cellFactory = new CellFactory();
-        String waterId = new game.map.cell.Water(null).cellTypeId();
+        CellFactory cellFactory = new CellFactory(mockNetwork());
+        String waterId = new game.map.cell.Water(new Position(0, 0)).cellTypeId();
 
         // Act
         Cell waterCell = cellFactory.createFromId(waterId, null);
@@ -65,8 +74,8 @@ public class CellFactoryTest {
     @Test
     public void testCreateBuilding() {
         // Arrange
-        CellFactory cellFactory = new CellFactory();
-        String buildingId = new game.map.cell.Building(null).cellTypeId();
+        CellFactory cellFactory = new CellFactory(mockNetwork());
+        String buildingId = new game.map.cell.Building(new Position(0, 0), mockNetwork()).cellTypeId();
 
         // Act
         Cell buildingCell = cellFactory.createFromId(buildingId, null);
@@ -79,7 +88,7 @@ public class CellFactoryTest {
     @Test
     public void testCreateInvalidCell() {
         // Arrange
-        CellFactory cellFactory = new CellFactory();
+        CellFactory cellFactory = new CellFactory(mockNetwork());
         String invalidId = "INVALID ID!!!";
 
         // Act & Assert

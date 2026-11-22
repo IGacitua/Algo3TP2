@@ -1,31 +1,34 @@
 package game.map.creation;
 
+import game.electricalNetwork.ElectricalNetwork;
 import game.map.cell.*;
-import game.position.Position2D;
+import game.position.Position;
 
 public class CellFactory {
-
-    // I could use a Dictionary<ID, Class> and use reflection to get the constructor... but that's overkill.
     public final String ACID_ID;
     public final String BUILDING_ID;
     public final String GROUND_ID;
     public final String MOUNTAIN_ID;
     public final String WATER_ID;
 
-    public CellFactory() {
-        ACID_ID = new Acid(null).cellTypeId();
-        BUILDING_ID = new Building(null).cellTypeId();
-        GROUND_ID = new Cell(null).cellTypeId();
-        MOUNTAIN_ID = new Mountain(null).cellTypeId();
-        WATER_ID = new Water(null).cellTypeId();
+    private final ElectricalNetwork network;
+
+    public CellFactory(ElectricalNetwork network) {
+        this.network = network;
+
+        ACID_ID = "A";
+        BUILDING_ID = "B";
+        GROUND_ID = "G";
+        MOUNTAIN_ID = "M";
+        WATER_ID = "W";
     }
 
-    public Cell createFromId(String cellId, Position2D cellPosition) throws InvalidMapFileException {
+    public Cell createFromId(String cellId, Position cellPosition) throws InvalidMapFileException {
         if (cellId.equals(ACID_ID))
             return new Acid(cellPosition);
 
         if (cellId.equals(BUILDING_ID))
-            return new Building(cellPosition);
+            return new Building(cellPosition, network);
 
         if (cellId.equals(GROUND_ID))
             return new Cell(cellPosition);

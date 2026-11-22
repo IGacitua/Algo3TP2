@@ -5,8 +5,9 @@ import game.map.cell.Acid;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
-import game.position.Position2D;
-import game.position.direction.East;
+import game.position.Position;
+import game.position.PositionOutOfBoundsException;
+import game.position.direction.West;
 import game.units.Unit;
 import game.units.movement.Flying;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,110 +18,78 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AcidIntegrationTest {
 
+    private GameMap gameMap;
+
     @BeforeEach
     public void setUp() throws InvalidMapFileException {
         MapImporter importer = Mockito.mock(MapImporter.class);
 
-        Cell[][] cells = new Cell[1][1];
-        cells[0][0] = new Acid(new Position2D(0, 0));
+        Cell[][] cells = new Cell[3][3];
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                cells[x][y] = new Cell(new Position(x, y));
+            }
+        }
+        cells[0][0] = new Acid(new Position(0, 0));
 
         Mockito.when(importer.importMap(Mockito.anyString()))
                 .thenReturn(cells);
 
-        GameMap.getInstance().initialize(importer, "");
+        gameMap = new GameMap(importer, "");
     }
 
     @Test
-    public void testGroundedUnitOnAcidReceivesDoubleDamage() {
-        Unit unit = new Unit(
-                new Position2D(0, 0),
-                null,
-                10
-        );
+    public void testGroundedUnitOnAcidReceivesDoubleDamage() throws PositionOutOfBoundsException {
+        // Arrange
+        Unit unit = new Unit(null, 10);
+        gameMap.placeUnitAt(unit, new Position(0, 0));
 
+        // Act
         unit.damage(2);
 
+        // Assert
         assertEquals(6, unit.getCurrentHealth());
     }
 
     @Test
     public void testFlyingUnitOnAcidReceivesNormalDamage() {
-        Unit unit = new Unit(
-                new Position2D(0, 0),
-                null,
-                10,
-                new Flying()
-        );
+        // Arrange
+        Unit unit = new Unit(null, 10, new Flying());
 
+        // Act
         unit.damage(2);
 
+        // Assert
         assertEquals(8, unit.getCurrentHealth());
     }
 
     @Test
-    public void testGroundedUnitPushedIntoAcidReceivesDoubleDamage()
-            throws Exception {
+    public void testGroundedUnitPushedIntoAcidReceivesDoubleDamage() throws Exception {
+        // Arrange
+        Position unitPosition = new Position(1, 0);
+        Unit unit = new Unit(null, 10);
 
-        MapImporter importer = Mockito.mock(MapImporter.class);
-
-        Cell[][] cells = new Cell[2][1];
-        cells[0][0] = new Cell(new Position2D(0, 0));
-        cells[1][0] = new Acid(new Position2D(1, 0));
-
-        Mockito.when(importer.importMap(Mockito.anyString()))
-                .thenReturn(cells);
-
-        GameMap.getInstance().initialize(importer, "");
-
-        Unit unit = new Unit(
-                new Position2D(0, 0),
-                null,
-                10
-        );
-
-        GameMap.getInstance().pushUnitTowards(
-                new Position2D(0, 0),
-                new East()
-        );
-
+        // Act
+        gameMap.placeUnitAt(unit, unitPosition);
+        gameMap.pushUnitTowards(unitPosition, new West());
         unit.damage(2);
 
+        // Assert
         assertEquals(6, unit.getCurrentHealth());
-        assertEquals(1, unit.getPosition().getX());
-        assertEquals(0, unit.getPosition().getY());
     }
 
     @Test
-    public void testFlyingUnitPushedIntoAcidReceivesNormalDamage()
-            throws Exception {
+    public void testFlyingUnitPushedIntoAcidReceivesNormalDamage() throws Exception {
+        // Arrange
+        Position unitPosition = new Position(1, 0);
+        Unit unit = new Unit(null, 10, new Flying());
 
-        MapImporter importer = Mockito.mock(MapImporter.class);
-
-        Cell[][] cells = new Cell[2][1];
-        cells[0][0] = new Cell(new Position2D(0, 0));
-        cells[1][0] = new Acid(new Position2D(1, 0));
-
-        Mockito.when(importer.importMap(Mockito.anyString()))
-                .thenReturn(cells);
-
-        GameMap.getInstance().initialize(importer, "");
-
-        Unit unit = new Unit(
-                new Position2D(0, 0),
-                null,
-                10,
-                new Flying()
-        );
-
-        GameMap.getInstance().pushUnitTowards(
-                new Position2D(0, 0),
-                new East()
-        );
-
+        // Act
+        gameMap.placeUnitAt(unit, unitPosition);
+        gameMap.pushUnitTowards(unitPosition, new West());
         unit.damage(2);
 
+        // Assert
         assertEquals(8, unit.getCurrentHealth());
-        assertEquals(1, unit.getPosition().getX());
-        assertEquals(0, unit.getPosition().getY());
     }
 }

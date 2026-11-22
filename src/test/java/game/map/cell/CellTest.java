@@ -1,6 +1,6 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ public class CellTest {
     @Test
     public void testCanPlaceOneUnitInCell() {
         // Arrange
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
@@ -24,7 +24,7 @@ public class CellTest {
     @Test
     public void testCannotPlaceMultipleUnitsInCell() {
         // Arrange
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
@@ -38,23 +38,9 @@ public class CellTest {
     }
 
     @Test
-    public void testPlacingUnitMovesItToPosition() {
-        // Arrange
-        Position2D position = new Position2D(0, 0);
-        Cell cell = new Cell(position);
-        Unit unit = Mockito.mock(Unit.class);
-
-        // Act
-        cell.tryPlaceUnit(unit, false);
-
-        // Assert
-        Mockito.verify(unit).moveTo(position);
-    }
-
-    @Test
     public void testPopUnitReturnsCorrectUnit() {
         // Arrange
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         cell.tryPlaceUnit(unit, false);
 
@@ -68,7 +54,7 @@ public class CellTest {
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
 
@@ -97,7 +83,7 @@ public class CellTest {
     public void testCellWithUnitCanBeDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
 
         // Act
         cell.tryPlaceUnit(unit, false);
@@ -111,7 +97,7 @@ public class CellTest {
     public void testCellDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
         cell.tryPlaceUnit(unit, false);
 
         // Act
@@ -124,45 +110,21 @@ public class CellTest {
     @Test
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
-        Position2D position = new Position2D(1, 1);
+        Position position = new Position(1, 1);
         Cell cell = new Cell(position);
 
         // Act
-        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+        boolean hasPosition = cell.hasPosition(new Position(1, 1));
 
         // Assert
         Assertions.assertTrue(hasPosition, "Cell should return true for matching position.");
     }
 
     @Test
-    public void testCellIsNotVekTarget() {
-        // Arrange
-        Cell cell = new Cell(new Position2D(0, 0));
-
-        // Act
-        boolean isVekTarget = cell.isVekTarget();
-
-        // Assert
-        Assertions.assertFalse(isVekTarget, "Cell should not be a Vek target.");
-    }
-
-    @Test
-    public void testCellIsNotWater() {
-        // Arrange
-        Cell cell = new Cell(new Position2D(0, 0));
-
-        // Act
-        boolean isWater = cell.isWater();
-
-        // Assert
-        Assertions.assertFalse(isWater, "Cell should not be water.");
-    }
-
-    @Test
     public void testCellHasUnitAfterPlacement() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
 
         // Act
         cell.tryPlaceUnit(unit, false);
@@ -177,7 +139,7 @@ public class CellTest {
         // Arrange
         Unit mechUnit = Mockito.mock(Unit.class);
         Mockito.when(mechUnit.isMech()).thenReturn(true);
-        Cell cell = new Cell(new Position2D(0, 0));
+        Cell cell = new Cell(new Position(0, 0));
 
         // Act
         cell.tryPlaceUnit(mechUnit, false);

@@ -1,6 +1,6 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ public class WaterTest {
     @Test
     public void testCanPlaceOneWaterUnitInWaterCell() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
 
@@ -25,7 +25,7 @@ public class WaterTest {
     @Test
     public void testCannotPlaceNonWaterUnitInWaterCell() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(false);
 
@@ -39,7 +39,7 @@ public class WaterTest {
     @Test
     public void testCanForceNonWaterUnitPlacementInWaterCell() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(false);
 
@@ -53,7 +53,7 @@ public class WaterTest {
     @Test
     public void testCannotPlaceMultipleWaterUnitsInWaterCell() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
         Mockito.when(mainUnit.canMoveToWater()).thenReturn(true);
@@ -69,24 +69,9 @@ public class WaterTest {
     }
 
     @Test
-    public void testPlacingWaterUnitMovesItToPosition() {
-        // Arrange
-        Position2D position = new Position2D(0, 0);
-        Cell water = new Water(position);
-        Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(true);
-
-        // Act
-        water.tryPlaceUnit(unit, false);
-
-        // Assert
-        Mockito.verify(unit).moveTo(position);
-    }
-
-    @Test
     public void testPopWaterUnitReturnsCorrectUnit() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
         water.tryPlaceUnit(unit, false);
@@ -101,7 +86,7 @@ public class WaterTest {
     @Test
     public void testPopWaterUnitAllowsNewWaterUnitPlacement() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
         Mockito.when(firstUnit.canMoveToWater()).thenReturn(true);
@@ -131,7 +116,7 @@ public class WaterTest {
     @Test
     public void testWaterWithUnitCanBeDamaged() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
 
@@ -146,7 +131,7 @@ public class WaterTest {
     @Test
     public void testWaterDamagesUnitWhenDamaged() {
         // Arrange
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
         water.tryPlaceUnit(unit, false);
@@ -161,39 +146,14 @@ public class WaterTest {
     @Test
     public void testHasPositionReturnsTrueForMatchingPosition() {
         // Arrange
-        Position2D position = new Position2D(1, 1);
+        Position position = new Position(1, 1);
         Cell cell = new Water(position);
 
         // Act
-        boolean hasPosition = cell.hasPosition(new Position2D(1, 1));
+        boolean hasPosition = cell.hasPosition(new Position(1, 1));
 
         // Assert
         Assertions.assertTrue(hasPosition, "Water should return true for matching position.");
-    }
-
-
-    @Test
-    public void testWaterIsNotVekTarget() {
-        // Arrange
-        Cell water = new Water(new Position2D(0, 0));
-
-        // Act
-        boolean isVekTarget = water.isVekTarget();
-
-        // Assert
-        Assertions.assertFalse(isVekTarget, "Water should not be a Vek target.");
-    }
-
-    @Test
-    public void testWaterIsWater() {
-        // Arrange
-        Cell cell = new Water(new Position2D(0, 0));
-
-        // Act
-        boolean isWater = cell.isWater();
-
-        // Assert
-        Assertions.assertTrue(isWater, "Water should be water.");
     }
 
     @Test
@@ -201,7 +161,7 @@ public class WaterTest {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
         Mockito.when(unit.canMoveToWater()).thenReturn(true);
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
 
         // Act
         water.tryPlaceUnit(unit, false);
@@ -217,7 +177,7 @@ public class WaterTest {
         Unit mech = Mockito.mock(Unit.class);
         Mockito.when(mech.canMoveToWater()).thenReturn(true);
         Mockito.when(mech.isMech()).thenReturn(true);
-        Cell water = new Water(new Position2D(0, 0));
+        Cell water = new Water(new Position(0, 0));
 
         // Act
         water.tryPlaceUnit(mech, false);

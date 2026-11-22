@@ -1,11 +1,11 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 
 public class Water extends Cell {
 
-    public Water(Position2D position) {
+    public Water(Position position) {
         super(position);
     }
 

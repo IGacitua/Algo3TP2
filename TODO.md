@@ -1,24 +1,15 @@
 Correciones (Eliminar al completar):
 
 - Modelo y Codigo:
-    - [Grave] Viola el ocultamiento de la informacion GameMap y ElectricalNetwork son Singletons globales;
-      Mantener solo uno para evitar errores. Cannon y Artillery reciben el map por parametro pero lo ignoran y usan
-      `GameMap.getInstance()`
-
-    - [Grave] Viola el encapsulamiento Position2D es mutable.
-
-    - [Medio] Implementa al menos una clase anemica Mech: solo `isMech()`, createMoveCommand duplicado y canAttack sin
-      uso; no existen los tipos de Mech
+    - [Medio] Implementa al menos una clase anemica
+        - Mech: solo `isMech()`, `createMoveCommand` duplicado y canAttack sin uso; no existen los tipos de Mech
+        - *Ver Sugerencias*
 
     - [Medio] Inicializa objetos en estado inconsistente:
-        - GameMap existe sin grilla hasta `initialize()` (`ensureInitialized` en cada metodo), pueden separar el
-          singleton de forma que el juego sea singleton y el mapa no
-          asi se puede inicializar correctamente
         - `new Mech(pos, arma)` se crea con movimiento 1 (`Grounded(1)`); el enunciado pide 3
-        - CellFactory crea celdas con posicion null para leer el ID, tener los IDs directo en la factory
 
     - [Medio] Viola Tell don’t ask: `GameMap.moveUnitTo()` saca la unidad, pregunta `getMovementDistance()` y decide
-      afuera; si no, la vuelve a poner
+      afuera; si no, la vuelve a poner.
 
     - [Medio] If en lugar de polimorfismo:
         - `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
@@ -28,13 +19,11 @@ Correciones (Eliminar al completar):
     - [Medio] Desnormalizacion del estado PlayerBehavior:
         - hasMoved y previousMovement != null dicen lo mismo;
         - flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
-        - posicion duplicada en Cell y Unit
 
     - [Leve] Codigo intrincado
         - Cannon no usa el origen: adivina al tirador buscando la unidad mas lejana en alguna
           direccion desde el objetivo;
         - Punch adivina la direccion
-        - CellGrid/MapImporter mezclan row/col con x/y
 
     - [Leve] Un nuevo requerimiento implicara alterar varias clases
         - Nuevo tipo de casilla: subclase + CellFactory + `isX()` en Cell + `hasXAt()` en GameMap
@@ -55,7 +44,12 @@ Correciones (Eliminar al completar):
     - TestArtilleryShootsVek afirma que el Vek empujado termina SOBRE el edificio
     - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
 
-  -[Medio] Testea getters y setters unicamente isWater/isVekTarget/hasPosition en todos los tests de cell; getDeltaX/Y
+Sugerencias (Ezequiel):
+
+- Separación Mek/Vek puede ser refactorizada:
+    - isMech () -> Boolean en el constructor
+    - Comportamiento Vek -> UnitBehavior, recibido en el constructor.
+    - Comportamiento Mek -> Idem.
 
 Entrega 1:
 

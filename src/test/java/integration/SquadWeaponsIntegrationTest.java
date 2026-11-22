@@ -6,7 +6,7 @@ import game.map.cell.Building;
 import game.map.cell.Cell;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
-import game.position.Position2D;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
 import game.units.actions.UnitAction;
@@ -22,21 +22,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SquadWeaponsIntegrationTest {
 
+    private ElectricalNetwork electricalNetwork;
+    private GameMap gameMap;
+
     @BeforeEach
     public void setUp() throws InvalidMapFileException {
-        ElectricalNetwork.getInstance().reset();
-
+        electricalNetwork = Mockito.mock(ElectricalNetwork.class);
         MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
         Cell[][] mockCells = new Cell[8][8];
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                mockCells[x][y] = new Cell(new Position2D(x, y));
+                mockCells[x][y] = new Cell(new Position(x, y));
             }
         }
-        mockCells[1][3] = new Building(new Position2D(1, 3)); // Adjacent obstacle for artillery test
+        mockCells[1][3] = new Building(new Position(1, 3), electricalNetwork); // Adjacent obstacle for artillery test
         Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
-        GameMap.getInstance().initialize(mockMapImporter, "");
+        gameMap = new GameMap(mockMapImporter, "");
     }
 
     /*
@@ -47,22 +49,25 @@ public class SquadWeaponsIntegrationTest {
     public void punchDealsTwoDamageToAdjacentUnitAndPushesItOneTileInHitDirection() throws PositionOutOfBoundsException {
         // Arrange
         Weapon punch = new Punch();
-        Position2D mechPosition = new Position2D(2, 2);
-        Position2D targetPosition = new Position2D(2, 3);
-        Position2D pushedPosition = new Position2D(2, 4);
+        Position mechPosition = new Position(2, 2);
+        Position targetPosition = new Position(2, 3);
+        Position pushedPosition = new Position(2, 4);
 
-        Unit combatMech = new Unit(mechPosition, punch);
-        Unit targetVek = new Unit(targetPosition, null);
+        Unit combatMech = new Unit(punch);
+        Unit targetVek = new Unit(null);
+        gameMap.placeUnitAt(combatMech, mechPosition);
+        gameMap.placeUnitAt(targetVek, targetPosition);
 
-        UnitAction punchAttack = combatMech.getAttack(targetPosition);
+        UnitAction punchAttack = combatMech.getAttack(mechPosition, targetPosition);
 
         // Act
-        punchAttack.tryExecute(GameMap.getInstance());
+        punchAttack.tryExecute(gameMap);
 
         // Assert
         assertTrue(targetVek.isDamaged(), "Target Vek should take damage from Punch");
         assertEquals(1, targetVek.getCurrentHealth(), "Target Vek health should decrease by 2 points");
-        assertEquals(pushedPosition, targetVek.getPosition(), "Target Vek should be pushed 1 tile in the hit direction");
+        assertTrue(gameMap.hasUnitAt(pushedPosition), "Target Vek should be pushed 1 tile in the hit direction");
+        assertFalse(gameMap.hasUnitAt(targetPosition), "Target Vek should have left its original position");
     }
 
     /*
@@ -73,19 +78,22 @@ public class SquadWeaponsIntegrationTest {
     public void cannonHitsFirstUnitOrObstacleInStraightLineAndDoesNotHitBehind() throws PositionOutOfBoundsException {
         // Arrange
         Weapon cannon = new Cannon();
-        Position2D mechPosition = new Position2D(1, 1);
-        Position2D firstVekPosition = new Position2D(1, 3);
-        Position2D secondVekPosition = new Position2D(1, 5);
-        Position2D aimPosition = new Position2D(1, 6);
+        Position mechPosition = new Position(1, 1);
+        Position firstVekPosition = new Position(1, 3);
+        Position secondVekPosition = new Position(1, 5);
+        Position aimPosition = new Position(1, 6);
 
-        Unit cannonMech = new Unit(mechPosition, cannon);
-        Unit firstVek = new Unit(firstVekPosition, null);
-        Unit secondVekBehind = new Unit(secondVekPosition, null);
+        Unit cannonMech = new Unit(cannon);
+        Unit firstVek = new Unit(null);
+        Unit secondVekBehind = new Unit(null);
+        gameMap.placeUnitAt(cannonMech, mechPosition);
+        gameMap.placeUnitAt(firstVek, firstVekPosition);
+        gameMap.placeUnitAt(secondVekBehind, secondVekPosition);
 
-        UnitAction cannonAttack = cannonMech.getAttack(aimPosition);
+        UnitAction cannonAttack = cannonMech.getAttack(mechPosition, aimPosition);
 
         // Act
-        cannonAttack.tryExecute(GameMap.getInstance());
+        cannonAttack.tryExecute(gameMap);
 
         // Assert
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
@@ -103,30 +111,52 @@ public class SquadWeaponsIntegrationTest {
     public void artilleryAttacksOverObstaclesCannotTargetAdjacentTilesAndPushesFourAdjacentUnits() throws PositionOutOfBoundsException {
         // Arrange
         Weapon artillery = new Artillery();
-        Position2D mechPosition = new Position2D(0, 3);
-        Position2D adjacentObstaclePosition = new Position2D(1, 3);
-        Position2D targetPosition = new Position2D(4, 3);
+        Position mechPosition = new Position(0, 3);
+        Position adjacentObstaclePosition = new Position(1, 3);
+        Position targetPosition = new Position(4, 3);
 
-        Unit artilleryMech = new Unit(mechPosition, artillery);
-        Unit centerVek = new Unit(targetPosition, null);
-        Unit northVek = new Unit(new Position2D(4, 2), null);
-        Unit southVek = new Unit(new Position2D(4, 4), null);
-        Unit eastVek = new Unit(new Position2D(5, 3), null);
-        Unit westVek = new Unit(new Position2D(3, 3), null);
+        Position northPosition = new Position(4, 2);
+        Position southPosition = new Position(4, 4);
+        Position eastPosition = new Position(5, 3);
+        Position westPosition = new Position(3, 3);
 
-        UnitAction adjacentAttack = artilleryMech.getAttack(adjacentObstaclePosition);
-        UnitAction validArtilleryAttack = artilleryMech.getAttack(targetPosition);
+        Position northPushedPosition = new Position(4, 1);
+        Position southPushedPosition = new Position(4, 5);
+        Position eastPushedPosition = new Position(6, 3);
+        Position westPushedPosition = new Position(2, 3);
+
+        Unit artilleryMech = new Unit(artillery);
+        Unit centerVek = new Unit(null);
+        Unit northVek = new Unit(null);
+        Unit southVek = new Unit(null);
+        Unit eastVek = new Unit(null);
+        Unit westVek = new Unit(null);
+
+        gameMap.placeUnitAt(artilleryMech, mechPosition);
+        gameMap.placeUnitAt(centerVek, targetPosition);
+        gameMap.placeUnitAt(northVek, northPosition);
+        gameMap.placeUnitAt(southVek, southPosition);
+        gameMap.placeUnitAt(eastVek, eastPosition);
+        gameMap.placeUnitAt(westVek, westPosition);
+
+        UnitAction adjacentAttack = artilleryMech.getAttack(mechPosition, adjacentObstaclePosition);
+        UnitAction validArtilleryAttack = artilleryMech.getAttack(mechPosition, targetPosition);
 
         // Act
-        validArtilleryAttack.tryExecute(GameMap.getInstance());
+        validArtilleryAttack.tryExecute(gameMap);
 
         // Assert
-        assertThrows(RuntimeException.class, () -> adjacentAttack.tryExecute(GameMap.getInstance()), "Artillery should not be able to target adjacent tiles");
+        assertThrows(RuntimeException.class, () -> adjacentAttack.tryExecute(gameMap), "Artillery should not be able to target adjacent tiles");
         assertTrue(centerVek.isDamaged(), "Unit on target cell should take damage over obstacle");
         assertEquals(2, centerVek.getCurrentHealth(), "Unit on target cell should receive 1 damage over obstacle");
-        assertEquals(new Position2D(4, 1), northVek.getPosition(), "North unit should be pushed to (4, 1)");
-        assertEquals(new Position2D(4, 5), southVek.getPosition(), "South unit should be pushed to (4, 5)");
-        assertEquals(new Position2D(6, 3), eastVek.getPosition(), "East unit should be pushed to (6, 3)");
-        assertEquals(new Position2D(2, 3), westVek.getPosition(), "West unit should be pushed to (2, 3)");
+        assertTrue(gameMap.hasUnitAt(targetPosition), "Unit on target cell should not move");
+        assertTrue(gameMap.hasUnitAt(northPushedPosition), "North unit should be pushed to (4, 1)");
+        assertTrue(gameMap.hasUnitAt(southPushedPosition), "South unit should be pushed to (4, 5)");
+        assertTrue(gameMap.hasUnitAt(eastPushedPosition), "East unit should be pushed to (6, 3)");
+        assertTrue(gameMap.hasUnitAt(westPushedPosition), "West unit should be pushed to (2, 3)");
+        assertFalse(gameMap.hasUnitAt(northPosition), "North unit should have left its original position");
+        assertFalse(gameMap.hasUnitAt(southPosition), "South unit should have left its original position");
+        assertFalse(gameMap.hasUnitAt(eastPosition), "East unit should have left its original position");
+        assertFalse(gameMap.hasUnitAt(westPosition), "West unit should have left its original position");
     }
 }

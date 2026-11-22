@@ -1,7 +1,7 @@
 package game.map;
 
 import game.map.cell.Cell;
-import game.position.Position2D;
+import game.position.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ public class CellGridTest {
         Cell[][] cells = new Cell[rows][cols];
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                cells[x][y] = new Cell(new Position2D(x, y));
+                cells[x][y] = new Cell(new Position(x, y));
             }
         }
         return cells;

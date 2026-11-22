@@ -1,13 +1,13 @@
 package game.map.cell;
 
-import game.position.Position2D;
+import game.position.Position;
 import game.units.Unit;
 
 public class Cell {
-    protected final Position2D position;
+    protected final Position position;
     protected UnitSlot unitSlot;
 
-    public Cell(Position2D position) {
+    public Cell(Position position) {
         this.position = position;
         unitSlot = createUnitSlot();
     }
@@ -42,7 +42,6 @@ public class Cell {
         }
 
         if (unitSlot.tryPlace(unit)) {
-            unit.moveTo(position);
             onUnitPlaced(unit, pushed);
             return true;
         }
@@ -61,8 +60,8 @@ public class Cell {
         return unitSlot.popUnit();
     }
 
-    public boolean hasPosition(Position2D position) {
-        return this.position.getDistance(position) == 0;
+    public boolean hasPosition(Position position) {
+        return this.position.getDiagonalDistance(position) == 0;
     }
 
     public boolean hasUnit() {
