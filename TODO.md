@@ -41,7 +41,6 @@ Correciones (Eliminar al completar):
 
   -[Grave] Tests incorrectos / vacios:
     - mechCanUndoMovementBeforeAttacking compara la misma instancia de posicion: pasa sin deshacer nada
-    - TestArtilleryShootsVek afirma que el Vek empujado termina SOBRE el edificio
     - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
 
 Sugerencias (Ezequiel):
