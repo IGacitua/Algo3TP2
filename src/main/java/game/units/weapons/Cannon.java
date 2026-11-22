@@ -1,9 +1,7 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.map.cell.Building;
 import game.map.cell.Cell;
-import game.map.cell.Mountain;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.*;
@@ -37,7 +35,7 @@ public class Cannon extends Weapon {
                 return false;
             }
 
-            if (isObstacle(cell)) {
+            if (cell != null && cell.blocksShot()) {
                 impactCell(current, cell, fireDirection, map);
                 return true;
             }
@@ -91,23 +89,5 @@ public class Cannon extends Weapon {
         }
 
         return furthestUnitPosition;
-    }
-
-    private boolean isObstacle(Cell cell) {
-        // TODO: Change checks to check for non-forced movement availability for a new
-        // TODO: MovementType that ignores water and such.
-        if (cell == null) {
-            return false;
-        }
-
-        if (cell.hasUnit()) {
-            return true;
-        }
-
-        if (cell instanceof Building) {
-            return true;
-        }
-
-        return cell instanceof Mountain;
     }
 }

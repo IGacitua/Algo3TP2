@@ -13,7 +13,6 @@ Correciones (Eliminar al completar):
 
     - [Medio] If en lugar de polimorfismo:
         - `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
-        - `Cannon.isObstacleOrUnit`: `instanceof Building / Mountain`
         - `instanceof NoDirection` en las armas
 
     - [Medio] Desnormalizacion del estado PlayerBehavior:

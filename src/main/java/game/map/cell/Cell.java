@@ -79,4 +79,8 @@ public class Cell {
     public boolean isWater() {
         return false;
     }
+
+    public boolean blocksShot() {
+        return hasUnit();
+    }
 }

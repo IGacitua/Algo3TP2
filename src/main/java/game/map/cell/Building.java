@@ -66,4 +66,9 @@ public class Building extends Cell {
         return super.canPlaceUnit(unit, pushed);
     }
 
+    @Override
+    public boolean blocksShot() {
+        return !isDestroyed || hasUnit();
+    }
+
 }

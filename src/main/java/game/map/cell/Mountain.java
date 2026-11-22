@@ -21,4 +21,9 @@ public class Mountain extends Cell {
     public boolean canDamage() {
         return false;
     }
+
+    @Override
+    public boolean blocksShot() {
+        return true;
+    }
 }
