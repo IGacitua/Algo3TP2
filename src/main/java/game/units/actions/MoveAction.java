@@ -11,6 +11,10 @@ public class MoveAction implements UnitAction {
     private final Position origin;
     private final Position destination;
 
+    public MoveAction(Position origin, Position destination) {
+        this(null, origin, destination);
+    }
+    
     public MoveAction(Unit unit, Position origin, Position destination) {
         this.unit = unit;
         this.origin = origin;
