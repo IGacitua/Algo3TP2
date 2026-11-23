@@ -6,7 +6,7 @@ Correciones (Eliminar al completar):
         - *Ver Sugerencias*
 
     - [Medio] Inicializa objetos en estado inconsistente:
-        - `new Mech(pos, arma)` se crea con movimiento 1 (`Grounded(1)`); el enunciado pide 3
+        - [X] `new Mech(pos, arma)` se crea con movimiento 1 (`Grounded(1)`); el enunciado pide 3
 
     - [Medio] Viola Tell don’t ask: `GameMap.moveUnitTo()` saca la unidad, pregunta `getMovementDistance()` y decide
       afuera; si no, la vuelve a poner.

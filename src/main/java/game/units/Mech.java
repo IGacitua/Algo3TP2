@@ -11,11 +11,11 @@ import game.units.weapons.Weapon;
 public class Mech extends Unit {
 
     public Mech(Weapon weapon) {
-        this(weapon, 3, new Grounded(1));
+        this(weapon, 3, new Grounded(3));
     }
 
     public Mech(Weapon weapon, int maximumHealth) {
-        this(weapon, maximumHealth, new Grounded(1));
+        this(weapon, maximumHealth, new Grounded(3));
     }
 
     // Usamos la misma firma que tu constructor principal de Unit
