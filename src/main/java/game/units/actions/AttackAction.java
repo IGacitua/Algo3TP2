@@ -2,6 +2,8 @@ package game.units.actions;
 
 import game.map.GameMap;
 import game.position.Position;
+import game.position.PositionOutOfBoundsException;
+import game.units.behavior.PlayerBehavior;
 import game.units.weapons.Weapon;
 
 public class AttackAction implements UnitAction {
@@ -18,5 +20,10 @@ public class AttackAction implements UnitAction {
     @Override
     public boolean tryExecute(GameMap map) {
         return weapon.attack(origin, target, map);
+    }
+
+    @Override
+    public void executeWith(PlayerBehavior behavior, GameMap map) throws PositionOutOfBoundsException {
+        behavior.executeAttack(this, map);
     }
 }
