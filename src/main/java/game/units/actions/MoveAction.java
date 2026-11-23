@@ -3,13 +3,16 @@ package game.units.actions;
 import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
+import game.units.Unit;
 
 
 public class MoveAction implements UnitAction {
+    private final Unit unit;
     private final Position origin;
     private final Position destination;
 
-    public MoveAction(Position origin, Position destination) {
+    public MoveAction(Unit unit, Position origin, Position destination) {
+        this.unit = unit;
         this.origin = origin;
         this.destination = destination;
     }

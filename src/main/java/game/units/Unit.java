@@ -38,7 +38,7 @@ public class Unit {
     }
 
     public UnitAction getMove(Position origin, Position destination) {
-        return new MoveAction(origin, destination);
+        return new MoveAction(this, origin, destination);
     }
 
     public boolean isDamaged() {
@@ -81,6 +81,10 @@ public class Unit {
 
     public void removeContamination() {
         contaminated = false;
+    }
+
+    public boolean isContaminated() {
+        return contaminated;
     }
 
     public void kill() {
