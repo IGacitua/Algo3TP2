@@ -4,24 +4,24 @@ import game.map.GameMap;
 import game.map.cell.Cell;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.position.direction.*;
-
-import java.util.List;
+import game.position.direction.OrthogonalDirection;
 
 public class Cannon extends Weapon {
 
     @Override
-    public boolean attack(Position target, GameMap map) {
-        OrthogonalDirection directionToShooter = getDirectionToShooter(target, map);
+    public boolean attack(Position origin, Position target, GameMap map) {
+        OrthogonalDirection fireDirection = origin.getDirectionTo(target);
 
-        if (!directionToShooter.isValidDirection()) {
+        if (!fireDirection.isValidDirection()) {
             throw new IllegalArgumentException("Cannon can only fire in a straight orthogonal line.");
         }
 
-        Position shooterOrigin = findFurthestUnitPosition(target, directionToShooter, map);
-        OrthogonalDirection fireDirection = directionToShooter.invert();
+        return fireAlongLine(origin, fireDirection, map);
+    }
 
-        return fireAlongLine(shooterOrigin, fireDirection, map);
+    @Override
+    public boolean attack(Position target, GameMap map) {
+        throw new UnsupportedOperationException("Cannon requires an origin position to determine the firing direction.");
     }
 
     private boolean fireAlongLine(Position origin, OrthogonalDirection fireDirection, GameMap map) {
@@ -58,36 +58,5 @@ public class Cannon extends Weapon {
                 // Si el empuje cae fuera del tablero, la unidad permanece en el borde
             }
         }
-    }
-
-    private OrthogonalDirection getDirectionToShooter(Position target, GameMap map) {
-        List<OrthogonalDirection> directions = List.of(new North(), new East(), new South(), new West());
-
-        for (OrthogonalDirection direction : directions) {
-            if (findFurthestUnitPosition(target, direction, map) != null) {
-                return direction;
-            }
-        }
-
-        return new NoDirection();
-    }
-
-    private Position findFurthestUnitPosition(Position start, OrthogonalDirection direction, GameMap map) {
-        Position current = start.getAdjacent(direction);
-        Position furthestUnitPosition = null;
-
-        while (true) {
-            try {
-                Cell cell = map.getCellAt(current);
-                if (cell.hasUnit()) {
-                    furthestUnitPosition = current;
-                }
-            } catch (PositionOutOfBoundsException e) {
-                break;
-            }
-            current = current.getAdjacent(direction);
-        }
-
-        return furthestUnitPosition;
     }
 }
