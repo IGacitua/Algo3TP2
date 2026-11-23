@@ -12,12 +12,12 @@ Correciones (Eliminar al completar):
       afuera; si no, la vuelve a poner.
 
     - [Medio] If en lugar de polimorfismo:
-        - `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
+        - [X] `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
         
 
     - [Medio] Desnormalizacion del estado PlayerBehavior:
-        - hasMoved y previousMovement != null dicen lo mismo;
-        - flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
+        - [X] hasMoved y previousMovement != null dicen lo mismo;
+        - [X] flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
 
     - [Leve] Codigo intrincado
         - Cannon no usa el origen: adivina al tirador buscando la unidad mas lejana en alguna
@@ -34,12 +34,12 @@ Correciones (Eliminar al completar):
     - getReachablePositions borra la unidad del mapa y usa distancia euclidea
     - Canon: con un Vek detras del Mech, el disparo sale del Vek y dania al Mech
     - Un Vek terrestre puede moverse voluntariamente al Agua y muere
-    - PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
+    - [X] PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
 
 - Pruebas:
 
   -[Grave] Tests incorrectos / vacios:
-    - mechCanUndoMovementBeforeAttacking compara la misma instancia de posicion: pasa sin deshacer nada
+    - [X] mechCanUndoMovementBeforeAttacking compara la misma instancia de posicion: pasa sin deshacer nada
     - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
 
 Sugerencias (Ezequiel):
@@ -73,7 +73,7 @@ Entrega 2:
 - [X] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
   Avispón no se contamine.
 - [ ] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
-- [ ] Verificar que al deshacer el movimiento de un Mech que terminó sobre Ácido, el Mech deje de estar Contaminado.
+- [X] Verificar que al deshacer el movimiento de un Mech que terminó sobre Ácido, el Mech deje de estar Contaminado.
 - [ ] Verificar que cada Vek anuncie su ataque en la Fase Vek y que se ejecute en la Fase de Resolución, en el orden
   anunciado.
 - [ ] Verificar que al empujar a un Vek su ataque anunciado se desplace con él, y que si queda apuntando a otro Vek, lo
