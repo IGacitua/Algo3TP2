@@ -8,13 +8,21 @@ import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.West;
+import game.units.Mech;
 import game.units.Unit;
+import game.units.actions.UnitAction;
+import game.units.behavior.PlayerBehavior;
+import game.units.behavior.TurnUndoTracker;
 import game.units.movement.Flying;
+import game.units.weapons.Weapon;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AcidIntegrationTest {
 
@@ -91,5 +99,27 @@ public class AcidIntegrationTest {
 
         // Assert
         assertEquals(8, unit.getCurrentHealth());
+    }
+
+    @Test 
+    public void undoingMoveOntoAcidRemovesContamination() throws PositionOutOfBoundsException {
+        // Arrange
+        Mech mech = new Mech(Mockito.mock(Weapon.class));
+        Position origin = new Position(1, 0);
+        Position moveDestination = new Position(0, 0); 
+        gameMap.placeUnitAt(mech, origin);
+
+        PlayerBehavior player = new PlayerBehavior(mech, new TurnUndoTracker());
+        UnitAction moveAction = mech.getMove(origin, moveDestination);
+
+        // Act
+        player.executeAction(moveAction, gameMap);
+        assertTrue(mech.isContaminated());
+
+        player.undoMovement(gameMap);        
+
+        // Assert
+        assertFalse(mech.isContaminated(), "Expected the mech to no longer be contaminated after undoing the move");
+        assertTrue(gameMap.hasMechAt(origin), "Expected the mech to be back at its original position after undoing the move");
     }
 }
