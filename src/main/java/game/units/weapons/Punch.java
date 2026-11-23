@@ -1,10 +1,9 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.map.cell.Cell;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.position.direction.*;
+import game.position.direction.OrthogonalDirection;
 
 public class Punch extends Weapon {
 
@@ -12,7 +11,7 @@ public class Punch extends Weapon {
 
     @Override
     public boolean attack(Position origin, Position target, GameMap map) {
-        if (origin.getDiagonalDistance(target) != 1.0) {
+        if (origin.getOrthogonalDistance(target) != 1.0) {
             throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
         }
 
@@ -26,13 +25,7 @@ public class Punch extends Weapon {
 
     @Override
     public boolean attack(Position target, GameMap map) {
-        OrthogonalDirection pushDirection = getPushDirection(target, map);
-
-        if (!pushDirection.isValidDirection()) {
-            throw new IllegalArgumentException("Punch can only target an orthogonally adjacent tile.");
-        }
-
-        return applyPunch(target, pushDirection, map);
+        throw new UnsupportedOperationException("Punch requires an origin position to determine the hit direction.");
     }
 
     private boolean applyPunch(Position target, OrthogonalDirection pushDirection, GameMap map) {
@@ -49,36 +42,5 @@ public class Punch extends Weapon {
         }
 
         return true;
-    }
-
-    private OrthogonalDirection getPushDirection(Position target, GameMap map) {
-        Position north = target.getAdjacent(new North());
-        Position east = target.getAdjacent(new East());
-        Position south = target.getAdjacent(new South());
-        Position west = target.getAdjacent(new West());
-
-        if (hasUnitAt(north, map)) {
-            return new South();
-        }
-        if (hasUnitAt(east, map)) {
-            return new West();
-        }
-        if (hasUnitAt(south, map)) {
-            return new North();
-        }
-        if (hasUnitAt(west, map)) {
-            return new East();
-        }
-
-        return new NoDirection();
-    }
-
-    private boolean hasUnitAt(Position position, GameMap map) {
-        try {
-            Cell cell = map.getCellAt(position);
-            return cell != null && cell.hasUnit();
-        } catch (PositionOutOfBoundsException e) {
-            return false;
-        }
     }
 }

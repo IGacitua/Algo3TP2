@@ -19,10 +19,7 @@ Correciones (Eliminar al completar):
         - hasMoved y previousMovement != null dicen lo mismo;
         - flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
 
-    - [Leve] Codigo intrincado
-        - Cannon no usa el origen: adivina al tirador buscando la unidad mas lejana en alguna
-          direccion desde el objetivo;
-        - Punch adivina la direccion
+    
 
     - [Leve] Un nuevo requerimiento implicara alterar varias clases
         - Nuevo tipo de casilla: subclase + CellFactory + `isX()` en Cell + `hasXAt()` en GameMap
