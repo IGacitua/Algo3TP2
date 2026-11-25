@@ -61,7 +61,7 @@ public class IntegrationTests {
 
         // Act
 
-        UnitAction action = mecha.getAttack(mechaPosition, vekCentroPosition);
+        UnitAction action = mecha.getAttackAction(mechaPosition, vekCentroPosition);
         action.tryExecute(map);
 
         // Assert

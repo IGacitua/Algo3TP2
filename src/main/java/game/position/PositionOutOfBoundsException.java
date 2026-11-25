@@ -1,6 +1,6 @@
 package game.position;
 
-public class PositionOutOfBoundsException extends Exception {
+public class PositionOutOfBoundsException extends RuntimeException {
     public PositionOutOfBoundsException(Position position) {
         super(position + "is out of bounds.");
     }

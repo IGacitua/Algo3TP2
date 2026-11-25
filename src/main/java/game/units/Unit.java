@@ -1,5 +1,6 @@
 package game.units;
 
+import game.map.cell.Cell;
 import game.position.Position;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
@@ -23,7 +24,6 @@ public class Unit {
     }
 
     public Unit(Weapon weapon, int maximumHealth, Movement movement) {
-
         if (movement == null) {
             throw new IllegalArgumentException("Movement type cannot be null");
         }
@@ -33,11 +33,11 @@ public class Unit {
         this.movement = movement;
     }
 
-    public UnitAction getAttack(Position origin, Position target) {
+    public UnitAction getAttackAction(Position origin, Position target) {
         return new AttackAction(weapon, origin, target);
     }
 
-    public UnitAction getMove(Position origin, Position destination) {
+    public UnitAction getMovementAction(Position origin, Position destination) {
         return new MoveAction(this, origin, destination);
     }
 
@@ -69,14 +69,14 @@ public class Unit {
         return health.isAlive();
     }
 
-    public boolean canMoveToWater() {
-        return movement.canMoveToWater();
-    }
-
     public void contaminate() {
         if (movement.canBeContaminated()) {
             contaminated = true;
         }
+    }
+
+    public boolean canMoveToWater() {
+        return movement.canMoveToWater();
     }
 
     public void removeContamination() {
@@ -91,11 +91,20 @@ public class Unit {
         health.kill();
     }
 
-    public int getMovementDistance() {
-        return movement.getMovementDistance();
-    }
-
     public boolean isMech() {
         return false;
+    }
+
+    // TODO: Call on turn start!
+    public void resetMovementDistance() {
+        this.movement.resetMovementDistance();
+    }
+
+    public void consumeMovement() {
+        this.movement.onMove();
+    }
+
+    public boolean canMoveTo(Cell destinationCell, boolean forced) {
+        return this.movement.canMoveTo(destinationCell, forced);
     }
 }

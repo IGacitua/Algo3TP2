@@ -20,6 +20,8 @@ public class Cell {
         return "G";
     }
 
+    // Damage
+
     public void tryDamage(int damage) {
         if (!canDamage()) {
             return;
@@ -36,6 +38,8 @@ public class Cell {
         unitSlot.damage(damage);
     }
 
+    // Unit
+
     public boolean tryPlaceUnit(Unit unit, boolean pushed) {
         if (!canPlaceUnit(unit, pushed)) {
             return false;
@@ -49,11 +53,41 @@ public class Cell {
         return false;
     }
 
-    public boolean canPlaceUnit(Unit unit, boolean pushed) {
+    public boolean isFull() {
         return !unitSlot.isFull();
     }
 
+    public boolean canPlaceUnit(Unit unit, boolean pushed) {
+        return isFull();
+    }
+
     protected void onUnitPlaced(Unit unit, boolean pushed) {
+    }
+
+    public boolean moveUnit(Cell destination, boolean pushed) {
+        if (!destination.isFull()) {
+            return false;
+        }
+
+        Unit unit = unitSlot.popUnit();
+        if (unit == null) {
+            return false;
+        }
+
+        if (!destination.canPlaceUnit(unit, pushed) || !unit.canMoveTo(destination, pushed) || !destination.tryPlaceUnit(unit, pushed)) {
+            unitSlot.tryPlace(unit); // Put it back without triggering onUnitPlaced.
+            return false;
+        }
+
+        if (!pushed) { // Pushes are free.
+            unit.consumeMovement();
+        }
+
+        return true;
+    }
+
+    public Unit peekUnit() {
+        return unitSlot.peekUnit();
     }
 
     public Unit popUnit() {

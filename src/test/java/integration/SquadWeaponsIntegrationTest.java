@@ -58,7 +58,7 @@ public class SquadWeaponsIntegrationTest {
         gameMap.placeUnitAt(combatMech, mechPosition);
         gameMap.placeUnitAt(targetVek, targetPosition);
 
-        UnitAction punchAttack = combatMech.getAttack(mechPosition, targetPosition);
+        UnitAction punchAttack = combatMech.getAttackAction(mechPosition, targetPosition);
 
         // Act
         boolean hit = punchAttack.tryExecute(gameMap);
@@ -91,7 +91,7 @@ public class SquadWeaponsIntegrationTest {
         gameMap.placeUnitAt(firstVek, firstVekPosition);
         gameMap.placeUnitAt(secondVekBehind, secondVekPosition);
 
-        UnitAction cannonAttack = cannonMech.getAttack(mechPosition, aimPosition);
+        UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
 
         // Act
         boolean hit = cannonAttack.tryExecute(gameMap);
@@ -118,7 +118,7 @@ public class SquadWeaponsIntegrationTest {
         Unit cannonMech = new Unit(cannon);
         gameMap.placeUnitAt(cannonMech, mechPosition);
 
-        UnitAction cannonAttack = cannonMech.getAttack(mechPosition, aimPosition);
+        UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
 
         // Act
         boolean hit = cannonAttack.tryExecute(gameMap);
@@ -164,8 +164,8 @@ public class SquadWeaponsIntegrationTest {
         gameMap.placeUnitAt(eastVek, eastPosition);
         gameMap.placeUnitAt(westVek, westPosition);
 
-        UnitAction adjacentAttack = artilleryMech.getAttack(mechPosition, adjacentObstaclePosition);
-        UnitAction validArtilleryAttack = artilleryMech.getAttack(mechPosition, targetPosition);
+        UnitAction adjacentAttack = artilleryMech.getAttackAction(mechPosition, adjacentObstaclePosition);
+        UnitAction validArtilleryAttack = artilleryMech.getAttackAction(mechPosition, targetPosition);
 
         // Act
         boolean hit = validArtilleryAttack.tryExecute(gameMap);

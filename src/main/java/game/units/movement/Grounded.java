@@ -1,18 +1,16 @@
 package game.units.movement;
 
-public class Grounded extends Movement {
+import game.map.cell.Cell;
 
-    public Grounded() {
-        super(1);
-    }
+public class Grounded extends Movement {
 
     public Grounded(int movementDistance) {
         super(movementDistance);
     }
 
     @Override
-    public boolean canMoveToWater() {
-        return false;
+    protected boolean canMove(Cell destinationCell, boolean forced) {
+        return forced || !destinationCell.isWater();
     }
 
     @Override
@@ -20,4 +18,8 @@ public class Grounded extends Movement {
         return true;
     }
 
+    @Override
+    public boolean canMoveToWater() {
+        return false;
+    }
 }

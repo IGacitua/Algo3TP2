@@ -4,36 +4,41 @@ import game.map.cell.Cell;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.*;
+import game.utils.graph.Graph;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class CellGrid {
 
+    private static final OrthogonalDirection[] DIRECTIONS = {new North(), new South(), new East(), new West()};
+
     private final Cell[][] matrix; // Indexed [x][y]
+    private final Graph<Position> graph = new Graph<>();
 
     public CellGrid(Cell[][] cells) {
         this.matrix = cells;
-    }
 
-    public void replaceCell(Cell cell, Position pos) {
-        int x = pos.getX();
-        int y = pos.getY();
-        replaceCell(cell, x, y);
-    }
-
-    private void replaceCell(Cell cell, int x, int y) {
-        if (x < 0 || x >= matrix.length) {
-            throw new IndexOutOfBoundsException("X index out of bounds: " + x);
-        }
-        if (y < 0 || y >= matrix[x].length) {
-            throw new IndexOutOfBoundsException("Y index out of bounds: " + y);
+        // Create Nodes
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
+                graph.addNode(new Position(x, y));
+            }
         }
 
-        matrix[x][y] = cell;
+        // Link Nodes
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
+                Position pos = new Position(x, y);
+                for (OrthogonalDirection direction : DIRECTIONS) {
+                    Position adj = pos.getAdjacent(direction);
+                    if (graph.contains(adj)) {
+                        graph.link(pos, adj);
+                    }
+                }
+            }
+        }
     }
 
     public Cell getCell(Position position) throws PositionOutOfBoundsException {
@@ -53,72 +58,41 @@ public class CellGrid {
     }
 
     public List<Position> getCellsInRadius(Position center, double radius, Predicate<Cell> requirement) {
-        List<Position> result = new ArrayList<>();
-
-        int cx = center.getX();
-        int cy = center.getY();
-        if (cx < 0 || cx >= matrix.length || cy < 0 || cy >= matrix[cx].length) {
-            return result;
+        if (!graph.contains(center)) {
+            return new ArrayList<>();
         }
-
-        boolean[][] visited = new boolean[matrix.length][];
-        for (int i = 0; i < matrix.length; i++) {
-            visited[i] = new boolean[matrix[i].length];
-        }
-
-        Deque<Position> queue = new ArrayDeque<>();
-        queue.add(center);
-        visited[cx][cy] = true;
-
-        OrthogonalDirection[] directions = {new North(), new South(), new East(), new West()};
-
-        while (!queue.isEmpty()) {
-            Position current = queue.poll();
-            for (OrthogonalDirection direction : directions) {
-                Position displaced = current.getAdjacent(direction);
-                int x = displaced.getX();
-                int y = displaced.getY();
-
-                if (x < 0 || x >= matrix.length || y < 0 || y >= matrix[x].length) {
-                    continue;
-                }
-
-                if (visited[x][y]) {
-                    continue;
-                }
-                Position next = new Position(x, y);
-                if (next.getDiagonalDistance(center) <= radius && requirement.test(matrix[x][y])) {
-                    visited[x][y] = true;
-                    result.add(next);
-                    queue.add(next);
-                }
+        return graph.getReachable(center, position -> {
+            if (position.getDiagonalDistance(center) > radius) {
+                return false;
             }
-        }
-        return result;
+            return requirement.test(getCell(position));
+        });
     }
 
     public Position getNearestCell(Position center, Predicate<Cell> requirement) {
-        Position nearest = null;
-        double best = Double.POSITIVE_INFINITY;
-        for (int x = 0; x < matrix.length; x++) {
-            for (int y = 0; y < matrix[x].length; y++) {
-                if (requirement.test(matrix[x][y])) {
-                    double d = new Position(x, y).getDiagonalDistance(center);
-                    if (d < best) {
-                        best = d;
-                        nearest = new Position(x, y);
-                    }
-                }
-            }
+        if (!graph.contains(center)) {
+            return null;
         }
-        return nearest;
+        return graph.findNearest(center, p -> requirement.test(getCell(p)))
+                .map(Graph.SearchResult::getValue)
+                .orElse(center); // TODO: Ver requerimientos de uso de este mensaje. Quizá sea ideal retornar null, o Inf,Inf, o lanzar excepción.
     }
 
     public double getDistanceToNearestCell(Position center, Predicate<Cell> requirement) {
-        Position nearest = getNearestCell(center, requirement);
-        if (nearest == null) {
+        if (!graph.contains(center)) {
             return Double.POSITIVE_INFINITY;
         }
-        return nearest.getOrthogonalDistance(center);
+        return graph.findNearest(center, p -> requirement.test(getCell(p)))
+                .map(r -> (double) r.getDistance())
+                .orElse(Double.POSITIVE_INFINITY);
+    }
+
+    public List<Position> getPath(Position center, Position destination, Predicate<Cell> requirement) {
+        if (!graph.contains(center) || !graph.contains(destination)) {
+            throw new NoPathException(center, destination);
+        }
+        return graph.getPath(center, destination,
+                position -> requirement.test(getCell(position))).orElseThrow(
+                () -> new NoPathException(center, destination));
     }
 }

@@ -120,7 +120,7 @@ public class MovementIntegrationTest {
     }
 
     private void assertMove(Position destination, boolean shouldSucceed) throws PositionOutOfBoundsException {
-        UnitAction moveAction = mech.getMove(mechPosition, destination);
+        UnitAction moveAction = mech.getMovementAction(mechPosition, destination);
         boolean success = moveAction.tryExecute(gameMap);
 
         if (shouldSucceed) {

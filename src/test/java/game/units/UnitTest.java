@@ -117,12 +117,7 @@ public class UnitTest {
 
     @Test
     public void testFlyingUnitCannotBeContaminated() {
-        Unit unit = new Unit(
-
-                null,
-                10,
-                new Flying()
-        );
+        Unit unit = new Unit(null, 10, new Flying(1));
 
         unit.contaminate();
         unit.damage(2);
@@ -132,13 +127,7 @@ public class UnitTest {
 
     @Test
     public void testFlyingUnitCanMoveToWater() {
-        Unit unit = new Unit(
-
-                null,
-                3,
-                new Flying()
-        );
-
+        Unit unit = new Unit(null, 3, new Flying(1));
         assertTrue(unit.canMoveToWater());
     }
 

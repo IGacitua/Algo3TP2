@@ -101,19 +101,19 @@ public class Position {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-
-        if (obj == null) {
+        }
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
+        Position other = (Position) obj;
+        return x == other.x && y == other.y;
+    }
 
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        Position o = (Position) obj;
-        return o.getDiagonalDistance(getX(), getY()) == 0;
+    @Override
+    public int hashCode() {
+        return 31 * x + y;
     }
 
     @Override

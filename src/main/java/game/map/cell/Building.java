@@ -63,7 +63,7 @@ public class Building extends Cell {
             return false;
         }
 
-        return super.canPlaceUnit(unit, pushed);
+        return super.isFull();
     }
 
     @Override

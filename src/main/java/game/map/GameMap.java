@@ -10,13 +10,16 @@ import game.units.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class GameMap {
+
+    private static final OrthogonalDirection[] DIRECTIONS =
+            {new North(), new South(), new East(), new West()};
+
     private final CellGrid grid;
 
     public GameMap(MapImporter importer, String mapFilePath) throws InvalidMapFileException {
-        grid = new CellGrid(importer.importMap(mapFilePath));
+        this.grid = new CellGrid(importer.importMap(mapFilePath));
     }
 
     // Cell Access
@@ -37,14 +40,14 @@ public class GameMap {
         return getCellAt(position).isWater();
     }
 
-    // Unit
+    public boolean hasUnitAt(Position position) throws PositionOutOfBoundsException {
+        return getCellAt(position).hasUnit();
+    }
+
+    // Units
 
     public void damageCellAt(Position target, int damage) throws PositionOutOfBoundsException {
         getCellAt(target).tryDamage(damage);
-    }
-
-    public boolean hasUnitAt(Position position) throws PositionOutOfBoundsException {
-        return getCellAt(position).hasUnit();
     }
 
     public boolean placeUnitAt(Unit unit, Position position) throws PositionOutOfBoundsException {
@@ -53,51 +56,60 @@ public class GameMap {
 
     public boolean moveUnitTo(Position origin, Position destination) throws PositionOutOfBoundsException {
         Cell originCell = getCellAt(origin);
-        Cell destinationCell = getCellAt(destination);
-
-        Unit unitToMove = originCell.popUnit();
-        if (unitToMove == null) {
+        Unit unit = originCell.peekUnit();
+        if (unit == null) {
             return false;
         }
 
-        int movementDistance = unitToMove.getMovementDistance();
-        if (origin.getOrthogonalDistance(destination) > movementDistance) {
-            // The destination is too far away.
-            originCell.tryPlaceUnit(unitToMove, true); // Put the unit back.
+        List<Position> path;
+        try {
+            path = grid.getPath(origin, destination, Cell::isFull);
+        } catch (NoPathException e) {
             return false;
         }
 
-        return destinationCell.tryPlaceUnit(unitToMove, true);
+        // Check the whole trip up front so a unit never stops halfway for lack of movement.
+        if (path.isEmpty()) {
+            return false;
+        }
+
+        Cell current = originCell;
+        for (Position step : path) {
+            Cell next = getCellAt(step);
+            if (!current.moveUnit(next, false)) {
+                return false; // Ran out of movement. The unit stays on the last cell it reached.
+            }
+            current = next;
+        }
+        return true;
     }
 
-    public void pushUnitTowards(Position unit, OrthogonalDirection direction) throws PositionOutOfBoundsException {
-        Cell fromCell = getCellAt(unit);
-        Cell toCell = getCellAt(unit.getAdjacent(direction));
+    public void pushUnitTowards(Position unitPosition, OrthogonalDirection direction)
+            throws PositionOutOfBoundsException {
+        Cell fromCell = getCellAt(unitPosition);
+        Cell toCell = getCellAt(unitPosition.getAdjacent(direction));
 
-        Unit unitToPush = fromCell.popUnit();
-        if (unitToPush == null) {
+        Unit unit = fromCell.popUnit();
+        if (unit == null) {
             return;
         }
 
-        boolean placed = toCell.tryPlaceUnit(unitToPush, true);
-        if (!placed) {
-            fromCell.tryPlaceUnit(unitToPush, false);
-            unitToPush.damage(1);
+        if (!toCell.tryPlaceUnit(unit, true)) {
+            fromCell.tryPlaceUnit(unit, false);
+            unit.damage(1);
             toCell.tryDamage(1);
         }
     }
 
     public void pushAllAdjacent(Position target) {
-        pushAway(target, new North());
-        pushAway(target, new South());
-        pushAway(target, new East());
-        pushAway(target, new West());
+        for (OrthogonalDirection direction : DIRECTIONS) {
+            pushAway(target, direction);
+        }
     }
 
     private void pushAway(Position target, OrthogonalDirection direction) {
         try {
-            Position adjacent = target.getAdjacent(direction);
-            pushUnitTowards(adjacent, direction);
+            pushUnitTowards(target.getAdjacent(direction), direction);
         } catch (PositionOutOfBoundsException e) {
             // Skip cells that are out of bounds.
         }
@@ -105,28 +117,27 @@ public class GameMap {
 
     // Search
 
-    public List<Position> getReachablePositions(Position unitPosition) throws PositionOutOfBoundsException {
-        Cell position = getCellAt(unitPosition);
-        if (!position.hasUnit()) {
-            return new ArrayList<>(); // Empty
+    public List<Position> getReachablePositions(Position unitPosition, int radius) throws PositionOutOfBoundsException {
+        Unit unit = getCellAt(unitPosition).peekUnit();
+        if (unit == null) {
+            return new ArrayList<>();
         }
+        return grid.getCellsInRadius(unitPosition, radius, Cell::isFull);
+    }
 
-        Unit unit = getCellAt(unitPosition).popUnit();
-        int movementDistance = unit.getMovementDistance();
-        Predicate<Cell> canMoveTo = (c) -> c.canPlaceUnit(unit, false);
-
-        return grid.getCellsInRadius(unitPosition, movementDistance, canMoveTo);
+    public List<Position> getPath(Position origin, Position destination) throws PositionOutOfBoundsException {
+        return grid.getPath(origin, destination, Cell::isFull);
     }
 
     public Position findClosestVekTarget(Position origin) {
-        return grid.getNearestCell(origin, (c) -> c.isVekTarget() && c.canDamage());
+        return grid.getNearestCell(origin, cell -> cell.isVekTarget() && cell.canDamage());
     }
 
     public Position findClosestPlayerUnit(Position origin) {
-        return grid.getNearestCell(origin, (c) -> c.hasMech() && c.canDamage());
+        return grid.getNearestCell(origin, cell -> cell.hasMech() && cell.canDamage());
     }
 
-    public double distanceToClosestVekTarget(Position pos) {
-        return grid.getDistanceToNearestCell(pos, Cell::isVekTarget);
+    public double distanceToClosestVekTarget(Position origin) {
+        return grid.getDistanceToNearestCell(origin, Cell::isVekTarget);
     }
 }

@@ -53,9 +53,9 @@ public class WaterIntegrationTest {
     }
 
     @Test
-    public void testFlyingUnitPushedIntoWaterSurvives() throws Exception {
+    public void testFlyingUnitPushedIntoWaterSurvives() {
         // Arrange
-        Unit unit = new Unit(null, 3, new Flying());
+        Unit unit = new Unit(null, 3, new Flying(1));
         gameMap.placeUnitAt(unit, landPosition);
 
         // Act

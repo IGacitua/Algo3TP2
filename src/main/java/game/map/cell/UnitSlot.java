@@ -23,6 +23,13 @@ public class UnitSlot {
         return true;
     }
 
+    public Unit peekUnit() {
+        if (containedUnits.isEmpty()) {
+            return null;
+        }
+        return containedUnits.get(containedUnits.size() - 1);
+    }
+
     public Unit popUnit() {
         if (containedUnits.isEmpty()) {
             return null;

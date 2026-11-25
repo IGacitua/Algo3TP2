@@ -16,7 +16,10 @@ public class Water extends Cell {
 
     @Override
     public boolean canPlaceUnit(Unit unit, boolean pushed) {
-        return super.canPlaceUnit(unit, pushed) && (unit.canMoveToWater() || pushed);
+        if (!unit.canMoveToWater() && !pushed) {
+            return false;
+        }
+        return super.canPlaceUnit(unit, pushed);
     }
 
     @Override

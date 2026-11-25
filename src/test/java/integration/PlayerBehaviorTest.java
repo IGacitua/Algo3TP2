@@ -15,9 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerBehaviorTest {
     private GameMap gameMap;
@@ -39,14 +37,14 @@ public class PlayerBehaviorTest {
 
         this.gameMap = new GameMap(mockMapImporter, "");
         this.undoTracker = new TurnUndoTracker();
-        
+
         Weapon mockPunch = Mockito.mock(Weapon.class);
         Mockito.when(mockPunch.attack(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
 
         this.origin = new Position(0, 0);
         this.combatMech = new Mech(mockPunch);
         this.gameMap.placeUnitAt(this.combatMech, this.origin);
-        
+
         this.player = new PlayerBehavior(this.combatMech, this.undoTracker);
     }
 
@@ -57,8 +55,8 @@ public class PlayerBehaviorTest {
         Position secondMoveDestination = new Position(0, 2);
 
         // Act
-        UnitAction firstMoveAction = this.combatMech.getMove(this.origin, firstMoveDestination);
-        UnitAction secondMoveAction = this.combatMech.getMove(firstMoveDestination, secondMoveDestination);
+        UnitAction firstMoveAction = this.combatMech.getMovementAction(this.origin, firstMoveDestination);
+        UnitAction secondMoveAction = this.combatMech.getMovementAction(firstMoveDestination, secondMoveDestination);
         this.player.executeAction(firstMoveAction, gameMap);
 
         // Assert
@@ -75,8 +73,8 @@ public class PlayerBehaviorTest {
         Position attackedPosition = new Position(0, 1);
 
         // Act
-        UnitAction firstAttackAction = this.combatMech.getAttack(this.origin, attackedPosition);
-        UnitAction secondAttackAction = this.combatMech.getAttack(this.origin, attackedPosition);
+        UnitAction firstAttackAction = this.combatMech.getAttackAction(this.origin, attackedPosition);
+        UnitAction secondAttackAction = this.combatMech.getAttackAction(this.origin, attackedPosition);
         this.player.executeAction(firstAttackAction, gameMap);
 
         // Assert
@@ -91,18 +89,18 @@ public class PlayerBehaviorTest {
     public void mechCanUndoMovementBeforeAttacking() throws PositionOutOfBoundsException {
         // Arrange
         Position moveDestination = new Position(0, 1);
-        UnitAction moveAction = this.combatMech.getMove(this.origin, moveDestination);
+        UnitAction moveAction = this.combatMech.getMovementAction(this.origin, moveDestination);
 
         // Act
-        this.player.executeAction(moveAction, gameMap);       
-        assertTrue(this.gameMap.hasMechAt(moveDestination)); 
+        this.player.executeAction(moveAction, gameMap);
+        assertTrue(this.gameMap.hasMechAt(moveDestination));
         this.player.undoMovement(gameMap);
 
         // Assert
-        assertTrue(this.gameMap.hasMechAt(this.origin), 
-            "Expected the mech to be back at its original position after undoing movement");    
-        assertFalse(this.gameMap.hasUnitAt(moveDestination), 
-            "Expected the destination cell to be empty after undoing movement");    
+        assertTrue(this.gameMap.hasMechAt(this.origin),
+                "Expected the mech to be back at its original position after undoing movement");
+        assertFalse(this.gameMap.hasUnitAt(moveDestination),
+                "Expected the destination cell to be empty after undoing movement");
     }
 
     @Test
@@ -112,10 +110,10 @@ public class PlayerBehaviorTest {
         Position attackedPosition = new Position(0, 2);
 
         // Act
-        UnitAction moveAction = this.combatMech.getMove(this.origin, moveDestination);
+        UnitAction moveAction = this.combatMech.getMovementAction(this.origin, moveDestination);
         this.player.executeAction(moveAction, gameMap);
 
-        UnitAction attackAction = this.combatMech.getAttack(this.origin, attackedPosition);
+        UnitAction attackAction = this.combatMech.getAttackAction(this.origin, attackedPosition);
         this.player.executeAction(attackAction, gameMap);
 
         // Assert
@@ -132,7 +130,7 @@ public class PlayerBehaviorTest {
         Position moveDestination = new Position(0, 1);
 
         // Act
-        UnitAction moveAction = this.combatMech.getMove(this.origin, moveDestination);
+        UnitAction moveAction = this.combatMech.getMovementAction(this.origin, moveDestination);
         this.player.executeAction(moveAction, gameMap);
         this.player.undoMovement(gameMap);
 
@@ -153,10 +151,10 @@ public class PlayerBehaviorTest {
         Position attackedPosition = new Position(0, 2);
 
         // Act
-        UnitAction attackAction = this.combatMech.getAttack(this.origin, attackedPosition);
+        UnitAction attackAction = this.combatMech.getAttackAction(this.origin, attackedPosition);
         this.player.executeAction(attackAction, gameMap);
 
-        UnitAction moveAction = this.combatMech.getMove(this.origin, moveDestination);
+        UnitAction moveAction = this.combatMech.getMovementAction(this.origin, moveDestination);
 
         // Assert
         assertThrows(
@@ -179,8 +177,8 @@ public class PlayerBehaviorTest {
         Position secondMechMoveDestination = new Position(1, 1);
 
         // Act
-        UnitAction firstMechMoveAction = this.combatMech.getMove(this.origin, firstMechMoveDestination);
-        UnitAction secondMechMoveAction = secondMech.getMove(secondMechOrigin, secondMechMoveDestination);
+        UnitAction firstMechMoveAction = this.combatMech.getMovementAction(this.origin, firstMechMoveDestination);
+        UnitAction secondMechMoveAction = secondMech.getMovementAction(secondMechOrigin, secondMechMoveDestination);
 
         this.player.executeAction(firstMechMoveAction, gameMap);
         secondPlayer.executeAction(secondMechMoveAction, gameMap);
@@ -196,7 +194,7 @@ public class PlayerBehaviorTest {
                 IllegalStateException.class,
                 () -> secondPlayer.undoMovement(gameMap),
                 "Expected an IllegalStateException when trying to undo movement for the second mech after the first " +
-                    "mech has already undone its movement in the same turn"
+                        "mech has already undone its movement in the same turn"
         );
     }
 

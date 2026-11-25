@@ -15,14 +15,11 @@ import game.units.behavior.PlayerBehavior;
 import game.units.behavior.TurnUndoTracker;
 import game.units.movement.Flying;
 import game.units.weapons.Weapon;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AcidIntegrationTest {
 
@@ -62,7 +59,7 @@ public class AcidIntegrationTest {
     @Test
     public void testFlyingUnitOnAcidReceivesNormalDamage() {
         // Arrange
-        Unit unit = new Unit(null, 10, new Flying());
+        Unit unit = new Unit(null, 10, new Flying(1));
 
         // Act
         unit.damage(2);
@@ -90,7 +87,7 @@ public class AcidIntegrationTest {
     public void testFlyingUnitPushedIntoAcidReceivesNormalDamage() throws Exception {
         // Arrange
         Position unitPosition = new Position(1, 0);
-        Unit unit = new Unit(null, 10, new Flying());
+        Unit unit = new Unit(null, 10, new Flying(1));
 
         // Act
         gameMap.placeUnitAt(unit, unitPosition);
@@ -101,22 +98,22 @@ public class AcidIntegrationTest {
         assertEquals(8, unit.getCurrentHealth());
     }
 
-    @Test 
+    @Test
     public void undoingMoveOntoAcidRemovesContamination() throws PositionOutOfBoundsException {
         // Arrange
         Mech mech = new Mech(Mockito.mock(Weapon.class));
         Position origin = new Position(1, 0);
-        Position moveDestination = new Position(0, 0); 
+        Position moveDestination = new Position(0, 0);
         gameMap.placeUnitAt(mech, origin);
 
         PlayerBehavior player = new PlayerBehavior(mech, new TurnUndoTracker());
-        UnitAction moveAction = mech.getMove(origin, moveDestination);
+        UnitAction moveAction = mech.getMovementAction(origin, moveDestination);
 
         // Act
         player.executeAction(moveAction, gameMap);
         assertTrue(mech.isContaminated());
 
-        player.undoMovement(gameMap);        
+        player.undoMovement(gameMap);
 
         // Assert
         assertFalse(mech.isContaminated(), "Expected the mech to no longer be contaminated after undoing the move");

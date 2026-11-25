@@ -36,7 +36,7 @@ public class Vek extends Unit {
 
         List<UnitAction> plan = new ArrayList<>();
         plan.add(new MoveAction(origin, target));
-        plan.add(this.getAttack(origin, targetBuilding)); // Usamos tu método de Unit!
+        plan.add(this.getAttackAction(origin, targetBuilding)); // Usamos tu método de Unit!
         return plan;
     }
 
@@ -50,7 +50,7 @@ public class Vek extends Unit {
 
         List<UnitAction> plan = new ArrayList<>();
         plan.add(new MoveAction(origin, target));
-        plan.add(this.getAttack(origin, targetMech)); // Usamos tu método de Unit!
+        plan.add(this.getAttackAction(origin, targetMech)); // Usamos tu método de Unit!
         return plan;
     }
 
