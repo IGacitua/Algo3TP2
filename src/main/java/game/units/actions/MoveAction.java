@@ -16,7 +16,7 @@ public class MoveAction implements UnitAction {
     public MoveAction(Position origin, Position destination) {
         this(null, origin, destination);
     }
-    
+
     public MoveAction(Unit unit, Position origin, Position destination) {
         this.unit = unit;
         this.origin = origin;
@@ -28,10 +28,10 @@ public class MoveAction implements UnitAction {
         if (unit != null) {
             this.wasCleanBeforeMove = !this.unit.isContaminated();
         }
-        return map.moveUnitTo(this.origin, this.destination);
+        return map.moveUnitTo(this.origin, this.destination, 1.0);
     }
 
-    @Override 
+    @Override
     public void executeWith(PlayerBehavior behavior, GameMap map) throws PositionOutOfBoundsException {
         behavior.executeMove(this, map);
     }
@@ -41,9 +41,9 @@ public class MoveAction implements UnitAction {
      *
      * @param map The game map where the action is undone.
      */
-    public void undone(GameMap map) throws PositionOutOfBoundsException {
-        // Deshacer es simplemente mover en reversa: del destino al origen
-        map.moveUnitTo(this.destination, this.origin);
+    public void undoExecution(GameMap map) throws PositionOutOfBoundsException {
+        // Mover de destino a origen, devolviendo consumo de movimiento.
+        map.moveUnitTo(this.destination, this.origin, -1.0);
 
         if (this.unit != null && this.wasCleanBeforeMove) {
             this.unit.removeContamination();
@@ -51,7 +51,7 @@ public class MoveAction implements UnitAction {
     }
 
     /**
-     * 
+     *
      * @return The destination position of the move action.
      */
     public Position getDestination() {

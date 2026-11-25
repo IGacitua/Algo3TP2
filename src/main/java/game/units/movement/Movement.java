@@ -16,11 +16,11 @@ public abstract class Movement {
         this.movementDistance = originalMovementDistance;
     }
 
-    public boolean canMoveTo(Cell destinationCell, boolean forced) {
+    public boolean canMoveTo(Cell destinationCell, boolean forced, double consumptionMultiplier) {
         if (!destinationCell.isFull()) {
             return false;
         }
-        if (!forced && movementDistance == 0) {
+        if (!forced && (movementDistance - consumptionMultiplier) < 0) {
             return false; // No movement left for another step.
         }
         return canMove(destinationCell, forced);
@@ -29,8 +29,8 @@ public abstract class Movement {
     // TODO: Better name distinction for canMove / canMoveTo
     protected abstract boolean canMove(Cell destinationCell, boolean forced);
 
-    public void onMove() {
-        movementDistance--;
+    public void consumeMovement(double multiplier) {
+        movementDistance -= multiplier;
     }
 
     public abstract boolean canBeContaminated();

@@ -5,7 +5,6 @@ import game.position.Position;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
-import game.units.movement.Grounded;
 import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
@@ -14,14 +13,6 @@ public class Unit {
     private final Health health;
     private final Movement movement;
     private boolean contaminated = false;
-
-    public Unit(Weapon weapon) {
-        this(weapon, 3, new Grounded(1));
-    }
-
-    public Unit(Weapon weapon, int maximumHealth) {
-        this(weapon, maximumHealth, new Grounded(1));
-    }
 
     public Unit(Weapon weapon, int maximumHealth, Movement movement) {
         if (movement == null) {
@@ -100,11 +91,11 @@ public class Unit {
         this.movement.resetMovementDistance();
     }
 
-    public void consumeMovement() {
-        this.movement.onMove();
+    public void consumeMovement(double multiplier) {
+        this.movement.consumeMovement(multiplier);
     }
 
-    public boolean canMoveTo(Cell destinationCell, boolean forced) {
-        return this.movement.canMoveTo(destinationCell, forced);
+    public boolean canMoveTo(Cell destinationCell, boolean forced, double consumptionMultiplier) {
+        return this.movement.canMoveTo(destinationCell, forced, consumptionMultiplier);
     }
 }

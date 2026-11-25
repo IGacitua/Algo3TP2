@@ -12,6 +12,8 @@ import game.position.PositionOutOfBoundsException;
 import game.position.direction.East;
 import game.position.direction.North;
 import game.units.Unit;
+import game.units.movement.Movement;
+import game.units.weapons.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -48,8 +50,8 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(1, 1);
         Position blockerPosition = new Position(2, 1);
-        Unit pushedVek = new Unit(null);
-        Unit blockingVek = new Unit(null);
+        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit blockingVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(pushedVek, pushedOrigin);
         gameMap.placeUnitAt(blockingVek, blockerPosition);
 
@@ -70,7 +72,7 @@ public class PushCollisionIntegrationTest {
     public void pushingUnitIntoBuildingStopsMovementDamagesUnitDestroysBuildingAndReducesPower() throws PositionOutOfBoundsException {
         // Arrange
         Position pushedOrigin = new Position(2, 2);
-        Unit pushedVek = new Unit(null);
+        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(pushedVek, pushedOrigin);
 
         // Act
@@ -90,7 +92,7 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(2, 5);
         Position destination = new Position(3, 5);
-        Unit pushedVek = new Unit(null);
+        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(pushedVek, pushedOrigin);
 
         // Act
@@ -108,7 +110,7 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(4, 2);
         Position mountainPosition = new Position(5, 2);
-        Unit pushedVek = new Unit(null);
+        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(pushedVek, pushedOrigin);
 
         // Act
@@ -126,7 +128,7 @@ public class PushCollisionIntegrationTest {
     public void pushingUnitOutOfBoundsThrowsExceptionAndKeepsUnitUninjuredInPlace() throws PositionOutOfBoundsException {
         // Arrange
         Position edgePosition = new Position(0, 0);
-        Unit edgeVek = new Unit(null);
+        Unit edgeVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(edgeVek, edgePosition);
 
         // Act & Assert

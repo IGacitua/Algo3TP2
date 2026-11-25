@@ -4,7 +4,6 @@ import game.map.GameMap;
 import game.position.Position;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
-import game.units.movement.Grounded;
 import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
@@ -13,14 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Vek extends Unit {
-
-    public Vek(Weapon weapon) {
-        this(weapon, 3, new Grounded(1));
-    }
-
-    public Vek(Weapon weapon, int maximumHealth) {
-        this(weapon, maximumHealth, new Grounded(1));
-    }
 
     public Vek(Weapon weapon, int maximumHealth, Movement movement) {
         super(weapon, maximumHealth, movement);

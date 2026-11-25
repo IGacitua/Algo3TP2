@@ -28,8 +28,8 @@ public class MovedState implements MechTurnState {
     @Override
     public MechTurnState undo(GameMap map, TurnUndoTracker undoTracker) throws PositionOutOfBoundsException {
         undoTracker.consumeUndo();
-        previousMovement.undone(map);
+        previousMovement.undoExecution(map);
         return new ReadyState();
     }
-    
+
 }

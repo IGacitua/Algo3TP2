@@ -14,6 +14,7 @@ import game.units.actions.UnitAction;
 import game.units.behavior.PlayerBehavior;
 import game.units.behavior.TurnUndoTracker;
 import game.units.movement.Flying;
+import game.units.movement.Grounded;
 import game.units.weapons.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class AcidIntegrationTest {
     @Test
     public void testGroundedUnitOnAcidReceivesDoubleDamage() throws PositionOutOfBoundsException {
         // Arrange
-        Unit unit = new Unit(null, 10);
+        Unit unit = new Unit(null, 10, new Grounded(1));
         gameMap.placeUnitAt(unit, new Position(0, 0));
 
         // Act
@@ -72,7 +73,7 @@ public class AcidIntegrationTest {
     public void testGroundedUnitPushedIntoAcidReceivesDoubleDamage() throws Exception {
         // Arrange
         Position unitPosition = new Position(1, 0);
-        Unit unit = new Unit(null, 10);
+        Unit unit = new Unit(null, 10, new Grounded(1));
 
         // Act
         gameMap.placeUnitAt(unit, unitPosition);
@@ -101,7 +102,7 @@ public class AcidIntegrationTest {
     @Test
     public void undoingMoveOntoAcidRemovesContamination() throws PositionOutOfBoundsException {
         // Arrange
-        Mech mech = new Mech(Mockito.mock(Weapon.class));
+        Mech mech = new Mech(Mockito.mock(Weapon.class), 5, new Grounded(1));
         Position origin = new Position(1, 0);
         Position moveDestination = new Position(0, 0);
         gameMap.placeUnitAt(mech, origin);

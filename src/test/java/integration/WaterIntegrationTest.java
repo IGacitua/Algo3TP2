@@ -8,6 +8,7 @@ import game.position.Position;
 import game.position.direction.East;
 import game.units.Unit;
 import game.units.movement.Flying;
+import game.units.movement.Grounded;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -42,7 +43,7 @@ public class WaterIntegrationTest {
     @Test
     public void testGroundedUnitPushedIntoWaterDies() throws Exception {
         // Arrange
-        Unit unit = new Unit(null, 3);
+        Unit unit = new Unit(null, 3, new Grounded(1));
         gameMap.placeUnitAt(unit, landPosition);
 
         // Act
@@ -71,7 +72,7 @@ public class WaterIntegrationTest {
     @Test
     public void testGroundedUnitCannotBePlacedOnWater() throws Exception {
         // Arrange
-        Unit unit = new Unit(null, 3);
+        Unit unit = new Unit(null, 3, new Grounded(1));
         gameMap.placeUnitAt(unit, landPosition);
 
         // Act

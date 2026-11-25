@@ -10,6 +10,7 @@ import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
 import game.units.actions.UnitAction;
+import game.units.movement.Movement;
 import game.units.weapons.Artillery;
 import game.units.weapons.Cannon;
 import game.units.weapons.Punch;
@@ -53,8 +54,8 @@ public class SquadWeaponsIntegrationTest {
         Position targetPosition = new Position(2, 3);
         Position pushedPosition = new Position(2, 4);
 
-        Unit combatMech = new Unit(punch);
-        Unit targetVek = new Unit(null);
+        Unit combatMech = new Unit(punch, 3, Mockito.mock(Movement.class));
+        Unit targetVek = new Unit(null, 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(combatMech, mechPosition);
         gameMap.placeUnitAt(targetVek, targetPosition);
 
@@ -84,9 +85,9 @@ public class SquadWeaponsIntegrationTest {
         Position secondVekPosition = new Position(1, 5);
         Position aimPosition = new Position(1, 6);
 
-        Unit cannonMech = new Unit(cannon);
-        Unit firstVek = new Unit(null);
-        Unit secondVekBehind = new Unit(null);
+        Unit cannonMech = new Unit(cannon, 3, Mockito.mock(Movement.class));
+        Unit firstVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit secondVekBehind = new Unit(null, 3, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(cannonMech, mechPosition);
         gameMap.placeUnitAt(firstVek, firstVekPosition);
         gameMap.placeUnitAt(secondVekBehind, secondVekPosition);
@@ -115,7 +116,7 @@ public class SquadWeaponsIntegrationTest {
         Position mechPosition = new Position(4, 4);
         Position aimPosition = new Position(4, 5);
 
-        Unit cannonMech = new Unit(cannon);
+        Unit cannonMech = new Unit(cannon, 5, Mockito.mock(Movement.class));
         gameMap.placeUnitAt(cannonMech, mechPosition);
 
         UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
@@ -150,12 +151,12 @@ public class SquadWeaponsIntegrationTest {
         Position eastPushedPosition = new Position(6, 3);
         Position westPushedPosition = new Position(2, 3);
 
-        Unit artilleryMech = new Unit(artillery);
-        Unit centerVek = new Unit(null);
-        Unit northVek = new Unit(null);
-        Unit southVek = new Unit(null);
-        Unit eastVek = new Unit(null);
-        Unit westVek = new Unit(null);
+        Unit artilleryMech = new Unit(artillery, 3, Mockito.mock(Movement.class));
+        Unit centerVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit northVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit southVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit eastVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit westVek = new Unit(null, 3, Mockito.mock(Movement.class));
 
         gameMap.placeUnitAt(artilleryMech, mechPosition);
         gameMap.placeUnitAt(centerVek, targetPosition);

@@ -4,21 +4,10 @@ import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.actions.MoveAction;
-import game.units.movement.Grounded;
 import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
 public class Mech extends Unit {
-
-    public Mech(Weapon weapon) {
-        this(weapon, 3, new Grounded(3));
-    }
-
-    public Mech(Weapon weapon, int maximumHealth) {
-        this(weapon, maximumHealth, new Grounded(3));
-    }
-
-    // Usamos la misma firma que tu constructor principal de Unit
     public Mech(Weapon weapon, int maximumHealth, Movement movement) {
         super(weapon, maximumHealth, movement);
     }

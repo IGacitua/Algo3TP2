@@ -64,7 +64,7 @@ public class Cell {
     protected void onUnitPlaced(Unit unit, boolean pushed) {
     }
 
-    public boolean moveUnit(Cell destination, boolean pushed) {
+    public boolean moveUnit(Cell destination, boolean pushed, double consumptionMultiplier) {
         if (!destination.isFull()) {
             return false;
         }
@@ -74,13 +74,13 @@ public class Cell {
             return false;
         }
 
-        if (!destination.canPlaceUnit(unit, pushed) || !unit.canMoveTo(destination, pushed) || !destination.tryPlaceUnit(unit, pushed)) {
+        if (!destination.canPlaceUnit(unit, pushed) || !unit.canMoveTo(destination, pushed, consumptionMultiplier) || !destination.tryPlaceUnit(unit, pushed)) {
             unitSlot.tryPlace(unit); // Put it back without triggering onUnitPlaced.
             return false;
         }
 
         if (!pushed) { // Pushes are free.
-            unit.consumeMovement();
+            unit.consumeMovement(consumptionMultiplier);
         }
 
         return true;

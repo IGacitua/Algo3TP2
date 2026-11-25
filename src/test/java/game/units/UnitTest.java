@@ -1,34 +1,19 @@
 package game.units;
 
 import game.units.movement.Flying;
+import game.units.movement.Grounded;
+import game.units.movement.Movement;
+import game.units.weapons.Weapon;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitTest {
-
-    // TODO: Verify whether it's still needed
-    /*
-    private GameMap gameMap;
-
-    @BeforeEach
-    public void setUp() throws InvalidMapFileException {
-        // Preparar un mapa de 1x1 antes de cada test
-        MapImporter importer = Mockito.mock(MapImporter.class);
-
-        Cell[][] cells = new Cell[1][1];
-        cells[0][0] = new Cell(new Position(0, 0));
-
-        Mockito.when(importer.importMap(Mockito.anyString())).thenReturn(cells);
-
-        gameMap = new GameMap(importer, "");
-    }
-    */
-
     @Test
     public void testDamageReducesUnitHealth() {
         // Arrange
-        Unit unit = new Unit(null);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
 
         // Act
         unit.damage();
@@ -40,7 +25,7 @@ public class UnitTest {
     @Test
     public void testUnitCanHaveCustomMaximumHealth() {
         // Arrange
-        Unit unit = new Unit(null, 5);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 5, Mockito.mock(Movement.class));
 
         // Act
         unit.damage();
@@ -52,7 +37,7 @@ public class UnitTest {
     @Test
     public void testUnitCanReceiveDifferentAmountsOfDamage() {
         // Arrange
-        Unit unit = new Unit(null, 5);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 5, Mockito.mock(Movement.class));
 
         // Act
         unit.damage(2);
@@ -64,7 +49,7 @@ public class UnitTest {
     @Test
     public void testUnitDiesWhenHealthReachesZero() {
         // Arrange
-        Unit unit = new Unit(null, 3);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
 
         // Act
         unit.damage(3);
@@ -77,7 +62,7 @@ public class UnitTest {
     @Test
     public void testContaminatedUnitReceivesDoubleDamage() {
         // Arrange
-        Unit unit = new Unit(null, 10);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 10, new Grounded(1));
 
         // Act
         unit.contaminate();
@@ -90,7 +75,7 @@ public class UnitTest {
     @Test
     public void testContaminationDoesNotStack() {
         // Arrange
-        Unit unit = new Unit(null, 10);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 10, new Grounded(1));
 
         // Act
         unit.contaminate();
@@ -104,7 +89,7 @@ public class UnitTest {
     @Test
     public void testRemovingContaminationRestoresNormalDamage() {
         // Arrange
-        Unit unit = new Unit(null, 10);
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 10, Mockito.mock(Movement.class));
 
         // Act
         unit.contaminate();
@@ -133,22 +118,14 @@ public class UnitTest {
 
     @Test
     public void testGroundedUnitCannotMoveToWater() {
-        Unit unit = new Unit(
-
-                null,
-                3
-        );
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
 
         assertFalse(unit.canMoveToWater());
     }
 
     @Test
     public void testGroundedUnitCanBeContaminated() {
-        Unit unit = new Unit(
-
-                null,
-                10
-        );
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 10, new Grounded(1));
 
         unit.contaminate();
         unit.damage(2);
@@ -158,11 +135,7 @@ public class UnitTest {
 
     @Test
     public void testUnitCanBeKilledInstantly() {
-        Unit unit = new Unit(
-
-                null,
-                10
-        );
+        Unit unit = new Unit(Mockito.mock(Weapon.class), 10, Mockito.mock(Movement.class));
 
         unit.kill();
 

@@ -12,11 +12,13 @@ import game.units.Mech;
 import game.units.Unit;
 import game.units.Vek;
 import game.units.actions.UnitAction;
+import game.units.movement.Movement;
 import game.units.weapons.Artillery;
 import game.units.weapons.Weapon;
 import game.utils.FileHandler;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 // Probablemente lo separemos en varias clases de tests de integración, pero por ahora le dejamos el nombre.
 public class IntegrationTests {
@@ -49,10 +51,10 @@ public class IntegrationTests {
         // Arrange: Units
 
         Weapon artillery = new Artillery();
-        Unit mecha = new Mech(artillery);
-        Unit vekCentro = new Vek(null);
-        Unit vekNorte = new Vek(null);
-        Unit vekEste = new Vek(null);
+        Unit mecha = new Mech(artillery, 5, Mockito.mock(Movement.class));
+        Unit vekCentro = new Vek(null, 5, Mockito.mock(Movement.class));
+        Unit vekNorte = new Vek(null, 5, Mockito.mock(Movement.class));
+        Unit vekEste = new Vek(null, 5, Mockito.mock(Movement.class));
 
         map.placeUnitAt(mecha, mechaPosition);
         map.placeUnitAt(vekCentro, vekCentroPosition);

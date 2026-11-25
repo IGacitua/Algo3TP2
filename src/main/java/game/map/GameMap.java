@@ -54,7 +54,7 @@ public class GameMap {
         return getCellAt(position).tryPlaceUnit(unit, false);
     }
 
-    public boolean moveUnitTo(Position origin, Position destination) throws PositionOutOfBoundsException {
+    public boolean moveUnitTo(Position origin, Position destination, double consumptionMultiplier) throws PositionOutOfBoundsException {
         Cell originCell = getCellAt(origin);
         Unit unit = originCell.peekUnit();
         if (unit == null) {
@@ -76,7 +76,7 @@ public class GameMap {
         Cell current = originCell;
         for (Position step : path) {
             Cell next = getCellAt(step);
-            if (!current.moveUnit(next, false)) {
+            if (!current.moveUnit(next, false, consumptionMultiplier)) {
                 return false; // Ran out of movement. The unit stays on the last cell it reached.
             }
             current = next;
@@ -84,8 +84,7 @@ public class GameMap {
         return true;
     }
 
-    public void pushUnitTowards(Position unitPosition, OrthogonalDirection direction)
-            throws PositionOutOfBoundsException {
+    public void pushUnitTowards(Position unitPosition, OrthogonalDirection direction) throws PositionOutOfBoundsException {
         Cell fromCell = getCellAt(unitPosition);
         Cell toCell = getCellAt(unitPosition.getAdjacent(direction));
 
