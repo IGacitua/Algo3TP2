@@ -5,21 +5,12 @@ Correciones (Eliminar al completar):
         - Mech: solo `isMech()`, `createMoveCommand` duplicado y canAttack sin uso; no existen los tipos de Mech
         - *Ver Sugerencias*
 
-    - [Medio] Inicializa objetos en estado inconsistente:
-        - [X] `new Mech(pos, arma)` se crea con movimiento 1 (`Grounded(1)`); el enunciado pide 3
-
-    - [Medio] Viola Tell don’t ask: `GameMap.moveUnitTo()` saca la unidad, pregunta `getMovementDistance()` y decide
-      afuera; si no, la vuelve a poner.
-
     - [Medio] If en lugar de polimorfismo:
         - [X] `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
-        
 
     - [Medio] Desnormalizacion del estado PlayerBehavior:
         - [X] hasMoved y previousMovement != null dicen lo mismo;
         - [X] flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
-
-    
 
     - [Leve] Un nuevo requerimiento implicara alterar varias clases
         - Nuevo tipo de casilla: subclase + CellFactory + `isX()` en Cell + `hasXAt()` en GameMap
@@ -42,23 +33,11 @@ Correciones (Eliminar al completar):
 Sugerencias (Ezequiel):
 
 - Separación Mek/Vek puede ser refactorizada:
-    - isMech () -> Boolean en el constructor
+    - isMech () -> Boolean en el constructor. O, mas adecuadamente, un 'Equipo' enum, Jugador/Enemigo.
+        - Con eso podemos hacer que la pregunta no sea 'hay una unidad aca', si no 'hay una unidad que NO es del mi
+          equipo aca'
     - Comportamiento Vek -> UnitBehavior, recibido en el constructor.
     - Comportamiento Mek -> Idem.
-
-Entrega 1:
-
-- [X] Verificar que el tablero se cargue con 8x8 casillas a partir de un mapa predefinido, con los tipos de casilla en
-  las posiciones correctas.
-- [X] Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento, sin atravesar obstáculos ni
-  otras unidades.
-- [X] Verificar que el Puño cause 2 de daño a una unidad adyacente y la empuje 1 casilla en la dirección del golpe.
-- [X] Verificar que el Cañón impacte a la primera unidad u obstáculo en línea recta y no a las que están detrás.
-- [X] Verificar que la Artillería pueda atacar por encima de obstáculos, que no pueda atacar casillas adyacentes y que
-  dañe la casilla objetivo y empuje hacia afuera a las unidades de las 4 casillas adyacentes.
-- [X] Verificar que un Mech no pueda moverse ni atacar dos veces en el mismo turno.
-- [X] Verificar que se pueda deshacer el movimiento de un Mech que todavía no atacó y que vuelva a su posición anterior.
-- [X] Verificar que no se pueda deshacer un movimiento después de que el Mech atacó, ni más de una vez por turno.
 
 Entrega 2:
 
