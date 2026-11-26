@@ -31,7 +31,7 @@ Entrega 2:
   dañe.
 - [ ] Verificar que la IA de los Vek aplique las reglas de prioridad en orden.
 - [ ] Verificar que una unidad sobre la casilla de emergencia bloquee la aparición del nuevo Vek y reciba 1 de daño.
-- [ ] Planteo inicial de interfaz gráfica (mockups/dibujos) mostrando: el tablero con los ataques anunciados, la
+- [X] Planteo inicial de interfaz gráfica (mockups/dibujos) mostrando: el tablero con los ataques anunciados, la
   información de cada unidad, la Red Eléctrica y el turno actual.
 
 Entrega 3:
