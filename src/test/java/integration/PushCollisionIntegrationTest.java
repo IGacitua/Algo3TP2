@@ -13,6 +13,7 @@ import game.position.direction.East;
 import game.position.direction.North;
 import game.units.Team;
 import game.units.Unit;
+import game.units.movement.Grounded;
 import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 import org.junit.jupiter.api.BeforeEach;
@@ -93,7 +94,7 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(2, 5);
         Position destination = new Position(3, 5);
-        Unit pushedVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit pushedVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, new Grounded(3));
         gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act

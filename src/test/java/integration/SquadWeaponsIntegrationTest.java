@@ -11,7 +11,7 @@ import game.position.PositionOutOfBoundsException;
 import game.units.Team;
 import game.units.Unit;
 import game.units.actions.UnitAction;
-import game.units.movement.Movement;
+import game.units.movement.Grounded;
 import game.units.weapons.Artillery;
 import game.units.weapons.Cannon;
 import game.units.weapons.Punch;
@@ -54,8 +54,8 @@ public class SquadWeaponsIntegrationTest {
         Position targetPosition = new Position(2, 3);
         Position pushedPosition = new Position(2, 4);
 
-        Unit combatMech = new Unit(Team.Player, punch, 3, Mockito.mock(Movement.class));
-        Unit targetVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit combatMech = new Unit(Team.Player, punch, 3, new Grounded(3));
+        Unit targetVek = new Unit(Team.Player, null, 3, new Grounded(3));
         gameMap.tryPlaceUnit(combatMech, mechPosition);
         gameMap.tryPlaceUnit(targetVek, targetPosition);
 
@@ -80,19 +80,22 @@ public class SquadWeaponsIntegrationTest {
     public void cannonHitsFirstUnitOrObstacleInStraightLineAndDoesNotHitBehind() throws PositionOutOfBoundsException {
         // Arrange
         Weapon cannon = new Cannon(gameMap);
-        Position mechPosition = new Position(1, 1);
-        Position firstVekPosition = new Position(1, 3);
-        Position secondVekPosition = new Position(1, 5);
-        Position aimPosition = new Position(1, 6);
 
-        Unit cannonMech = new Unit(Team.Player, cannon, 3, Mockito.mock(Movement.class));
-        Unit firstVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
-        Unit secondVekBehind = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
-        gameMap.tryPlaceUnit(cannonMech, mechPosition);
-        gameMap.tryPlaceUnit(firstVek, firstVekPosition);
-        gameMap.tryPlaceUnit(secondVekBehind, secondVekPosition);
+        Position mechPosition = new Position(2, 1);
+        Position firstVekPosition = new Position(2, 3);
+        Position secondVekPosition = new Position(2, 5);
 
-        UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
+        Position aimPosition = new Position(2, 6);
+
+        Unit mech = new Unit(Team.Player, cannon, 3, new Grounded(3));
+        Unit firstVek = new Unit(Team.Player, null, 3, new Grounded(3));
+        Unit secondVek = new Unit(Team.Player, null, 3, new Grounded(3));
+
+        assertTrue(gameMap.tryPlaceUnit(mech, mechPosition), "Should have been able to place cannon mech.");
+        assertTrue(gameMap.tryPlaceUnit(firstVek, firstVekPosition), "Should have been able to place first vek.");
+        assertTrue(gameMap.tryPlaceUnit(secondVek, secondVekPosition), "Should have been able to place second vek behind first.");
+
+        UnitAction cannonAttack = mech.getAttackAction(mechPosition, aimPosition);
 
         // Act
         boolean hit = cannonAttack.tryExecute(gameMap);
@@ -101,8 +104,8 @@ public class SquadWeaponsIntegrationTest {
         assertTrue(hit, "Cannon should return true when hitting the first unit in line of sight");
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
         assertEquals(2, firstVek.getHealth(), "First unit should receive 1 damage from Cannon");
-        assertFalse(secondVekBehind.isDamaged(), "Unit behind the first target should not take damage");
-        assertEquals(3, secondVekBehind.getHealth(), "Unit behind should keep its full health");
+        assertFalse(secondVek.isDamaged(), "Unit behind the first target should not take damage");
+        assertEquals(3, secondVek.getHealth(), "Unit behind should keep its full health");
     }
 
     /*
@@ -116,7 +119,7 @@ public class SquadWeaponsIntegrationTest {
         Position mechPosition = new Position(4, 4);
         Position aimPosition = new Position(4, 5);
 
-        Unit cannonMech = new Unit(Team.Player, cannon, 5, Mockito.mock(Movement.class));
+        Unit cannonMech = new Unit(Team.Player, cannon, 5, new Grounded(3));
         gameMap.tryPlaceUnit(cannonMech, mechPosition);
 
         UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
@@ -151,12 +154,12 @@ public class SquadWeaponsIntegrationTest {
         Position eastPushedPosition = new Position(6, 3);
         Position westPushedPosition = new Position(2, 3);
 
-        Unit artilleryMech = new Unit(Team.Player, artillery, 3, Mockito.mock(Movement.class));
-        Unit centerVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
-        Unit northVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
-        Unit southVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
-        Unit eastVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
-        Unit westVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit artilleryMech = new Unit(Team.Player, artillery, 3, new Grounded(3));
+        Unit centerVek = new Unit(Team.Player, null, 3, new Grounded(3));
+        Unit northVek = new Unit(Team.Player, null, 3, new Grounded(3));
+        Unit southVek = new Unit(Team.Player, null, 3, new Grounded(3));
+        Unit eastVek = new Unit(Team.Player, null, 3, new Grounded(3));
+        Unit westVek = new Unit(Team.Player, null, 3, new Grounded(3));
 
         gameMap.tryPlaceUnit(artilleryMech, mechPosition);
         gameMap.tryPlaceUnit(centerVek, targetPosition);

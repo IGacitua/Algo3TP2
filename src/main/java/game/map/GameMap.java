@@ -14,6 +14,7 @@ import java.util.List;
 
 public class GameMap {
 
+    private static final int COLISSION_DAMAGE = 1;
     private static final OrthogonalDirection[] DIRECTIONS = {new North(), new South(), new East(), new West()};
 
     private final CellGrid grid;
@@ -94,15 +95,9 @@ public class GameMap {
         Cell fromCell = getCellAt(unitPosition);
         Cell toCell = getCellAt(unitPosition.getAdjacent(direction));
 
-        Unit unit = fromCell.popUnit();
-        if (unit == null) {
-            return;
-        }
-
-        if (!toCell.tryPlaceUnit(unit, true)) {
-            fromCell.tryPlaceUnit(unit, false);
-            unit.dealDamage(1);
-            toCell.tryDamage(1);
+        if (!fromCell.moveUnit(toCell, true, 0)) {
+            fromCell.tryDamage(COLISSION_DAMAGE);
+            toCell.tryDamage(COLISSION_DAMAGE);
         }
     }
 

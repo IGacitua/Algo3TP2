@@ -14,7 +14,7 @@ public class BuildingTest {
     }
 
     @Test
-    public void testCanPlaceOneUnitInBuildingCell() {
+    public void testCannotPlaceOneUnitInBuildingCell() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
@@ -23,19 +23,46 @@ public class BuildingTest {
         boolean result = building.tryPlaceUnit(unit, false);
 
         // Assert
+        Assertions.assertFalse(result, "Unit should be able to be placed.");
+    }
+
+    @Test
+    public void testCanPushOneUnitInBuildingCell() {
+        // Arrange
+        Cell building = new Building(new Position(0, 0), mockNetwork());
+        Unit unit = Mockito.mock(Unit.class);
+
+        // Act
+        boolean result = building.tryPlaceUnit(unit, true);
+
+        // Assert
         Assertions.assertTrue(result, "Unit should be able to be placed.");
     }
 
     @Test
-    public void testCannotPlaceMultipleUnitsInBuildingCell() {
+    public void testCanPushUnitIntoDestroyedBuilding() {
+        // Arrange
+        Cell building = new Building(new Position(0, 0), mockNetwork());
+        Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
+
+        // Act
+        boolean result = building.tryPlaceUnit(unit, true);
+
+        // Assert
+        Assertions.assertTrue(result, "Pushed unit should be able to move onto a destroyed building.");
+    }
+
+    @Test
+    public void testCannotPushMultipleUnitsInBuildingCell() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
 
         // Act
-        boolean mainResult = building.tryPlaceUnit(mainUnit, false);
-        boolean secondaryResult = building.tryPlaceUnit(secondaryUnit, false);
+        boolean mainResult = building.tryPlaceUnit(mainUnit, true);
+        boolean secondaryResult = building.tryPlaceUnit(secondaryUnit, true);
 
         // Assert
         Assertions.assertTrue(mainResult, "Main unit should be placed successfully.");
@@ -47,7 +74,7 @@ public class BuildingTest {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
-        building.tryPlaceUnit(unit, false);
+        building.tryPlaceUnit(unit, true);
 
         // Act
         Unit poppedUnit = building.popUnit();
@@ -64,9 +91,9 @@ public class BuildingTest {
         Unit secondUnit = Mockito.mock(Unit.class);
 
         // Act
-        building.tryPlaceUnit(firstUnit, false);
+        building.tryPlaceUnit(firstUnit, true);
         building.popUnit();
-        boolean canPlaceSecondUnit = building.tryPlaceUnit(secondUnit, false);
+        boolean canPlaceSecondUnit = building.tryPlaceUnit(secondUnit, true);
 
         // Assert
         Assertions.assertTrue(canPlaceSecondUnit, "Should be able to place a new unit after popping the first one.");
@@ -116,7 +143,7 @@ public class BuildingTest {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
         Cell building = new Building(new Position(0, 0), mockNetwork());
-        building.tryPlaceUnit(unit, false);
+        building.tryPlaceUnit(unit, true);
 
         // Act
         building.tryDamage(1);
@@ -203,43 +230,16 @@ public class BuildingTest {
     }
 
     @Test
-    public void testBuildingHasUnitAfterPlacement() {
+    public void testBuildingHasUnitAfterPushing() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
         Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
-        building.tryPlaceUnit(unit, false);
+        building.tryPlaceUnit(unit, true);
         boolean hasUnit = building.hasUnit();
 
         // Assert
         Assertions.assertTrue(hasUnit, "Building should report having a unit after placement.");
-    }
-
-    @Test
-    public void testCannotPushUnitIntoIntactBuilding() {
-        // Arrange
-        Unit unit = Mockito.mock(Unit.class);
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        boolean result = building.tryPlaceUnit(unit, true);
-
-        // Assert
-        Assertions.assertFalse(result, "Pushed unit should not be placed into an intact building.");
-    }
-
-    @Test
-    public void testCanPushUnitIntoDestroyedBuilding() {
-        // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = Mockito.mock(Unit.class);
-        building.tryDamage(1);
-
-        // Act
-        boolean result = building.tryPlaceUnit(unit, true);
-
-        // Assert
-        Assertions.assertTrue(result, "Pushed unit should be able to move onto a destroyed building.");
     }
 }

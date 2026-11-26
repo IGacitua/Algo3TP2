@@ -88,7 +88,10 @@ public class Cell {
             return false;
         }
 
-        if (!unit.canMoveTo(destination, pushed, consumptionMultiplier) || !destination.tryPlaceUnit(unit, pushed)) {
+        // Separated from if for easier debugging
+        boolean canMoveTo = unit.canMoveTo(destination, pushed, consumptionMultiplier);
+
+        if (!canMoveTo || !destination.tryPlaceUnit(unit, pushed)) {
             unitSlot.tryPlace(unit); // Put it back without triggering onUnitPlaced.
             return false;
         }
