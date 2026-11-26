@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-mvn test-compile org.pitest:pitest-maven:mutationCoverage
+mvn -B -ntp test-compile org.pitest:pitest-maven:mutationCoverage -DverboseLogging=true -Dverbose=true

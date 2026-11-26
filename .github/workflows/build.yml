@@ -12,6 +12,12 @@ jobs:
         run: docker compose -f docker/docker-compose.yaml exec -T app bash scripts/build.sh
       - name: Run mutation test
         run: docker compose -f docker/docker-compose.yaml exec -T app bash scripts/run_mutation_test.sh
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pit-reports
+          path: target/pit-reports/
       - name: Upload coverage report
         uses: codecov/codecov-action@v4
 
