@@ -9,10 +9,6 @@ Correciones (Eliminar al completar):
     - Un Vek terrestre puede moverse voluntariamente al Agua y muere
     - [X] PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
 
-- Pruebas:
-  -[Grave] Tests incorrectos / vacios:
-    - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
-
 - IMPORTANTE! (ESCRITO POR EZEQUIEL)
     - Unit no tiene Behavior! Debería recibirlo por constructor.
         - O escribir un Wrapper que contenga Unit + Behavior y que el juego use eso? No me encanta.
