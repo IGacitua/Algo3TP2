@@ -6,7 +6,7 @@ import game.units.Unit;
 
 public class Cell {
     protected final Position position;
-    protected UnitSlot unitSlot;
+    protected final UnitSlot unitSlot;
 
     public Cell(Position position) {
         this.position = position;
@@ -128,7 +128,7 @@ public class Cell {
         return false;
     }
 
-    public boolean blocksShot() {
+    public boolean isObstacle() {
         return hasUnit();
     }
 }

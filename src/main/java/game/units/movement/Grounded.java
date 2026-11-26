@@ -9,7 +9,7 @@ public class Grounded extends Movement {
     }
 
     @Override
-    protected boolean canMove(Cell destinationCell, boolean forced) {
+    protected boolean canMoveTo(Cell destinationCell, boolean forced) {
         return forced || !destinationCell.isWater();
     }
 

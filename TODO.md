@@ -1,14 +1,5 @@
 Correciones (Eliminar al completar):
 
-- Bugs funcionales (ESCRIBIR TESTS Y GARANTIZAR QUE LOS CORREGIMOS!)
-    - El movimiento atraviesa montanas (solo compara distancia Manhattan)
-    - Un Mech puede moverse sobre un Edificio: lo destruye y resta Red
-    - Mover/empujar a casilla ocupada: la unidad desaparece del tablero
-    - getReachablePositions borra la unidad del mapa y usa distancia euclidea
-    - Canon: con un Vek detras del Mech, el disparo sale del Vek y dania al Mech
-    - Un Vek terrestre puede moverse voluntariamente al Agua y muere
-    - [X] PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
-
 - IMPORTANTE! (ESCRITO POR EZEQUIEL)
     - Unit no tiene Behavior! Debería recibirlo por constructor.
         - O escribir un Wrapper que contenga Unit + Behavior y que el juego use eso? No me encanta.

@@ -4,7 +4,7 @@ import game.map.cell.Cell;
 
 public abstract class Movement {
 
-    protected double originalMovementDistance;
+    protected final double originalMovementDistance;
     protected double movementDistance;
 
     public Movement(int movementDistance) {
@@ -16,15 +16,14 @@ public abstract class Movement {
         this.movementDistance = originalMovementDistance;
     }
 
-    public boolean canMoveTo(Cell destinationCell, boolean forced, double consumptionMultiplier) {
+    public boolean isMovementAllowed(Cell destinationCell, boolean forced, double consumptionMultiplier) {
         if (!forced && (movementDistance - consumptionMultiplier) < 0) {
             return false; // No movement left for another step.
         }
-        return canMove(destinationCell, forced);
+        return canMoveTo(destinationCell, forced);
     }
-
-    // TODO: Better name distinction for canMove / canMoveTo
-    protected abstract boolean canMove(Cell destinationCell, boolean forced);
+    
+    protected abstract boolean canMoveTo(Cell destinationCell, boolean forced);
 
     public void consumeMovement(double multiplier) {
         movementDistance -= multiplier;

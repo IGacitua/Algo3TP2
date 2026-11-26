@@ -106,6 +106,6 @@ public class Unit {
     }
 
     public boolean canMoveTo(Cell destinationCell, boolean forced, double consumptionMultiplier) {
-        return this.movement.canMoveTo(destinationCell, forced, consumptionMultiplier);
+        return this.movement.isMovementAllowed(destinationCell, forced, consumptionMultiplier);
     }
 }

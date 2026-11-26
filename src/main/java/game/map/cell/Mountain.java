@@ -28,7 +28,7 @@ public class Mountain extends Cell {
     }
 
     @Override
-    public boolean blocksShot() {
+    public boolean isObstacle() {
         return true;
     }
 }

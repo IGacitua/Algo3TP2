@@ -64,7 +64,11 @@ public class Building extends Cell {
 
     @Override
     public boolean canPlaceUnit(Unit unit, boolean pushed) {
-        if (pushed && !isDestroyed) {
+        if (pushed) {
+            return true;
+        }
+
+        if (!isDestroyed) {
             return false;
         }
 
@@ -72,7 +76,7 @@ public class Building extends Cell {
     }
 
     @Override
-    public boolean blocksShot() {
+    public boolean isObstacle() {
         return !isDestroyed || hasUnit();
     }
 
