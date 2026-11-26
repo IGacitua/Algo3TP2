@@ -16,11 +16,10 @@ import game.units.behavior.player.TurnUndoTracker;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
 import game.units.weapons.Weapon;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class AcidIntegrationTest {
 
@@ -54,7 +53,7 @@ public class AcidIntegrationTest {
         unit.dealDamage(2);
 
         // Assert
-        assertEquals(6, unit.getHealth());
+        Assertions.assertEquals(6, unit.getHealth());
     }
 
     @Test
@@ -66,7 +65,7 @@ public class AcidIntegrationTest {
         unit.dealDamage(2);
 
         // Assert
-        assertEquals(8, unit.getHealth());
+        Assertions.assertEquals(8, unit.getHealth());
     }
 
     @Test
@@ -81,7 +80,7 @@ public class AcidIntegrationTest {
         unit.dealDamage(2);
 
         // Assert
-        assertEquals(6, unit.getHealth());
+        Assertions.assertEquals(6, unit.getHealth());
     }
 
     @Test
@@ -96,7 +95,7 @@ public class AcidIntegrationTest {
         unit.dealDamage(2);
 
         // Assert
-        assertEquals(8, unit.getHealth());
+        Assertions.assertEquals(8, unit.getHealth());
     }
 
     @Test
@@ -112,12 +111,12 @@ public class AcidIntegrationTest {
 
         // Act
         player.executeAction(moveAction, gameMap);
-        assertTrue(mech.isContaminated());
+        Assertions.assertTrue(mech.isContaminated());
 
         player.undoMovement(gameMap);
 
         // Assert
-        assertFalse(mech.isContaminated(), "Expected the mech to no longer be contaminated after undoing the move");
-        assertTrue(gameMap.hasUnitAt(origin), "Expected the mech to be back at its original position after undoing the move");
+        Assertions.assertFalse(mech.isContaminated(), "Expected the mech to no longer be contaminated after undoing the move");
+        Assertions.assertTrue(gameMap.hasUnitAt(origin), "Expected the mech to be back at its original position after undoing the move");
     }
 }

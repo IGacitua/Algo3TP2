@@ -9,7 +9,7 @@ import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.utils.FileHandler;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class MapTests {
@@ -50,10 +50,13 @@ public class MapTests {
 
     private Cell[][] buildExpectedMapOne() {
         return new Cell[][]{
-                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)},
-                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)},
-                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)},
-                {new Mountain(null), new Cell(null), new Cell(null), new Mountain(null)}
+                {new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null)},
+                {new Cell(null), new Cell(null), new Cell(null), new Mountain(null), new Cell(null), new Cell(null), new Cell(null)},
+                {new Cell(null), new Cell(null), new Mountain(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null)},
+                {new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Mountain(null), new Cell(null)},
+                {new Cell(null), new Mountain(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null)},
+                {new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Mountain(null), new Cell(null), new Cell(null)},
+                {new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null), new Cell(null)}
         };
     }
 

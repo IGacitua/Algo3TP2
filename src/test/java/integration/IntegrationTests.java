@@ -15,8 +15,8 @@ import game.units.movement.Movement;
 import game.units.weapons.Artillery;
 import game.units.weapons.Weapon;
 import game.utils.FileHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 // Probablemente lo separemos en varias clases de tests de integración, pero por ahora le dejamos el nombre.
@@ -67,14 +67,14 @@ public class IntegrationTests {
 
         // Assert
 
-        Assert.assertTrue("Expected the unit at the target to be damaged after the attack.", vekCentro.isDamaged());
+        Assertions.assertTrue(vekCentro.isDamaged(), "Expected the unit at the target to be damaged after the attack.");
 
-        Assert.assertTrue("Expected the center unit NOT to have moved.", map.hasUnitAt(vekCentroPosition));
-        Assert.assertTrue("Expected the north unit to be pushed north.", map.hasUnitAt(vekNortePosition));
-        Assert.assertTrue("Expected the east unit to be pushed east.", map.hasUnitAt(vekEsteExpectedPosition));
-        Assert.assertFalse("Expected the east unit to have left its original position.", map.hasUnitAt(vekEstePosition));
+        Assertions.assertTrue(map.hasUnitAt(vekCentroPosition), "Expected the center unit NOT to have moved.");
+        Assertions.assertTrue(map.hasUnitAt(vekNortePosition), "Expected the north unit to be pushed north.");
+        Assertions.assertTrue(map.hasUnitAt(vekEsteExpectedPosition), "Expected the east unit to be pushed east.");
+        Assertions.assertFalse(map.hasUnitAt(vekEstePosition), "Expected the east unit to have left its original position.");
 
-        Assert.assertTrue(((Building) map.getCellAt(vekNortePosition)).isDestroyed());
-        Assert.assertEquals(4, electricalNetwork.getPower());
+        Assertions.assertTrue(((Building) map.getCellAt(vekNortePosition)).isDestroyed());
+        Assertions.assertEquals(4, electricalNetwork.getPower());
     }
 }
