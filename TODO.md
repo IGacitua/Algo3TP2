@@ -19,7 +19,7 @@ Entrega 2:
 - [X] Verificar que al empujar una unidad contra otra unidad u obstáculo, la unidad no se mueva y se aplique el daño de
   colisión.
 - [X] Verificar que el daño a un edificio reduzca la Red Eléctrica en 1 punto.
-- [ ] Verificar que un Vek terrestre empujado al Agua muera, que el Avispón no, y que un Mech en el Agua no pueda
+- [X] Verificar que un Vek terrestre empujado al Agua muera, que el Avispón no, y que un Mech en el Agua no pueda
   atacar.
 - [X] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
   Avispón no se contamine.
