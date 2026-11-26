@@ -137,4 +137,32 @@ public class PushCollisionIntegrationTest {
         assertTrue(gameMap.hasUnitAt(edgePosition), "Unit at board edge should remain in its original position");
         assertFalse(edgeVek.isDamaged(), "Unit pushed against board edge should not take collision damage");
     }
+
+    @Test
+    public void damagingBuildingReducesElectricalNetworkByOnePoint() throws PositionOutOfBoundsException {
+        // Arrange
+        ElectricalNetwork realNetwork = new ElectricalNetwork(5);
+        Position targetBuildingPosition = new Position(4, 2);
+        Building targetBuilding = new Building(targetBuildingPosition, realNetwork);
+
+        MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
+        Cell[][] cells = new Cell[8][8];
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                cells[x][y] = new Cell(new Position(x, y));
+            }
+        }
+        cells[4][2] = targetBuilding;
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(cells);
+
+        GameMap mapWithRealNetwork = new GameMap(mockMapImporter, "");
+        int initialPower = realNetwork.getPower();
+
+        // Act
+        mapWithRealNetwork.attackCell(targetBuildingPosition, 1);
+
+        // Assert
+        assertTrue(targetBuilding.isDestroyed(), "Building should be destroyed after taking damage");
+        assertEquals(initialPower - 1, realNetwork.getPower(), "Electrical network should decrease by 1 point");
+    }
 }
