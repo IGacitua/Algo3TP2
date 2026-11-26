@@ -1,13 +1,5 @@
 Correciones (Eliminar al completar):
 
-- Modelo y Codigo:
-    - [Medio] If en lugar de polimorfismo:
-        - [X] `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
-
-    - [Medio] Desnormalizacion del estado PlayerBehavior:
-        - [X] hasMoved y previousMovement != null dicen lo mismo;
-        - [X] flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
-
 - Bugs funcionales (ESCRIBIR TESTS Y GARANTIZAR QUE LOS CORREGIMOS!)
     - El movimiento atraviesa montanas (solo compara distancia Manhattan)
     - Un Mech puede moverse sobre un Edificio: lo destruye y resta Red
@@ -18,9 +10,7 @@ Correciones (Eliminar al completar):
     - [X] PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
 
 - Pruebas:
-
   -[Grave] Tests incorrectos / vacios:
-    - [X] mechCanUndoMovementBeforeAttacking compara la misma instancia de posicion: pasa sin deshacer nada
     - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
 
 Entrega 2:
