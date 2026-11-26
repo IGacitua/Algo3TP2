@@ -69,6 +69,18 @@ public class CellGrid {
 
     // Graph Access
 
+    public List<Position> getCells(Predicate<Cell> requirement) {
+        List<Position> result = new ArrayList<>();
+        for (int x = 0; x < matrix.length; x++) {
+            for (int y = 0; y < matrix[x].length; y++) {
+                if (requirement.test(matrix[x][y])) {
+                    result.add(new Position(x, y));
+                }
+            }
+        }
+        return result;
+    }
+
     public List<Position> getCellsInRadius(Position center, double radius, Predicate<Cell> requirement) {
         if (!graph.contains(center)) {
             return new ArrayList<>();
