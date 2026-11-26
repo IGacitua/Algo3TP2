@@ -23,7 +23,7 @@ Entrega 2:
   atacar.
 - [X] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
   Avispón no se contamine.
-- [ ] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
+- [x] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
 - [X] Verificar que al deshacer el movimiento de un Mech que terminó sobre Ácido, el Mech deje de estar Contaminado.
 - [ ] Verificar que cada Vek anuncie su ataque en la Fase Vek y que se ejecute en la Fase de Resolución, en el orden
   anunciado.
