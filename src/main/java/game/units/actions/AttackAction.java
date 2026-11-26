@@ -3,6 +3,7 @@ package game.units.actions;
 import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
+import game.units.Team;
 import game.units.behavior.player.PlayerBehavior;
 import game.units.weapons.Weapon;
 import game.map.cell.Cell;
@@ -21,12 +22,12 @@ public class AttackAction implements UnitAction {
     @Override
     public boolean tryExecute(GameMap map) throws PositionOutOfBoundsException {
         Cell originCell = map.getCellAt(origin);
-            if (originCell.isWater()) {
-                return false;
-            }
+        if (originCell.isWater() && originCell.hasUnit(Team.Player)) {
+            return false;
+        }
 
         return weapon.attack(origin, target);
-}
+    }
 
     @Override
     public void executeWith(PlayerBehavior behavior, GameMap map) throws PositionOutOfBoundsException {
