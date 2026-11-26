@@ -23,7 +23,7 @@ public class AcidShot extends Weapon {
         }
 
         map.attackCell(found, DAMAGE);
-        map.getCellAt(found).contaminateUnit();
+        map.contaminateCell(found);
 
         return true;
     }
