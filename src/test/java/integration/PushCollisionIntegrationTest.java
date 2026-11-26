@@ -52,11 +52,11 @@ public class PushCollisionIntegrationTest {
         Position blockerPosition = new Position(2, 1);
         Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         Unit blockingVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(pushedVek, pushedOrigin);
-        gameMap.placeUnitAt(blockingVek, blockerPosition);
+        gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
+        gameMap.tryPlaceUnit(blockingVek, blockerPosition);
 
         // Act
-        gameMap.pushUnitTowards(pushedOrigin, new East());
+        gameMap.pushUnit(pushedOrigin, new East());
 
         // Assert
         assertTrue(gameMap.hasUnitAt(pushedOrigin), "Pushed unit should remain in its original position");
@@ -73,10 +73,10 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(2, 2);
         Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(pushedVek, pushedOrigin);
+        gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act
-        gameMap.pushUnitTowards(pushedOrigin, new East());
+        gameMap.pushUnit(pushedOrigin, new East());
 
         // Assert
         assertTrue(gameMap.hasUnitAt(pushedOrigin), "Pushed unit should remain in its original position");
@@ -93,10 +93,10 @@ public class PushCollisionIntegrationTest {
         Position pushedOrigin = new Position(2, 5);
         Position destination = new Position(3, 5);
         Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(pushedVek, pushedOrigin);
+        gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act
-        gameMap.pushUnitTowards(pushedOrigin, new East());
+        gameMap.pushUnit(pushedOrigin, new East());
 
         // Assert
         assertTrue(gameMap.hasUnitAt(destination), "Pushed unit should move onto the destroyed building");
@@ -111,10 +111,10 @@ public class PushCollisionIntegrationTest {
         Position pushedOrigin = new Position(4, 2);
         Position mountainPosition = new Position(5, 2);
         Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(pushedVek, pushedOrigin);
+        gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act
-        gameMap.pushUnitTowards(pushedOrigin, new East());
+        gameMap.pushUnit(pushedOrigin, new East());
 
         // Assert
         assertTrue(gameMap.hasUnitAt(pushedOrigin), "Pushed unit should remain in its original position");
@@ -129,10 +129,10 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position edgePosition = new Position(0, 0);
         Unit edgeVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(edgeVek, edgePosition);
+        gameMap.tryPlaceUnit(edgeVek, edgePosition);
 
         // Act & Assert
-        assertThrows(PositionOutOfBoundsException.class, () -> gameMap.pushUnitTowards(edgePosition, new North()));
+        assertThrows(PositionOutOfBoundsException.class, () -> gameMap.pushUnit(edgePosition, new North()));
         assertTrue(gameMap.hasUnitAt(edgePosition), "Unit at board edge should remain in its original position");
         assertFalse(edgeVek.isDamaged(), "Unit pushed against board edge should not take collision damage");
     }

@@ -16,6 +16,11 @@ public class Cell {
         return new UnitSlot(1);
     }
 
+    @Override
+    public String toString() {
+        return "Ground " + position.toString();
+    }
+
     public String cellTypeId() {
         return "G";
     }
@@ -54,18 +59,18 @@ public class Cell {
     }
 
     public boolean isFull() {
-        return !unitSlot.isFull();
+        return unitSlot.isFull();
     }
 
     public boolean canPlaceUnit(Unit unit, boolean pushed) {
-        return isFull();
+        return !isFull();
     }
 
     protected void onUnitPlaced(Unit unit, boolean pushed) {
     }
 
     public boolean moveUnit(Cell destination, boolean pushed, double consumptionMultiplier) {
-        if (!destination.isFull()) {
+        if (destination.isFull()) {
             return false;
         }
 
@@ -74,7 +79,7 @@ public class Cell {
             return false;
         }
 
-        if (!destination.canPlaceUnit(unit, pushed) || !unit.canMoveTo(destination, pushed, consumptionMultiplier) || !destination.tryPlaceUnit(unit, pushed)) {
+        if (!unit.canMoveTo(destination, pushed, consumptionMultiplier) || !destination.tryPlaceUnit(unit, pushed)) {
             unitSlot.tryPlace(unit); // Put it back without triggering onUnitPlaced.
             return false;
         }

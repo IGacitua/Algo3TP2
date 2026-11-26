@@ -48,7 +48,7 @@ public class AcidIntegrationTest {
     public void testGroundedUnitOnAcidReceivesDoubleDamage() throws PositionOutOfBoundsException {
         // Arrange
         Unit unit = new Unit(null, 10, new Grounded(1));
-        gameMap.placeUnitAt(unit, new Position(0, 0));
+        gameMap.tryPlaceUnit(unit, new Position(0, 0));
 
         // Act
         unit.damage(2);
@@ -76,8 +76,8 @@ public class AcidIntegrationTest {
         Unit unit = new Unit(null, 10, new Grounded(1));
 
         // Act
-        gameMap.placeUnitAt(unit, unitPosition);
-        gameMap.pushUnitTowards(unitPosition, new West());
+        gameMap.tryPlaceUnit(unit, unitPosition);
+        gameMap.pushUnit(unitPosition, new West());
         unit.damage(2);
 
         // Assert
@@ -91,8 +91,8 @@ public class AcidIntegrationTest {
         Unit unit = new Unit(null, 10, new Flying(1));
 
         // Act
-        gameMap.placeUnitAt(unit, unitPosition);
-        gameMap.pushUnitTowards(unitPosition, new West());
+        gameMap.tryPlaceUnit(unit, unitPosition);
+        gameMap.pushUnit(unitPosition, new West());
         unit.damage(2);
 
         // Assert
@@ -105,7 +105,7 @@ public class AcidIntegrationTest {
         Mech mech = new Mech(Mockito.mock(Weapon.class), 5, new Grounded(1));
         Position origin = new Position(1, 0);
         Position moveDestination = new Position(0, 0);
-        gameMap.placeUnitAt(mech, origin);
+        gameMap.tryPlaceUnit(mech, origin);
 
         PlayerBehavior player = new PlayerBehavior(mech, new TurnUndoTracker());
         UnitAction moveAction = mech.getMovementAction(origin, moveDestination);

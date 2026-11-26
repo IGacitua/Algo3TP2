@@ -6,11 +6,17 @@ import game.position.Position;
 
 public abstract class Weapon {
 
-    // TODO: En lugar de recibir mapa como parametro, recibirlo en el constructor.
+    protected GameMap map;
+    protected int damage;
 
-    public boolean attack(Position origin, Position target, GameMap map) {
-        return attack(target, map);
+    public Weapon(GameMap map, int damage) {
+        this.map = map;
+        this.damage = damage;
     }
 
-    public abstract boolean attack(Position target, GameMap map);
+    // TODO: En lugar de recibir mapa como parametro, recibirlo en el constructor.
+
+    public abstract boolean attack(Position target);
+
+    public abstract boolean attack(Position origin, Position target);
 }

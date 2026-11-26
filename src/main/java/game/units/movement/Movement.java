@@ -17,9 +17,6 @@ public abstract class Movement {
     }
 
     public boolean canMoveTo(Cell destinationCell, boolean forced, double consumptionMultiplier) {
-        if (!destinationCell.isFull()) {
-            return false;
-        }
         if (!forced && (movementDistance - consumptionMultiplier) < 0) {
             return false; // No movement left for another step.
         }

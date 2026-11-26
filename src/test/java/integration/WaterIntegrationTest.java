@@ -44,10 +44,10 @@ public class WaterIntegrationTest {
     public void testGroundedUnitPushedIntoWaterDies() throws Exception {
         // Arrange
         Unit unit = new Unit(null, 3, new Grounded(1));
-        gameMap.placeUnitAt(unit, landPosition);
+        gameMap.tryPlaceUnit(unit, landPosition);
 
         // Act
-        gameMap.pushUnitTowards(landPosition, new East());
+        gameMap.pushUnit(landPosition, new East());
 
         // Assert
         assertFalse(unit.isAlive());
@@ -57,10 +57,10 @@ public class WaterIntegrationTest {
     public void testFlyingUnitPushedIntoWaterSurvives() {
         // Arrange
         Unit unit = new Unit(null, 3, new Flying(1));
-        gameMap.placeUnitAt(unit, landPosition);
+        gameMap.tryPlaceUnit(unit, landPosition);
 
         // Act
-        gameMap.pushUnitTowards(landPosition, new East());
+        gameMap.pushUnit(landPosition, new East());
 
         // Assert
         assertTrue(unit.isAlive());
@@ -73,10 +73,10 @@ public class WaterIntegrationTest {
     public void testGroundedUnitCannotBePlacedOnWater() throws Exception {
         // Arrange
         Unit unit = new Unit(null, 3, new Grounded(1));
-        gameMap.placeUnitAt(unit, landPosition);
+        gameMap.tryPlaceUnit(unit, landPosition);
 
         // Act
-        boolean placed = gameMap.placeUnitAt(unit, waterPosition);
+        boolean placed = gameMap.tryPlaceUnit(unit, waterPosition);
 
         // Assert
         assertFalse(placed);

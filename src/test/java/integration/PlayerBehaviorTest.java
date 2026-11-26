@@ -40,11 +40,11 @@ public class PlayerBehaviorTest {
         this.undoTracker = new TurnUndoTracker();
 
         Weapon mockPunch = Mockito.mock(Weapon.class);
-        Mockito.when(mockPunch.attack(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(mockPunch.attack(Mockito.any(), Mockito.any())).thenReturn(true);
 
         this.origin = new Position(0, 0);
         this.combatMech = new Mech(mockPunch, 5, new Grounded(1));
-        this.gameMap.placeUnitAt(this.combatMech, this.origin);
+        this.gameMap.tryPlaceUnit(this.combatMech, this.origin);
 
         this.player = new PlayerBehavior(this.combatMech, this.undoTracker);
     }
@@ -168,7 +168,7 @@ public class PlayerBehaviorTest {
         // Arrange
         Position secondMechOrigin = new Position(1, 0);
         Mech secondMech = new Mech(Mockito.mock(Weapon.class), 5, new Grounded(1));
-        this.gameMap.placeUnitAt(secondMech, secondMechOrigin);
+        this.gameMap.tryPlaceUnit(secondMech, secondMechOrigin);
 
         PlayerBehavior secondPlayer = new PlayerBehavior(secondMech, this.undoTracker);
 

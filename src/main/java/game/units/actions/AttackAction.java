@@ -19,7 +19,7 @@ public class AttackAction implements UnitAction {
 
     @Override
     public boolean tryExecute(GameMap map) {
-        return weapon.attack(origin, target, map);
+        return weapon.attack(origin, target);
     }
 
     @Override

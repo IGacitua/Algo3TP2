@@ -35,7 +35,7 @@ public class MovementIntegrationTest {
         gameMap = new GameMap(mapImporter, mapPath);
 
         mech = new Mech(null, 10, new Grounded(2));
-        gameMap.placeUnitAt(mech, mechPosition);
+        gameMap.tryPlaceUnit(mech, mechPosition);
     }
 
     // Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento, sin atravesar obstáculos ni otras unidades.

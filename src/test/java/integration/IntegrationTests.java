@@ -50,16 +50,16 @@ public class IntegrationTests {
 
         // Arrange: Units
 
-        Weapon artillery = new Artillery();
+        Weapon artillery = new Artillery(map);
         Unit mecha = new Mech(artillery, 5, Mockito.mock(Movement.class));
         Unit vekCentro = new Vek(null, 5, Mockito.mock(Movement.class));
         Unit vekNorte = new Vek(null, 5, Mockito.mock(Movement.class));
         Unit vekEste = new Vek(null, 5, Mockito.mock(Movement.class));
 
-        map.placeUnitAt(mecha, mechaPosition);
-        map.placeUnitAt(vekCentro, vekCentroPosition);
-        map.placeUnitAt(vekNorte, vekNortePosition);
-        map.placeUnitAt(vekEste, vekEstePosition);
+        map.tryPlaceUnit(mecha, mechaPosition);
+        map.tryPlaceUnit(vekCentro, vekCentroPosition);
+        map.tryPlaceUnit(vekNorte, vekNortePosition);
+        map.tryPlaceUnit(vekEste, vekEstePosition);
 
         // Act
 

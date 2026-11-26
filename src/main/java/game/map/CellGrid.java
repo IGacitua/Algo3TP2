@@ -95,4 +95,21 @@ public class CellGrid {
                 position -> requirement.test(getCell(position))).orElseThrow(
                 () -> new NoPathException(center, destination));
     }
+
+    public Position firstCellInLine(Position origin, OrthogonalDirection direction, Predicate<Cell> requirement) {
+        Position current = origin.getAdjacent(direction);
+        while (isInBounds(current)) {
+            if (requirement.test(getCell(current))) {
+                return current;
+            }
+            current = current.getAdjacent(direction);
+        }
+        return null;
+    }
+
+    private boolean isInBounds(Position position) {
+        int x = position.getX();
+        int y = position.getY();
+        return x >= 0 && x < matrix.length && y >= 0 && y < matrix[x].length;
+    }
 }

@@ -1,62 +1,40 @@
 package game.units.weapons;
 
 import game.map.GameMap;
-import game.map.cell.Cell;
 import game.position.Position;
-import game.position.PositionOutOfBoundsException;
 import game.position.direction.OrthogonalDirection;
 
 public class Cannon extends Weapon {
 
-    @Override
-    public boolean attack(Position origin, Position target, GameMap map) {
-        OrthogonalDirection fireDirection = origin.getDirectionTo(target);
+    private static final int DAMAGE = 1;
 
-        if (!fireDirection.isValidDirection()) {
-            throw new IllegalArgumentException("Cannon can only fire in a straight orthogonal line.");
-        }
-
-        return fireAlongLine(origin, fireDirection, map);
+    public Cannon(GameMap map) {
+        super(map, DAMAGE);
     }
 
     @Override
-    public boolean attack(Position target, GameMap map) {
+    public boolean attack(Position origin, Position target) {
+        OrthogonalDirection fireDirection = origin.getDirectionTo(target);
+        return fireAlongLine(origin, fireDirection);
+    }
+
+    @Override
+    public boolean attack(Position target) {
         throw new UnsupportedOperationException("Cannon requires an origin position to determine the firing direction.");
     }
 
-    private boolean fireAlongLine(Position origin, OrthogonalDirection fireDirection, GameMap map) {
+    private boolean fireAlongLine(Position origin, OrthogonalDirection fireDirection) {
         Position current = origin.getAdjacent(fireDirection);
+        Position found = map.findFirstObstacle(current, fireDirection);
 
-        while (true) {
-            Cell cell;
-            try {
-                cell = map.getCellAt(current);
-            } catch (PositionOutOfBoundsException e) {
-                return false;
-            }
-
-            if (cell != null && cell.blocksShot()) {
-                impactCell(current, cell, fireDirection, map);
-                return true;
-            }
-
-            current = current.getAdjacent(fireDirection);
+        if (found == null) {
+            return false; // TODO: Cambiar a que devuelva una excepción y hacer try/catch
         }
+
+        map.attackCell(found, DAMAGE);
+        map.pushUnit(found, fireDirection);
+
+        return true;
     }
 
-    private void impactCell(Position position, Cell cell, OrthogonalDirection fireDirection, GameMap map) {
-        try {
-            map.damageCellAt(position, 1);
-        } catch (PositionOutOfBoundsException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (cell.hasUnit()) {
-            try {
-                map.pushUnitTowards(position, fireDirection);
-            } catch (PositionOutOfBoundsException ignored) {
-                // Si el empuje cae fuera del tablero, la unidad permanece en el borde
-            }
-        }
-    }
 }

@@ -19,6 +19,11 @@ public class Building extends Cell {
     }
 
     @Override
+    public String toString() {
+        return "Building " + position.toString();
+    }
+
+    @Override
     public String cellTypeId() {
         return "B";
     }
@@ -63,7 +68,7 @@ public class Building extends Cell {
             return false;
         }
 
-        return super.isFull();
+        return !super.isFull();
     }
 
     @Override

@@ -23,20 +23,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SquadWeaponsIntegrationTest {
 
-    private ElectricalNetwork electricalNetwork;
     private GameMap gameMap;
 
     @BeforeEach
     public void setUp() throws InvalidMapFileException {
-        electricalNetwork = Mockito.mock(ElectricalNetwork.class);
-        MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
         Cell[][] mockCells = new Cell[8][8];
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 mockCells[x][y] = new Cell(new Position(x, y));
             }
         }
-        mockCells[1][3] = new Building(new Position(1, 3), electricalNetwork); // Adjacent obstacle for artillery test
+        mockCells[1][3] = new Building(new Position(1, 3), Mockito.mock(ElectricalNetwork.class)); // Adjacent obstacle for artillery test
+        
+        MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
         Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
         gameMap = new GameMap(mockMapImporter, "");
@@ -49,15 +48,15 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void punchDealsTwoDamageToAdjacentUnitAndPushesItOneTileInHitDirection() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon punch = new Punch();
+        Weapon punch = new Punch(gameMap);
         Position mechPosition = new Position(2, 2);
         Position targetPosition = new Position(2, 3);
         Position pushedPosition = new Position(2, 4);
 
         Unit combatMech = new Unit(punch, 3, Mockito.mock(Movement.class));
         Unit targetVek = new Unit(null, 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(combatMech, mechPosition);
-        gameMap.placeUnitAt(targetVek, targetPosition);
+        gameMap.tryPlaceUnit(combatMech, mechPosition);
+        gameMap.tryPlaceUnit(targetVek, targetPosition);
 
         UnitAction punchAttack = combatMech.getAttackAction(mechPosition, targetPosition);
 
@@ -79,7 +78,7 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void cannonHitsFirstUnitOrObstacleInStraightLineAndDoesNotHitBehind() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon cannon = new Cannon();
+        Weapon cannon = new Cannon(gameMap);
         Position mechPosition = new Position(1, 1);
         Position firstVekPosition = new Position(1, 3);
         Position secondVekPosition = new Position(1, 5);
@@ -88,9 +87,9 @@ public class SquadWeaponsIntegrationTest {
         Unit cannonMech = new Unit(cannon, 3, Mockito.mock(Movement.class));
         Unit firstVek = new Unit(null, 3, Mockito.mock(Movement.class));
         Unit secondVekBehind = new Unit(null, 3, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(cannonMech, mechPosition);
-        gameMap.placeUnitAt(firstVek, firstVekPosition);
-        gameMap.placeUnitAt(secondVekBehind, secondVekPosition);
+        gameMap.tryPlaceUnit(cannonMech, mechPosition);
+        gameMap.tryPlaceUnit(firstVek, firstVekPosition);
+        gameMap.tryPlaceUnit(secondVekBehind, secondVekPosition);
 
         UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
 
@@ -112,12 +111,12 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void cannonReturnsFalseWhenNoObstacleOrUnitIsHitBeforeMapEdge() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon cannon = new Cannon();
+        Weapon cannon = new Cannon(gameMap);
         Position mechPosition = new Position(4, 4);
         Position aimPosition = new Position(4, 5);
 
         Unit cannonMech = new Unit(cannon, 5, Mockito.mock(Movement.class));
-        gameMap.placeUnitAt(cannonMech, mechPosition);
+        gameMap.tryPlaceUnit(cannonMech, mechPosition);
 
         UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
 
@@ -136,7 +135,7 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void artilleryAttacksOverObstaclesCannotTargetAdjacentTilesAndPushesFourAdjacentUnits() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon artillery = new Artillery();
+        Weapon artillery = new Artillery(gameMap);
         Position mechPosition = new Position(0, 3);
         Position adjacentObstaclePosition = new Position(1, 3);
         Position targetPosition = new Position(4, 3);
@@ -158,12 +157,12 @@ public class SquadWeaponsIntegrationTest {
         Unit eastVek = new Unit(null, 3, Mockito.mock(Movement.class));
         Unit westVek = new Unit(null, 3, Mockito.mock(Movement.class));
 
-        gameMap.placeUnitAt(artilleryMech, mechPosition);
-        gameMap.placeUnitAt(centerVek, targetPosition);
-        gameMap.placeUnitAt(northVek, northPosition);
-        gameMap.placeUnitAt(southVek, southPosition);
-        gameMap.placeUnitAt(eastVek, eastPosition);
-        gameMap.placeUnitAt(westVek, westPosition);
+        gameMap.tryPlaceUnit(artilleryMech, mechPosition);
+        gameMap.tryPlaceUnit(centerVek, targetPosition);
+        gameMap.tryPlaceUnit(northVek, northPosition);
+        gameMap.tryPlaceUnit(southVek, southPosition);
+        gameMap.tryPlaceUnit(eastVek, eastPosition);
+        gameMap.tryPlaceUnit(westVek, westPosition);
 
         UnitAction adjacentAttack = artilleryMech.getAttackAction(mechPosition, adjacentObstaclePosition);
         UnitAction validArtilleryAttack = artilleryMech.getAttackAction(mechPosition, targetPosition);

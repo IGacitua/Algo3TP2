@@ -15,6 +15,11 @@ public class UnitSlot {
         containedUnits = new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        return "Unit Slot: " + containedUnits.size() + "/" + maximumUnits;
+    }
+
     public boolean tryPlace(Unit unit) {
         if (isFull()) {
             return false;

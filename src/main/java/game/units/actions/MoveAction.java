@@ -28,7 +28,7 @@ public class MoveAction implements UnitAction {
         if (unit != null) {
             this.wasCleanBeforeMove = !this.unit.isContaminated();
         }
-        return map.moveUnitTo(this.origin, this.destination, 1.0);
+        return map.moveUnit(this.origin, this.destination, 1.0);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MoveAction implements UnitAction {
      */
     public void undoExecution(GameMap map) throws PositionOutOfBoundsException {
         // Mover de destino a origen, devolviendo consumo de movimiento.
-        map.moveUnitTo(this.destination, this.origin, -1.0);
+        map.moveUnit(this.destination, this.origin, -1.0);
 
         if (this.unit != null && this.wasCleanBeforeMove) {
             this.unit.removeContamination();

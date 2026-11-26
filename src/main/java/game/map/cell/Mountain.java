@@ -13,6 +13,11 @@ public class Mountain extends Cell {
     }
 
     @Override
+    public String toString() {
+        return "Mountain " + position.toString();
+    }
+
+    @Override
     public String cellTypeId() {
         return "M";
     }

@@ -10,6 +10,11 @@ public class Water extends Cell {
     }
 
     @Override
+    public String toString() {
+        return "Water " + position.toString();
+    }
+
+    @Override
     public String cellTypeId() {
         return "W";
     }

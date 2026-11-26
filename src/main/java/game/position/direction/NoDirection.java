@@ -3,11 +3,6 @@ package game.position.direction;
 public class NoDirection extends OrthogonalDirection {
 
     @Override
-    public boolean isValidDirection() {
-        return false;
-    }
-
-    @Override
     public int getDeltaX() {
         return 0;
     }
@@ -16,7 +11,7 @@ public class NoDirection extends OrthogonalDirection {
     public int getDeltaY() {
         return 0;
     }
-    
+
     @Override
     public OrthogonalDirection invert() {
         return new NoDirection();

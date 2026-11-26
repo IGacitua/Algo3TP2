@@ -10,6 +10,11 @@ public class Acid extends Cell {
     }
 
     @Override
+    public String toString() {
+        return "Acid " + position.toString();
+    }
+
+    @Override
     public String cellTypeId() {
         return "A";
     }
