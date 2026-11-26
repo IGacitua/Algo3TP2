@@ -37,6 +37,11 @@ public class GameMap {
         return grid.getCell(position);
     }
 
+    public void contaminateCell(Position position) throws PositionOutOfBoundsException {
+        Cell cell = getCellAt(position);
+        cell.contaminateUnit();
+    }
+
     // Units
 
     public boolean hasUnitAt(Position position) throws PositionOutOfBoundsException {
@@ -117,7 +122,7 @@ public class GameMap {
         }
     }
 
-    // TODO: For game UI later.
+    // For game UI later.
     public List<Position> getReachablePositions(Position unitPosition, int radius) throws PositionOutOfBoundsException {
         Unit unit = getCellAt(unitPosition).peekUnit();
         if (unit == null) {

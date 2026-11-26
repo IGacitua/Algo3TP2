@@ -19,8 +19,10 @@ public class CellGrid {
 
     public CellGrid(Cell[][] cells) {
         this.matrix = cells;
+        buildGraph(cells);
+    }
 
-        // Create Nodes
+    private void buildGraph(Cell[][] cells) {
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells[x].length; y++) {
                 graph.addNode(new Position(x, y));
@@ -41,6 +43,8 @@ public class CellGrid {
         }
     }
 
+    // Cell Access
+
     public Cell getCell(Position position) throws PositionOutOfBoundsException {
         int x = position.getX();
         int y = position.getY();
@@ -56,6 +60,14 @@ public class CellGrid {
         }
         return matrix[x][y];
     }
+
+    public void replaceCell(Position position, Cell newCell) throws PositionOutOfBoundsException {
+        Cell oldCell = getCell(position);
+        oldCell.moveUnit(newCell, true, 0);
+        matrix[position.getX()][position.getY()] = newCell;
+    }
+
+    // Graph Access
 
     public List<Position> getCellsInRadius(Position center, double radius, Predicate<Cell> requirement) {
         if (!graph.contains(center)) {
