@@ -5,11 +5,15 @@ import game.map.cell.Cell;
 import game.map.cell.Water;
 import game.map.creation.MapImporter;
 import game.position.Position;
+import game.position.PositionOutOfBoundsException;
 import game.position.direction.East;
 import game.units.Team;
 import game.units.Unit;
+import game.units.actions.UnitAction;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
+import game.units.weapons.Punch;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -84,5 +88,25 @@ public class WaterIntegrationTest {
         assertTrue(unit.isAlive());
         assertTrue(gameMap.hasUnitAt(landPosition), "Unit should stay on its original position");
         assertFalse(gameMap.hasUnitAt(waterPosition), "Water cell should remain unoccupied");
+    }
+
+    @Test
+    public void testMechInWaterCannotAttack() throws PositionOutOfBoundsException {
+        // Arrange
+        Unit mech = new Unit(Team.Player, new Punch(gameMap), 3, new Flying(1)); // o Grounded si se colocó en agua
+        Position targetPos = new Position(2, 0);
+        Unit enemy = new Unit(Team.Enemy, null, 2, new Grounded(1));
+
+        gameMap.tryPlaceUnit(mech, waterPosition);
+        gameMap.tryPlaceUnit(enemy, targetPos);
+
+        UnitAction attackAction = mech.getAttackAction(waterPosition, targetPos);
+
+        // Act
+        boolean executed = attackAction.tryExecute(gameMap);
+
+        // Assert
+        assertFalse(executed, "Mech standing on water should not be able to attack");
+        assertFalse(enemy.isDamaged(), "Target should not receive damage when attacker is in water");
     }
 }
