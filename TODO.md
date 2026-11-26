@@ -9,10 +9,6 @@ Correciones (Eliminar al completar):
     - Un Vek terrestre puede moverse voluntariamente al Agua y muere
     - [X] PlayerBehavior no esta asociado a un Mech (mover 2 Mechs falla / undo por Mech y no por turno)
 
-- Pruebas:
-  -[Grave] Tests incorrectos / vacios:
-    - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
-
 - IMPORTANTE! (ESCRITO POR EZEQUIEL)
     - Unit no tiene Behavior! Debería recibirlo por constructor.
         - O escribir un Wrapper que contenga Unit + Behavior y que el juego use eso? No me encanta.
@@ -27,7 +23,7 @@ Entrega 2:
   atacar.
 - [X] Verificar que una unidad terrestre que termina sobre Ácido quede Contaminada y reciba el doble de daño, y que el
   Avispón no se contamine.
-- [ ] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
+- [x] Verificar que la Luciérnaga contamine a la unidad que impacta y que la contaminación no se acumule.
 - [X] Verificar que al deshacer el movimiento de un Mech que terminó sobre Ácido, el Mech deje de estar Contaminado.
 - [ ] Verificar que cada Vek anuncie su ataque en la Fase Vek y que se ejecute en la Fase de Resolución, en el orden
   anunciado.
@@ -35,7 +31,7 @@ Entrega 2:
   dañe.
 - [ ] Verificar que la IA de los Vek aplique las reglas de prioridad en orden.
 - [ ] Verificar que una unidad sobre la casilla de emergencia bloquee la aparición del nuevo Vek y reciba 1 de daño.
-- [ ] Planteo inicial de interfaz gráfica (mockups/dibujos) mostrando: el tablero con los ataques anunciados, la
+- [X] Planteo inicial de interfaz gráfica (mockups/dibujos) mostrando: el tablero con los ataques anunciados, la
   información de cada unidad, la Red Eléctrica y el turno actual.
 
 Entrega 3:

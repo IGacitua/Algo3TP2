@@ -59,6 +59,14 @@ public class Cell {
         return false;
     }
 
+    public void contaminateUnit() {
+        Unit unit = unitSlot.peekUnit();
+
+        if (unit != null) {
+            unit.contaminate();
+        }
+    }
+
     public boolean isFull() {
         return unitSlot.isFull();
     }
