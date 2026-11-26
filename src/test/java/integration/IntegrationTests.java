@@ -29,23 +29,20 @@ public class IntegrationTests {
      *   Choque contra el edificio.
      *   Descuento de la Red Eléctrica.
      */
-    @Test
+    @Test // TODO: Rehacer, algo raro hay con las posiciones de los vek!
     public void TestArtilleryShootsVek() throws InvalidMapFileException, PositionOutOfBoundsException {
         // Arrange: Map & Network
         ElectricalNetwork electricalNetwork = new ElectricalNetwork(5);
         MapImporter importer = new MapImporter(FileHandler.getInstance(), new CellFactory(electricalNetwork));
         GameMap map = new GameMap(importer, "src/test/resources/testMap2.txt");
 
-        final int targetX = 2;
-        final int targetY = 2;
-
         // Arrange: Positions
 
-        Position mechaPosition = new Position(targetX, targetY + 2);        // South of target ('Y' grows downward)
-        Position vekCentroPosition = new Position(targetX, targetY);        // Target
-        Position vekNortePosition = new Position(targetX, targetY - 2);     // North of target
-        Position vekEstePosition = new Position(targetX + 1, targetY);      // East of target
-        Position vekEsteExpectedPosition = new Position(targetX + 2, targetY); // Where the east unit should end up
+        Position mechaPosition = new Position(2, 4);        // South of target ('Y' grows downward)
+        Position vekCentroPosition = new Position(2, 2);        // Target
+        Position vekNortePosition = new Position(2, 1);     // North of target
+        Position vekEstePosition = new Position(3, 2);      // East of target
+        Position vekEsteExpectedPosition = new Position(4, 2); // Where the east unit should end up
 
         // Arrange: Units
 
