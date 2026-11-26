@@ -6,6 +6,7 @@ import game.map.cell.Water;
 import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.direction.East;
+import game.units.Team;
 import game.units.Unit;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
@@ -43,7 +44,7 @@ public class WaterIntegrationTest {
     @Test
     public void testGroundedUnitPushedIntoWaterDies() throws Exception {
         // Arrange
-        Unit unit = new Unit(null, 3, new Grounded(1));
+        Unit unit = new Unit(Team.Player, null, 3, new Grounded(1));
         gameMap.tryPlaceUnit(unit, landPosition);
 
         // Act
@@ -56,7 +57,7 @@ public class WaterIntegrationTest {
     @Test
     public void testFlyingUnitPushedIntoWaterSurvives() {
         // Arrange
-        Unit unit = new Unit(null, 3, new Flying(1));
+        Unit unit = new Unit(Team.Player, null, 3, new Flying(1));
         gameMap.tryPlaceUnit(unit, landPosition);
 
         // Act
@@ -64,7 +65,7 @@ public class WaterIntegrationTest {
 
         // Assert
         assertTrue(unit.isAlive());
-        assertEquals(3, unit.getCurrentHealth());
+        assertEquals(3, unit.getHealth());
         assertTrue(gameMap.hasUnitAt(waterPosition), "Flying unit should end up over the water");
         assertFalse(gameMap.hasUnitAt(landPosition), "Flying unit should have left its original position");
     }
@@ -72,7 +73,7 @@ public class WaterIntegrationTest {
     @Test
     public void testGroundedUnitCannotBePlacedOnWater() throws Exception {
         // Arrange
-        Unit unit = new Unit(null, 3, new Grounded(1));
+        Unit unit = new Unit(Team.Player, null, 3, new Grounded(1));
         gameMap.tryPlaceUnit(unit, landPosition);
 
         // Act

@@ -9,20 +9,32 @@ import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
 public class Unit {
-    protected final Weapon weapon;
     private final Health health;
     private final Movement movement;
+    private final Weapon weapon;
+
+    private final Team team;
+
     private boolean contaminated = false;
 
-    public Unit(Weapon weapon, int maximumHealth, Movement movement) {
+    public Unit(Team team, Weapon weapon, int maximumHealth, Movement movement) {
         if (movement == null) {
             throw new IllegalArgumentException("Movement type cannot be null");
         }
 
-        this.weapon = weapon;
+        this.team = team;
         this.health = new Health(maximumHealth);
         this.movement = movement;
+        this.weapon = weapon;
     }
+
+    // Team
+
+    public boolean isInTeam(Team team) {
+        return this.team.equals(team);
+    }
+
+    // Actions
 
     public UnitAction getAttackAction(Position origin, Position target) {
         return new AttackAction(weapon, origin, target);
@@ -32,19 +44,13 @@ public class Unit {
         return new MoveAction(this, origin, destination);
     }
 
-    public boolean isDamaged() {
-        return health.isDamaged();
-    }
+    // HP
 
-    public int getCurrentHealth() {
+    public int getHealth() {
         return health.getCurrent();
     }
 
-    public void damage() {
-        damage(1);
-    }
-
-    public void damage(int amount) {
+    public void dealDamage(int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Damage cannot be negative");
         }
@@ -56,9 +62,19 @@ public class Unit {
         health.receiveDamage(effectiveDamage);
     }
 
+    public boolean isDamaged() {
+        return health.isDamaged();
+    }
+
     public boolean isAlive() {
         return health.isAlive();
     }
+
+    public void kill() {
+        health.kill();
+    }
+
+    // Status
 
     public void contaminate() {
         if (movement.canBeContaminated()) {
@@ -66,24 +82,18 @@ public class Unit {
         }
     }
 
-    public boolean canMoveToWater() {
-        return movement.canMoveToWater();
+    public boolean isContaminated() {
+        return contaminated;
     }
 
     public void removeContamination() {
         contaminated = false;
     }
 
-    public boolean isContaminated() {
-        return contaminated;
-    }
+    // Movement
 
-    public void kill() {
-        health.kill();
-    }
-
-    public boolean isMech() {
-        return false;
+    public boolean canMoveToWater() {
+        return movement.canMoveToWater();
     }
 
     // TODO: Call on turn start!

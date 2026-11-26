@@ -8,9 +8,8 @@ import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.units.Mech;
+import game.units.Team;
 import game.units.Unit;
-import game.units.Vek;
 import game.units.actions.UnitAction;
 import game.units.movement.Movement;
 import game.units.weapons.Artillery;
@@ -24,7 +23,7 @@ import org.mockito.Mockito;
 public class IntegrationTests {
 
     /*
-     * Mech de Artillería dispara a un Vek que está al lado de un edificio:
+     * Unit de Artillería dispara a un Vek que está al lado de un edificio:
      *   Daño en la casilla objetivo.
      *   Empuje de las unidades adyacentes.
      *   Choque contra el edificio.
@@ -51,10 +50,10 @@ public class IntegrationTests {
         // Arrange: Units
 
         Weapon artillery = new Artillery(map);
-        Unit mecha = new Mech(artillery, 5, Mockito.mock(Movement.class));
-        Unit vekCentro = new Vek(null, 5, Mockito.mock(Movement.class));
-        Unit vekNorte = new Vek(null, 5, Mockito.mock(Movement.class));
-        Unit vekEste = new Vek(null, 5, Mockito.mock(Movement.class));
+        Unit mecha = new Unit(Team.Player, artillery, 5, Mockito.mock(Movement.class));
+        Unit vekCentro = new Unit(Team.Enemy, null, 5, Mockito.mock(Movement.class));
+        Unit vekNorte = new Unit(Team.Enemy, null, 5, Mockito.mock(Movement.class));
+        Unit vekEste = new Unit(Team.Enemy, null, 5, Mockito.mock(Movement.class));
 
         map.tryPlaceUnit(mecha, mechaPosition);
         map.tryPlaceUnit(vekCentro, vekCentroPosition);

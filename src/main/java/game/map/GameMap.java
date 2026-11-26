@@ -6,6 +6,7 @@ import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.*;
+import game.units.Team;
 import game.units.Unit;
 
 import java.util.ArrayList;
@@ -36,15 +37,14 @@ public class GameMap {
         return grid.getCell(position);
     }
 
-    // TODO: Replace with Team enum!
-    public boolean hasMechAt(Position position) throws PositionOutOfBoundsException {
-        return getCellAt(position).hasMech();
-    }
-
     // Units
 
     public boolean hasUnitAt(Position position) throws PositionOutOfBoundsException {
         return getCellAt(position).hasUnit();
+    }
+
+    public boolean hasUnitAt(Position position, Team team) throws PositionOutOfBoundsException {
+        return getCellAt(position).hasUnit(team);
     }
 
     public void attackCell(Position target, int damage) throws PositionOutOfBoundsException {
@@ -96,7 +96,7 @@ public class GameMap {
 
         if (!toCell.tryPlaceUnit(unit, true)) {
             fromCell.tryPlaceUnit(unit, false);
-            unit.damage(1);
+            unit.dealDamage(1);
             toCell.tryDamage(1);
         }
     }
@@ -131,7 +131,7 @@ public class GameMap {
     }
 
     public Position findClosestPlayerUnit(Position origin) {
-        return grid.getNearestCell(origin, cell -> cell.hasMech() && cell.canDamage());
+        return grid.getNearestCell(origin, cell -> cell.hasUnit(Team.Player) && cell.canDamage());
     }
 
     public Position findFirstObstacle(Position origin, OrthogonalDirection direction) {

@@ -140,7 +140,7 @@ public class WaterTest {
         water.tryDamage(1);
 
         // Assert
-        Mockito.verify(unit).damage(1);
+        Mockito.verify(unit).dealDamage(1);
     }
 
     @Test
@@ -169,21 +169,5 @@ public class WaterTest {
 
         // Assert
         Assertions.assertTrue(hasUnit, "Water should report having a unit after placement.");
-    }
-
-    @Test
-    public void testWaterHasMechAfterPlacement() {
-        // Arrange
-        Unit mech = Mockito.mock(Unit.class);
-        Mockito.when(mech.canMoveToWater()).thenReturn(true);
-        Mockito.when(mech.isMech()).thenReturn(true);
-        Cell water = new Water(new Position(0, 0));
-
-        // Act
-        water.tryPlaceUnit(mech, false);
-        boolean hasMech = water.hasMech();
-
-        // Assert
-        Assertions.assertTrue(hasMech, "Water should report having a mech after placement.");
     }
 }

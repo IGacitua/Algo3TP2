@@ -104,7 +104,7 @@ public class CellTest {
         cell.tryDamage(1);
 
         // Assert
-        Mockito.verify(unit).damage(1);
+        Mockito.verify(unit).dealDamage(1);
     }
 
     @Test
@@ -133,19 +133,5 @@ public class CellTest {
         // Assert
         Assertions.assertTrue(hasUnit, "Cell should report having a unit after placement.");
     }
-
-    @Test
-    public void testCellHasMechAfterPlacement() {
-        // Arrange
-        Unit mechUnit = Mockito.mock(Unit.class);
-        Mockito.when(mechUnit.isMech()).thenReturn(true);
-        Cell cell = new Cell(new Position(0, 0));
-
-        // Act
-        cell.tryPlaceUnit(mechUnit, false);
-        boolean hasMech = cell.hasMech();
-
-        // Assert
-        Assertions.assertTrue(hasMech, "Cell should report having a mech after placement.");
-    }
+    
 }

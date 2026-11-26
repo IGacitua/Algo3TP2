@@ -8,6 +8,7 @@ import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
+import game.units.Team;
 import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.movement.Movement;
@@ -34,7 +35,7 @@ public class SquadWeaponsIntegrationTest {
             }
         }
         mockCells[1][3] = new Building(new Position(1, 3), Mockito.mock(ElectricalNetwork.class)); // Adjacent obstacle for artillery test
-        
+
         MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
         Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
@@ -53,8 +54,8 @@ public class SquadWeaponsIntegrationTest {
         Position targetPosition = new Position(2, 3);
         Position pushedPosition = new Position(2, 4);
 
-        Unit combatMech = new Unit(punch, 3, Mockito.mock(Movement.class));
-        Unit targetVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit combatMech = new Unit(Team.Player, punch, 3, Mockito.mock(Movement.class));
+        Unit targetVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(combatMech, mechPosition);
         gameMap.tryPlaceUnit(targetVek, targetPosition);
 
@@ -66,7 +67,7 @@ public class SquadWeaponsIntegrationTest {
         // Assert
         assertTrue(hit, "Punch attack on valid adjacent target should return true");
         assertTrue(targetVek.isDamaged(), "Target Vek should take damage from Punch");
-        assertEquals(1, targetVek.getCurrentHealth(), "Target Vek health should decrease by 2 points");
+        assertEquals(1, targetVek.getHealth(), "Target Vek health should decrease by 2 points");
         assertTrue(gameMap.hasUnitAt(pushedPosition), "Target Vek should be pushed 1 tile in the hit direction");
         assertFalse(gameMap.hasUnitAt(targetPosition), "Target Vek should have left its original position");
     }
@@ -84,9 +85,9 @@ public class SquadWeaponsIntegrationTest {
         Position secondVekPosition = new Position(1, 5);
         Position aimPosition = new Position(1, 6);
 
-        Unit cannonMech = new Unit(cannon, 3, Mockito.mock(Movement.class));
-        Unit firstVek = new Unit(null, 3, Mockito.mock(Movement.class));
-        Unit secondVekBehind = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit cannonMech = new Unit(Team.Player, cannon, 3, Mockito.mock(Movement.class));
+        Unit firstVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit secondVekBehind = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(cannonMech, mechPosition);
         gameMap.tryPlaceUnit(firstVek, firstVekPosition);
         gameMap.tryPlaceUnit(secondVekBehind, secondVekPosition);
@@ -99,9 +100,9 @@ public class SquadWeaponsIntegrationTest {
         // Assert
         assertTrue(hit, "Cannon should return true when hitting the first unit in line of sight");
         assertTrue(firstVek.isDamaged(), "First unit in line of sight should be hit by Cannon");
-        assertEquals(2, firstVek.getCurrentHealth(), "First unit should receive 1 damage from Cannon");
+        assertEquals(2, firstVek.getHealth(), "First unit should receive 1 damage from Cannon");
         assertFalse(secondVekBehind.isDamaged(), "Unit behind the first target should not take damage");
-        assertEquals(3, secondVekBehind.getCurrentHealth(), "Unit behind should keep its full health");
+        assertEquals(3, secondVekBehind.getHealth(), "Unit behind should keep its full health");
     }
 
     /*
@@ -115,7 +116,7 @@ public class SquadWeaponsIntegrationTest {
         Position mechPosition = new Position(4, 4);
         Position aimPosition = new Position(4, 5);
 
-        Unit cannonMech = new Unit(cannon, 5, Mockito.mock(Movement.class));
+        Unit cannonMech = new Unit(Team.Player, cannon, 5, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(cannonMech, mechPosition);
 
         UnitAction cannonAttack = cannonMech.getAttackAction(mechPosition, aimPosition);
@@ -150,12 +151,12 @@ public class SquadWeaponsIntegrationTest {
         Position eastPushedPosition = new Position(6, 3);
         Position westPushedPosition = new Position(2, 3);
 
-        Unit artilleryMech = new Unit(artillery, 3, Mockito.mock(Movement.class));
-        Unit centerVek = new Unit(null, 3, Mockito.mock(Movement.class));
-        Unit northVek = new Unit(null, 3, Mockito.mock(Movement.class));
-        Unit southVek = new Unit(null, 3, Mockito.mock(Movement.class));
-        Unit eastVek = new Unit(null, 3, Mockito.mock(Movement.class));
-        Unit westVek = new Unit(null, 3, Mockito.mock(Movement.class));
+        Unit artilleryMech = new Unit(Team.Player, artillery, 3, Mockito.mock(Movement.class));
+        Unit centerVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit northVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit southVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit eastVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
+        Unit westVek = new Unit(Team.Player, null, 3, Mockito.mock(Movement.class));
 
         gameMap.tryPlaceUnit(artilleryMech, mechPosition);
         gameMap.tryPlaceUnit(centerVek, targetPosition);
@@ -174,7 +175,7 @@ public class SquadWeaponsIntegrationTest {
         assertTrue(hit, "Valid artillery attack should return true");
         assertThrows(RuntimeException.class, () -> adjacentAttack.tryExecute(gameMap), "Artillery should not be able to target adjacent tiles");
         assertTrue(centerVek.isDamaged(), "Unit on target cell should take damage over obstacle");
-        assertEquals(2, centerVek.getCurrentHealth(), "Unit on target cell should receive 1 damage over obstacle");
+        assertEquals(2, centerVek.getHealth(), "Unit on target cell should receive 1 damage over obstacle");
         assertTrue(gameMap.hasUnitAt(targetPosition), "Unit on target cell should not move");
         assertTrue(gameMap.hasUnitAt(northPushedPosition), "North unit should be pushed to (4, 1)");
         assertTrue(gameMap.hasUnitAt(southPushedPosition), "South unit should be pushed to (4, 5)");

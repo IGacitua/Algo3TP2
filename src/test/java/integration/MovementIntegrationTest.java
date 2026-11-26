@@ -6,7 +6,8 @@ import game.map.creation.CellFactory;
 import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.units.Mech;
+import game.units.Team;
+import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.movement.Grounded;
 import game.utils.FileHandler;
@@ -21,7 +22,7 @@ public class MovementIntegrationTest {
 
     private final ElectricalNetwork mockNetwork = Mockito.mock(ElectricalNetwork.class);
     private GameMap gameMap;
-    private Mech mech;
+    private Unit unit;
 
     @BeforeEach
     public void rebuildMap() throws PositionOutOfBoundsException {
@@ -34,8 +35,8 @@ public class MovementIntegrationTest {
         String mapPath = "src/test/resources/testMap1.txt";
         gameMap = new GameMap(mapImporter, mapPath);
 
-        mech = new Mech(null, 10, new Grounded(2));
-        gameMap.tryPlaceUnit(mech, mechPosition);
+        unit = new Unit(Team.Player, null, 10, new Grounded(2));
+        gameMap.tryPlaceUnit(unit, mechPosition);
     }
 
     // Verificar que un Mech solo pueda moverse a casillas dentro de su rango de movimiento, sin atravesar obstáculos ni otras unidades.
@@ -120,7 +121,7 @@ public class MovementIntegrationTest {
     }
 
     private void assertMove(Position destination, boolean shouldSucceed) throws PositionOutOfBoundsException {
-        UnitAction moveAction = mech.getMovementAction(mechPosition, destination);
+        UnitAction moveAction = unit.getMovementAction(mechPosition, destination);
         boolean success = moveAction.tryExecute(gameMap);
 
         if (shouldSucceed) {

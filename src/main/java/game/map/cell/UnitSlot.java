@@ -48,7 +48,7 @@ public class UnitSlot {
 
     public void damage(int damage) {
         for (Unit unit : containedUnits) {
-            unit.damage(damage);
+            unit.dealDamage(damage);
         }
     }
 

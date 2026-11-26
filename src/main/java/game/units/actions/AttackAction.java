@@ -3,7 +3,7 @@ package game.units.actions;
 import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.units.behavior.PlayerBehavior;
+import game.units.behavior.player.PlayerBehavior;
 import game.units.weapons.Weapon;
 
 public class AttackAction implements UnitAction {

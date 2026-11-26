@@ -3,7 +3,6 @@ package game.units;
 public class Health {
 
     private final int maximum;
-    private boolean isDamaged;
     private int current;
 
     public Health(int maximum) {
@@ -15,7 +14,6 @@ public class Health {
 
         this.maximum = maximum;
         this.current = maximum;
-        this.isDamaged = false;
     }
 
     public void receiveDamage(int amount) {
@@ -24,7 +22,6 @@ public class Health {
         }
 
         current = Math.max(0, current - amount);
-        isDamaged = true;
     }
 
     public boolean isAlive() {
@@ -44,7 +41,7 @@ public class Health {
     }
 
     public boolean isDamaged() {
-        return isDamaged;
+        return maximum > current;
     }
 }
 

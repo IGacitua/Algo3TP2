@@ -1,11 +1,12 @@
-package game.units.behavior;
+package game.units.behavior.player.state;
 
 import game.map.GameMap;
 import game.position.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
+import game.units.behavior.player.TurnUndoTracker;
 
-public class MovedState implements MechTurnState {
+public class MovedState implements TurnState {
     private final MoveAction previousMovement;
 
     public MovedState(MoveAction previousMovement) {
@@ -13,12 +14,12 @@ public class MovedState implements MechTurnState {
     }
 
     @Override
-    public MechTurnState move(MoveAction action, GameMap map) {
+    public TurnState move(MoveAction action, GameMap map) {
         throw new IllegalStateException("Mech cannot move twice in the same turn.");
     }
 
     @Override
-    public MechTurnState attack(AttackAction action, GameMap map) throws PositionOutOfBoundsException {
+    public TurnState attack(AttackAction action, GameMap map) throws PositionOutOfBoundsException {
         if (!action.tryExecute(map)) {
             return this;
         }
@@ -26,7 +27,7 @@ public class MovedState implements MechTurnState {
     }
 
     @Override
-    public MechTurnState undo(GameMap map, TurnUndoTracker undoTracker) throws PositionOutOfBoundsException {
+    public TurnState undo(GameMap map, TurnUndoTracker undoTracker) throws PositionOutOfBoundsException {
         undoTracker.consumeUndo();
         previousMovement.undoExecution(map);
         return new ReadyState();

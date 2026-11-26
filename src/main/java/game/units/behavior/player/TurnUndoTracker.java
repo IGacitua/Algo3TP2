@@ -1,4 +1,4 @@
-package game.units.behavior;
+package game.units.behavior.player;
 
 public class TurnUndoTracker {
     private boolean undoUsed = false;

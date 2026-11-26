@@ -11,6 +11,7 @@ import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.East;
 import game.position.direction.North;
+import game.units.Team;
 import game.units.Unit;
 import game.units.movement.Movement;
 import game.units.weapons.Weapon;
@@ -50,8 +51,8 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(1, 1);
         Position blockerPosition = new Position(2, 1);
-        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-        Unit blockingVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit pushedVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit blockingVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
         gameMap.tryPlaceUnit(blockingVek, blockerPosition);
 
@@ -61,18 +62,18 @@ public class PushCollisionIntegrationTest {
         // Assert
         assertTrue(gameMap.hasUnitAt(pushedOrigin), "Pushed unit should remain in its original position");
         assertTrue(pushedVek.isDamaged(), "Pushed unit should take collision damage");
-        assertEquals(2, pushedVek.getCurrentHealth(), "Pushed unit should lose 1 health from collision");
+        assertEquals(2, pushedVek.getHealth(), "Pushed unit should lose 1 health from collision");
 
         assertTrue(gameMap.hasUnitAt(blockerPosition), "Blocking unit should remain in its original position");
         assertTrue(blockingVek.isDamaged(), "Blocking unit should take collision damage");
-        assertEquals(2, blockingVek.getCurrentHealth(), "Blocking unit should lose 1 health from collision");
+        assertEquals(2, blockingVek.getHealth(), "Blocking unit should lose 1 health from collision");
     }
 
     @Test
     public void pushingUnitIntoBuildingStopsMovementDamagesUnitDestroysBuildingAndReducesPower() throws PositionOutOfBoundsException {
         // Arrange
         Position pushedOrigin = new Position(2, 2);
-        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit pushedVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act
@@ -81,7 +82,7 @@ public class PushCollisionIntegrationTest {
         // Assert
         assertTrue(gameMap.hasUnitAt(pushedOrigin), "Pushed unit should remain in its original position");
         assertTrue(pushedVek.isDamaged(), "Pushed unit should take collision damage against building");
-        assertEquals(2, pushedVek.getCurrentHealth(), "Pushed unit should lose 1 health from collision");
+        assertEquals(2, pushedVek.getHealth(), "Pushed unit should lose 1 health from collision");
 
         assertTrue(building.isDestroyed(), "Building should be destroyed by collision");
         Mockito.verify(electricalNetwork, Mockito.times(1)).modifyPower(-1);
@@ -92,7 +93,7 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(2, 5);
         Position destination = new Position(3, 5);
-        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit pushedVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act
@@ -110,7 +111,7 @@ public class PushCollisionIntegrationTest {
         // Arrange
         Position pushedOrigin = new Position(4, 2);
         Position mountainPosition = new Position(5, 2);
-        Unit pushedVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit pushedVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(pushedVek, pushedOrigin);
 
         // Act
@@ -119,7 +120,7 @@ public class PushCollisionIntegrationTest {
         // Assert
         assertTrue(gameMap.hasUnitAt(pushedOrigin), "Pushed unit should remain in its original position");
         assertTrue(pushedVek.isDamaged(), "Pushed unit should take collision damage against mountain");
-        assertEquals(2, pushedVek.getCurrentHealth(), "Pushed unit should lose 1 health from collision");
+        assertEquals(2, pushedVek.getHealth(), "Pushed unit should lose 1 health from collision");
 
         assertFalse(gameMap.getCellAt(mountainPosition).hasUnit(), "Mountain should remain unoccupied");
     }
@@ -128,7 +129,7 @@ public class PushCollisionIntegrationTest {
     public void pushingUnitOutOfBoundsThrowsExceptionAndKeepsUnitUninjuredInPlace() throws PositionOutOfBoundsException {
         // Arrange
         Position edgePosition = new Position(0, 0);
-        Unit edgeVek = new Unit(Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+        Unit edgeVek = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
         gameMap.tryPlaceUnit(edgeVek, edgePosition);
 
         // Act & Assert

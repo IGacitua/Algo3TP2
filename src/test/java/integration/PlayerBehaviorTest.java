@@ -6,10 +6,11 @@ import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.units.Mech;
+import game.units.Team;
+import game.units.Unit;
 import game.units.actions.UnitAction;
-import game.units.behavior.PlayerBehavior;
-import game.units.behavior.TurnUndoTracker;
+import game.units.behavior.player.PlayerBehavior;
+import game.units.behavior.player.TurnUndoTracker;
 import game.units.movement.Grounded;
 import game.units.weapons.Weapon;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ public class PlayerBehaviorTest {
     private GameMap gameMap;
     private TurnUndoTracker undoTracker;
     private PlayerBehavior player;
-    private Mech combatMech;
+    private Unit combatMech;
     private Position origin;
 
     @BeforeEach
@@ -43,7 +44,7 @@ public class PlayerBehaviorTest {
         Mockito.when(mockPunch.attack(Mockito.any(), Mockito.any())).thenReturn(true);
 
         this.origin = new Position(0, 0);
-        this.combatMech = new Mech(mockPunch, 5, new Grounded(1));
+        this.combatMech = new Unit(Team.Player, mockPunch, 5, new Grounded(1));
         this.gameMap.tryPlaceUnit(this.combatMech, this.origin);
 
         this.player = new PlayerBehavior(this.combatMech, this.undoTracker);
@@ -94,11 +95,11 @@ public class PlayerBehaviorTest {
 
         // Act
         this.player.executeAction(moveAction, gameMap);
-        assertTrue(this.gameMap.hasMechAt(moveDestination));
+        assertTrue(this.gameMap.hasUnitAt(moveDestination, Team.Player));
         this.player.undoMovement(gameMap);
 
         // Assert
-        assertTrue(this.gameMap.hasMechAt(this.origin), "Expected the mech to be back at its original position after undoing movement");
+        assertTrue(this.gameMap.hasUnitAt(this.origin, Team.Player), "Expected the mech to be back at its original position after undoing movement");
         assertFalse(this.gameMap.hasUnitAt(moveDestination), "Expected the destination cell to be empty after undoing movement");
     }
 
@@ -167,7 +168,7 @@ public class PlayerBehaviorTest {
     public void twoMechsShareSingleUndoPerTurn() throws PositionOutOfBoundsException {
         // Arrange
         Position secondMechOrigin = new Position(1, 0);
-        Mech secondMech = new Mech(Mockito.mock(Weapon.class), 5, new Grounded(1));
+        Unit secondMech = new Unit(Team.Player, Mockito.mock(Weapon.class), 5, new Grounded(1));
         this.gameMap.tryPlaceUnit(secondMech, secondMechOrigin);
 
         PlayerBehavior secondPlayer = new PlayerBehavior(secondMech, this.undoTracker);
@@ -182,11 +183,11 @@ public class PlayerBehaviorTest {
         this.player.executeAction(firstMechMoveAction, gameMap);
         secondPlayer.executeAction(secondMechMoveAction, gameMap);
 
-        assertTrue(this.gameMap.hasMechAt(firstMechMoveDestination));
-        assertTrue(this.gameMap.hasMechAt(secondMechMoveDestination));
+        assertTrue(this.gameMap.hasUnitAt(firstMechMoveDestination, Team.Player));
+        assertTrue(this.gameMap.hasUnitAt(secondMechMoveDestination, Team.Player));
 
         this.player.undoMovement(gameMap);
-        assertTrue(this.gameMap.hasMechAt(this.origin));
+        assertTrue(this.gameMap.hasUnitAt(this.origin, Team.Player));
 
         // Assert
         assertThrows(

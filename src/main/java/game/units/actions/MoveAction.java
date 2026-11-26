@@ -4,7 +4,7 @@ import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
-import game.units.behavior.PlayerBehavior;
+import game.units.behavior.player.PlayerBehavior;
 
 
 public class MoveAction implements UnitAction {

@@ -8,11 +8,11 @@ import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.position.direction.West;
-import game.units.Mech;
+import game.units.Team;
 import game.units.Unit;
 import game.units.actions.UnitAction;
-import game.units.behavior.PlayerBehavior;
-import game.units.behavior.TurnUndoTracker;
+import game.units.behavior.player.PlayerBehavior;
+import game.units.behavior.player.TurnUndoTracker;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
 import game.units.weapons.Weapon;
@@ -47,62 +47,62 @@ public class AcidIntegrationTest {
     @Test
     public void testGroundedUnitOnAcidReceivesDoubleDamage() throws PositionOutOfBoundsException {
         // Arrange
-        Unit unit = new Unit(null, 10, new Grounded(1));
+        Unit unit = new Unit(Team.Player, null, 10, new Grounded(1));
         gameMap.tryPlaceUnit(unit, new Position(0, 0));
 
         // Act
-        unit.damage(2);
+        unit.dealDamage(2);
 
         // Assert
-        assertEquals(6, unit.getCurrentHealth());
+        assertEquals(6, unit.getHealth());
     }
 
     @Test
     public void testFlyingUnitOnAcidReceivesNormalDamage() {
         // Arrange
-        Unit unit = new Unit(null, 10, new Flying(1));
+        Unit unit = new Unit(Team.Player, null, 10, new Flying(1));
 
         // Act
-        unit.damage(2);
+        unit.dealDamage(2);
 
         // Assert
-        assertEquals(8, unit.getCurrentHealth());
+        assertEquals(8, unit.getHealth());
     }
 
     @Test
     public void testGroundedUnitPushedIntoAcidReceivesDoubleDamage() throws Exception {
         // Arrange
         Position unitPosition = new Position(1, 0);
-        Unit unit = new Unit(null, 10, new Grounded(1));
+        Unit unit = new Unit(Team.Player, null, 10, new Grounded(1));
 
         // Act
         gameMap.tryPlaceUnit(unit, unitPosition);
         gameMap.pushUnit(unitPosition, new West());
-        unit.damage(2);
+        unit.dealDamage(2);
 
         // Assert
-        assertEquals(6, unit.getCurrentHealth());
+        assertEquals(6, unit.getHealth());
     }
 
     @Test
     public void testFlyingUnitPushedIntoAcidReceivesNormalDamage() throws Exception {
         // Arrange
         Position unitPosition = new Position(1, 0);
-        Unit unit = new Unit(null, 10, new Flying(1));
+        Unit unit = new Unit(Team.Player, null, 10, new Flying(1));
 
         // Act
         gameMap.tryPlaceUnit(unit, unitPosition);
         gameMap.pushUnit(unitPosition, new West());
-        unit.damage(2);
+        unit.dealDamage(2);
 
         // Assert
-        assertEquals(8, unit.getCurrentHealth());
+        assertEquals(8, unit.getHealth());
     }
 
     @Test
     public void undoingMoveOntoAcidRemovesContamination() throws PositionOutOfBoundsException {
         // Arrange
-        Mech mech = new Mech(Mockito.mock(Weapon.class), 5, new Grounded(1));
+        Unit mech = new Unit(Team.Player, Mockito.mock(Weapon.class), 5, new Grounded(1));
         Position origin = new Position(1, 0);
         Position moveDestination = new Position(0, 0);
         gameMap.tryPlaceUnit(mech, origin);
@@ -118,6 +118,6 @@ public class AcidIntegrationTest {
 
         // Assert
         assertFalse(mech.isContaminated(), "Expected the mech to no longer be contaminated after undoing the move");
-        assertTrue(gameMap.hasMechAt(origin), "Expected the mech to be back at its original position after undoing the move");
+        assertTrue(gameMap.hasUnitAt(origin), "Expected the mech to be back at its original position after undoing the move");
     }
 }

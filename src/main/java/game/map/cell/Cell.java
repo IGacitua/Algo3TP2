@@ -1,6 +1,7 @@
 package game.map.cell;
 
 import game.position.Position;
+import game.units.Team;
 import game.units.Unit;
 
 public class Cell {
@@ -107,8 +108,8 @@ public class Cell {
         return unitSlot.hasUnit();
     }
 
-    public boolean hasMech() {
-        return unitSlot.hasUnit(Unit::isMech);
+    public boolean hasUnit(Team unitTeam) {
+        return unitSlot.hasUnit((u) -> u.isInTeam(unitTeam));
     }
 
     public boolean isVekTarget() {

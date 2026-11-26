@@ -1,30 +1,33 @@
-package game.units.behavior;
+package game.units.behavior.player;
 
 import game.map.GameMap;
 import game.position.PositionOutOfBoundsException;
-import game.units.Mech;
+import game.units.Unit;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
+import game.units.behavior.Behavior;
+import game.units.behavior.player.state.ReadyState;
+import game.units.behavior.player.state.TurnState;
 
 public class PlayerBehavior implements Behavior {
-    private final Mech mech; // TODO: Usar para validar condiciones de la unidad, como si sigue vivo, puede atacar, etc.
+    private final Unit unit; // TODO: Usar para validar condiciones de la unidad, como si sigue vivo, puede atacar, etc.
     private final TurnUndoTracker undoTracker;
-    private MechTurnState state;
+    private TurnState state;
 
     public PlayerBehavior() {
         this(null, new TurnUndoTracker());
     }
 
-    public PlayerBehavior(Mech mech) {
-        this(mech, new TurnUndoTracker());
+    public PlayerBehavior(Unit unit) {
+        this(unit, new TurnUndoTracker());
     }
 
-    public PlayerBehavior(Mech mech, TurnUndoTracker undoTracker) throws IllegalArgumentException {
+    public PlayerBehavior(Unit unit, TurnUndoTracker undoTracker) throws IllegalArgumentException {
         if (undoTracker == null) {
             throw new IllegalArgumentException("Undo tracker cannot be null");
         }
-        this.mech = mech;
+        this.unit = unit;
         this.undoTracker = undoTracker;
         this.state = new ReadyState();
     }

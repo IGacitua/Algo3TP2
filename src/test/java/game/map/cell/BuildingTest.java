@@ -122,7 +122,7 @@ public class BuildingTest {
         building.tryDamage(1);
 
         // Assert
-        Mockito.verify(unit).damage(1);
+        Mockito.verify(unit).dealDamage(1);
     }
 
     @Test
@@ -214,22 +214,6 @@ public class BuildingTest {
 
         // Assert
         Assertions.assertTrue(hasUnit, "Building should report having a unit after placement.");
-    }
-
-    @Test
-    public void testBuildingHasMechAfterPlacement() {
-        // Arrange
-        Unit mechUnit = Mockito.mock(Unit.class);
-        Mockito.when(mechUnit.isMech()).thenReturn(true);
-
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        building.tryPlaceUnit(mechUnit, false);
-        boolean hasMech = building.hasMech();
-
-        // Assert
-        Assertions.assertTrue(hasMech, "Building should report having a mech after placement.");
     }
 
     @Test

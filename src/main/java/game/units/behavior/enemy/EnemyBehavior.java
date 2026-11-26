@@ -1,19 +1,20 @@
-package game.units.behavior;
+package game.units.behavior.enemy;
 
 import game.map.GameMap;
 import game.position.PositionOutOfBoundsException;
-import game.units.Vek;
+import game.units.Unit;
 import game.units.actions.UnitAction;
+import game.units.behavior.Behavior;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VekBehavior implements Behavior {
+public class EnemyBehavior implements Behavior {
     private final List<BehaviorRules> rules;
-    private final Vek vek;
+    private final Unit unit;
 
-    public VekBehavior(Vek vek) {
-        this.vek = vek;
+    public EnemyBehavior(Unit unit) {
+        this.unit = unit;
         this.rules = new ArrayList<>();
         rules.add(new BuildingAttackRule());
         rules.add(new MechAttackRule());
@@ -33,7 +34,7 @@ public class VekBehavior implements Behavior {
 
     private List<UnitAction> evaluatePriorityRules(GameMap map) {
         for (BehaviorRules rule : rules) {
-            List<UnitAction> actions = rule.evaluate(vek, map);
+            List<UnitAction> actions = rule.evaluate(unit, map);
             if (actions != null) {
                 return actions;
             }

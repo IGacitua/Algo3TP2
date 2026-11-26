@@ -1,10 +1,6 @@
 Correciones (Eliminar al completar):
 
 - Modelo y Codigo:
-    - [Medio] Implementa al menos una clase anemica
-        - Mech: solo `isMech()`, `createMoveCommand` duplicado y canAttack sin uso; no existen los tipos de Mech
-        - *Ver Sugerencias*
-
     - [Medio] If en lugar de polimorfismo:
         - [X] `PlayerBehavior.executeAction`: `instanceof MoveAction / AttackAction`
 
@@ -12,10 +8,7 @@ Correciones (Eliminar al completar):
         - [X] hasMoved y previousMovement != null dicen lo mismo;
         - [X] flags hasAttacked/hasUndone (candidato a State) `Unit.isDamaged()` derivable de Health;
 
-    - [Leve] Un nuevo requerimiento implicara alterar varias clases
-        - Nuevo tipo de casilla: subclase + CellFactory + `isX()` en Cell + `hasXAt()` en GameMap
-
-- Bugs funcionales:
+- Bugs funcionales (ESCRIBIR TESTS Y GARANTIZAR QUE LOS CORREGIMOS!)
     - El movimiento atraviesa montanas (solo compara distancia Manhattan)
     - Un Mech puede moverse sobre un Edificio: lo destruye y resta Red
     - Mover/empujar a casilla ocupada: la unidad desaparece del tablero
@@ -29,15 +22,6 @@ Correciones (Eliminar al completar):
   -[Grave] Tests incorrectos / vacios:
     - [X] mechCanUndoMovementBeforeAttacking compara la misma instancia de posicion: pasa sin deshacer nada
     - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
-
-Sugerencias (Ezequiel):
-
-- Separación Mek/Vek puede ser refactorizada:
-    - isMech () -> Boolean en el constructor. O, mas adecuadamente, un 'Equipo' enum, Jugador/Enemigo.
-        - Con eso podemos hacer que la pregunta no sea 'hay una unidad aca', si no 'hay una unidad que NO es del mi
-          equipo aca'
-    - Comportamiento Vek -> UnitBehavior, recibido en el constructor.
-    - Comportamiento Mek -> Idem.
 
 Entrega 2:
 
@@ -58,3 +42,12 @@ Entrega 2:
 - [ ] Verificar que una unidad sobre la casilla de emergencia bloquee la aparición del nuevo Vek y reciba 1 de daño.
 - [ ] Planteo inicial de interfaz gráfica (mockups/dibujos) mostrando: el tablero con los ataques anunciados, la
   información de cada unidad, la Red Eléctrica y el turno actual.
+
+Entrega 3:
+
+- [] Modelo del juego terminado.
+- [] Verificar las condiciones de victoria y derrota: completar los 5 turnos, Red Eléctrica en 0 y los tres Mechs
+  destruidos.
+- [] Interfaz gráfica inicial básica: comienzo del juego, visualización del tablero con los ataques anunciados e
+  interfaz de usuario básica para mover, atacar y deshacer movimiento.
+- [] Modelo del manejo de turnos: secuencia correcta de Fase Vek, Fase del Jugador, Fase de Resolución y Emergencia.
