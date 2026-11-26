@@ -13,6 +13,11 @@ Correciones (Eliminar al completar):
   -[Grave] Tests incorrectos / vacios:
     - MovementIntegrationTest usa Grounded (2)/vida 10 y un mapa sin obstaculos en el camino
 
+- IMPORTANTE! (ESCRITO POR EZEQUIEL)
+    - Unit no tiene Behavior! Debería recibirlo por constructor.
+        - O escribir un Wrapper que contenga Unit + Behavior y que el juego use eso? No me encanta.
+    - Todas las BehaviorRules están vacías!
+
 Entrega 2:
 
 - [X] Verificar que al empujar una unidad contra otra unidad u obstáculo, la unidad no se mueva y se aplique el daño de
