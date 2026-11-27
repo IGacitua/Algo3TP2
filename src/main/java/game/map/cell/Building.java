@@ -64,10 +64,6 @@ public class Building extends Cell {
 
     @Override
     public boolean canPlaceUnit(Unit unit, boolean pushed) {
-        if (pushed) {
-            return true;
-        }
-
         if (!isDestroyed) {
             return false;
         }

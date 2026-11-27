@@ -27,7 +27,7 @@ public class BuildingTest {
     }
 
     @Test
-    public void testCanPushOneUnitInBuildingCell() {
+    public void testCannotPushOneUnitInIntactBuildingCell() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
@@ -36,7 +36,7 @@ public class BuildingTest {
         boolean result = building.tryPlaceUnit(unit, true);
 
         // Assert
-        Assertions.assertTrue(result, "Unit should be able to be placed.");
+        Assertions.assertFalse(result, "Unit should not be able to be pushed into an intact building.");
     }
 
     @Test
@@ -54,26 +54,28 @@ public class BuildingTest {
     }
 
     @Test
-    public void testCannotPushMultipleUnitsInBuildingCell() {
+    public void testCannotPushMultipleUnitsIntoDestroyedBuildingCell() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
 
         // Act
         boolean mainResult = building.tryPlaceUnit(mainUnit, true);
         boolean secondaryResult = building.tryPlaceUnit(secondaryUnit, true);
 
         // Assert
-        Assertions.assertTrue(mainResult, "Main unit should be placed successfully.");
+        Assertions.assertTrue(mainResult, "Main unit should be placed successfully on destroyed building.");
         Assertions.assertFalse(secondaryResult, "Secondary unit should not be placed successfully.");
     }
 
     @Test
-    public void testPopUnitReturnsCorrectUnit() {
+    public void testPopUnitReturnsCorrectUnitFromDestroyedBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
         building.tryPlaceUnit(unit, true);
 
         // Act
@@ -84,11 +86,12 @@ public class BuildingTest {
     }
 
     @Test
-    public void testPopUnitAllowsNewUnitPlacement() {
+    public void testPopUnitAllowsNewUnitPlacementInDestroyedBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
 
         // Act
         building.tryPlaceUnit(firstUnit, true);
@@ -142,7 +145,8 @@ public class BuildingTest {
     public void testBuildingDamagesUnitWhenDamaged() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell building = new Building(new Position(0, 0), mockNetwork());
+        Building building = new Building(new Position(0, 0), mockNetwork());
+        building.tryDamage(1); // Destruye el edificio para que permita alojar la unidad empujada
         building.tryPlaceUnit(unit, true);
 
         // Act
@@ -233,7 +237,8 @@ public class BuildingTest {
     public void testBuildingHasUnitAfterPushing() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell building = new Building(new Position(0, 0), mockNetwork());
+        Building building = new Building(new Position(0, 0), mockNetwork());
+        building.tryDamage(1);
 
         // Act
         building.tryPlaceUnit(unit, true);
