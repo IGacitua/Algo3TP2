@@ -20,7 +20,7 @@ public class GameMap {
     private final CellGrid grid;
 
     public GameMap(MapImporter importer, String mapFilePath) throws InvalidMapFileException {
-        this.grid = new CellGrid(importer.importMap(mapFilePath));
+        this.grid = new CellGrid(importer.importMap(this, mapFilePath));
     }
 
     // Cell Access
@@ -28,6 +28,10 @@ public class GameMap {
     // For ease of debugging.
     private static boolean isObstacle(Cell cell) {
         if (cell.isFull()) {
+            return true;
+        }
+
+        if (cell.hasUnit()) {
             return true;
         }
 
@@ -50,7 +54,8 @@ public class GameMap {
     }
 
     public boolean hasUnitAt(Position position, Team team) throws PositionOutOfBoundsException {
-        return getCellAt(position).hasUnit(team);
+        Cell cell = getCellAt(position);
+        return cell.hasUnit((u) -> u.isInTeam(team));
     }
 
     public void attackCell(Position target, int damage) throws PositionOutOfBoundsException {
@@ -131,7 +136,7 @@ public class GameMap {
     }
 
     public Position findClosestPlayerUnit(Position origin) {
-        return grid.getNearestCell(origin, cell -> cell.hasUnit(Team.Player) && cell.canDamage());
+        return grid.getNearestCell(origin, cell -> cell.hasUnit((u) -> u.isInTeam(Team.Player)) && cell.canDamage());
     }
 
     public Position findFirstObstacle(Position origin, OrthogonalDirection direction) {

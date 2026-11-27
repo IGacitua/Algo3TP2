@@ -63,7 +63,7 @@ public class MapTests {
     private void testMapLoadsCorrectly(String mapPath, Cell[][] expected) {
         FileHandler fileHandler = FileHandler.getInstance();
         CellFactory cellFactory = new CellFactory(mockNetwork);
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, Mockito.mock(game.units.UnitFactory.class));
 
         GameMap map = new GameMap(mapImporter, mapPath);
 

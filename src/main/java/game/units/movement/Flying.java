@@ -1,18 +1,11 @@
 package game.units.movement;
 
-import game.map.cell.Cell;
-
+// Usado por: Vek Avispón
 public class Flying extends Movement {
 
-    public Flying(int movementDistance) {
-        super(movementDistance);
+    public Flying(int maxDistance) {
+        super(maxDistance);
     }
-
-    @Override
-    protected boolean canMoveTo(Cell destinationCell, boolean forced) {
-        return true;
-    }
-
 
     @Override
     public boolean canBeContaminated() {
@@ -20,7 +13,17 @@ public class Flying extends Movement {
     }
 
     @Override
-    public boolean canMoveToWater() {
+    public boolean canMoveToWater(boolean pushed) {
+        return true;
+    }
+
+    @Override
+    public boolean diesOnWater() {
+        return false;
+    }
+
+    @Override
+    public boolean canAttackFromWater() {
         return true;
     }
 

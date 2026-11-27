@@ -12,6 +12,7 @@ import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
+import game.units.movement.Hover;
 import game.units.weapons.Punch;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,15 +32,15 @@ public class WaterIntegrationTest {
     public void setUp() {
         MapImporter importer = Mockito.mock(MapImporter.class);
 
-        Cell[][] cells = new Cell[3][3];
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 3; y++) {
+        Cell[][] cells = new Cell[5][5];
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
                 cells[x][y] = new Cell(new Position(x, y));
             }
         }
         cells[1][0] = new Water(waterPosition);
 
-        Mockito.when(importer.importMap(Mockito.anyString()))
+        Mockito.when(importer.importMap(Mockito.any(GameMap.class), Mockito.anyString()))
                 .thenReturn(cells);
 
         gameMap = new GameMap(importer, "");
@@ -93,7 +94,7 @@ public class WaterIntegrationTest {
     @Test
     public void testMechInWaterCannotAttack() throws PositionOutOfBoundsException {
         // Arrange
-        Unit mech = new Unit(Team.Player, new Punch(gameMap), 3, new Flying(1)); // o Grounded si se colocó en agua
+        Unit mech = new Unit(Team.Player, new Punch(gameMap), 3, new Hover(1));
         Position targetPos = new Position(2, 0);
         Unit enemy = new Unit(Team.Enemy, null, 2, new Grounded(1));
 

@@ -13,7 +13,7 @@ public class WaterTest {
         // Arrange
         Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(true);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
 
         // Act
         boolean result = water.tryPlaceUnit(unit, false);
@@ -27,7 +27,7 @@ public class WaterTest {
         // Arrange
         Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(false);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean())).thenReturn(false);
 
         // Act
         boolean result = water.tryPlaceUnit(unit, false);
@@ -41,7 +41,8 @@ public class WaterTest {
         // Arrange
         Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(false);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean()))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         boolean result = water.tryPlaceUnit(unit, true);
@@ -56,8 +57,8 @@ public class WaterTest {
         Cell water = new Water(new Position(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
-        Mockito.when(mainUnit.canMoveToWater()).thenReturn(true);
-        Mockito.when(secondaryUnit.canMoveToWater()).thenReturn(true);
+        Mockito.when(mainUnit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
+        Mockito.when(secondaryUnit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
 
         // Act
         boolean mainResult = water.tryPlaceUnit(mainUnit, false);
@@ -73,7 +74,7 @@ public class WaterTest {
         // Arrange
         Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(true);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
         water.tryPlaceUnit(unit, false);
 
         // Act
@@ -89,8 +90,8 @@ public class WaterTest {
         Cell water = new Water(new Position(0, 0));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
-        Mockito.when(firstUnit.canMoveToWater()).thenReturn(true);
-        Mockito.when(secondUnit.canMoveToWater()).thenReturn(true);
+        Mockito.when(firstUnit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
+        Mockito.when(secondUnit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
 
         // Act
         water.tryPlaceUnit(firstUnit, false);
@@ -118,7 +119,7 @@ public class WaterTest {
         // Arrange
         Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(true);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
 
         // Act
         water.tryPlaceUnit(unit, false);
@@ -133,7 +134,7 @@ public class WaterTest {
         // Arrange
         Cell water = new Water(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(true);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
         water.tryPlaceUnit(unit, false);
 
         // Act
@@ -160,7 +161,7 @@ public class WaterTest {
     public void testWaterHasUnitAfterPlacement() {
         // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMoveToWater()).thenReturn(true);
+        Mockito.when(unit.canMoveToWater(Mockito.anyBoolean())).thenReturn(true);
         Cell water = new Water(new Position(0, 0));
 
         // Act

@@ -2,6 +2,7 @@ package integration;
 
 import game.map.GameMap;
 import game.map.cell.Cell;
+import game.map.cell.Mountain;
 import game.map.creation.InvalidMapFileException;
 import game.map.creation.MapImporter;
 import game.position.Position;
@@ -9,6 +10,7 @@ import game.position.PositionOutOfBoundsException;
 import game.units.Team;
 import game.units.Unit;
 import game.units.actions.UnitAction;
+import game.units.movement.Flying;
 import game.units.movement.Grounded;
 import game.units.weapons.AcidShot;
 import game.units.weapons.Punch;
@@ -16,8 +18,7 @@ import game.units.weapons.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import game.units.movement.Flying;
-import game.map.cell.Mountain;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AcidShotIntegrationTest {
@@ -37,7 +38,7 @@ public class AcidShotIntegrationTest {
             }
         }
 
-        Mockito.when(importer.importMap(Mockito.anyString()))
+        Mockito.when(importer.importMap(Mockito.any(GameMap.class), Mockito.anyString()))
                 .thenReturn(cells);
 
         gameMap = new GameMap(importer, "");

@@ -111,18 +111,25 @@ public class UnitTest {
     }
 
     @Test
-    public void testFlyingUnitCanMoveToWater() {
+    public void testFlyingUnitCanMoveToWaterWhenNotPushed() {
         Unit unit = new Unit(Team.Player, null, 3, new Flying(1));
-        assertTrue(unit.canMoveToWater());
+        assertTrue(unit.canMoveToWater(false));
     }
 
     @Test
-    public void testGroundedUnitCannotMoveToWater() {
-        Unit unit = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
-
-        assertFalse(unit.canMoveToWater());
+    public void testFlyingUnitCanMoveToWaterWhenPushed() {
+        Unit unit = new Unit(Team.Player, null, 3, new Flying(1));
+        assertTrue(unit.canMoveToWater(true));
     }
 
+    @Test
+    public void testGroundedUnitCannotMoveToWaterWhenNotPushed() {
+        Unit unit = new Unit(Team.Player, Mockito.mock(Weapon.class), 3, Mockito.mock(Movement.class));
+
+        assertFalse(unit.canMoveToWater(false));
+    }
+
+    
     @Test
     public void testGroundedUnitCanBeContaminated() {
         Unit unit = new Unit(Team.Player, Mockito.mock(Weapon.class), 10, new Grounded(1));

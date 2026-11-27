@@ -1,12 +1,11 @@
 package game.units.actions;
 
 import game.map.GameMap;
+import game.map.cell.Cell;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
-import game.units.Team;
 import game.units.behavior.player.PlayerBehavior;
 import game.units.weapons.Weapon;
-import game.map.cell.Cell;
 
 public class AttackAction implements UnitAction {
     private final Weapon weapon;
@@ -22,7 +21,8 @@ public class AttackAction implements UnitAction {
     @Override
     public boolean tryExecute(GameMap map) throws PositionOutOfBoundsException {
         Cell originCell = map.getCellAt(origin);
-        if (originCell.isWater() && originCell.hasUnit(Team.Player)) {
+        
+        if (!originCell.hasUnitThatCanAttack()) {
             return false;
         }
 

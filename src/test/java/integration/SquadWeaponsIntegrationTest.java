@@ -37,7 +37,7 @@ public class SquadWeaponsIntegrationTest {
         mockCells[1][3] = new Building(new Position(1, 3), Mockito.mock(ElectricalNetwork.class)); // Adjacent obstacle for artillery test
 
         MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
-        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
+        Mockito.when(mockMapImporter.importMap(Mockito.any(GameMap.class), Mockito.any(String.class))).thenReturn(mockCells);
 
         gameMap = new GameMap(mockMapImporter, "");
     }

@@ -10,6 +10,7 @@ import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Team;
 import game.units.Unit;
+import game.units.UnitFactory;
 import game.units.actions.UnitAction;
 import game.units.movement.Grounded;
 import game.units.weapons.Artillery;
@@ -18,6 +19,7 @@ import game.utils.FileHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class ArtilleryMapIntegrationTest {
 
@@ -30,7 +32,7 @@ public class ArtilleryMapIntegrationTest {
     @BeforeEach
     public void setUp() throws InvalidMapFileException {
         electricalNetwork = new ElectricalNetwork(5);
-        MapImporter importer = new MapImporter(FileHandler.getInstance(), new CellFactory(electricalNetwork));
+        MapImporter importer = new MapImporter(FileHandler.getInstance(), new CellFactory(electricalNetwork), Mockito.mock(UnitFactory.class));
         map = new GameMap(importer, TEST_MAP_PATH);
         artillery = new Artillery(map);
     }

@@ -1,8 +1,9 @@
 package game.map.cell;
 
 import game.position.Position;
-import game.units.Team;
 import game.units.Unit;
+
+import java.util.function.Predicate;
 
 public class Cell {
     protected final Position position;
@@ -89,7 +90,7 @@ public class Cell {
         }
 
         // Separated from if for easier debugging
-        boolean canMoveTo = unit.canMoveTo(destination, pushed, consumptionMultiplier);
+        boolean canMoveTo = unit.canMove(pushed, consumptionMultiplier);
 
         if (!canMoveTo || !destination.tryPlaceUnit(unit, pushed)) {
             unitSlot.tryPlace(unit); // Put it back without triggering onUnitPlaced.
@@ -97,7 +98,7 @@ public class Cell {
         }
 
         if (!pushed) { // Pushes are free.
-            unit.consumeMovement(consumptionMultiplier);
+            unit.reduceMovement(consumptionMultiplier);
         }
 
         return true;
@@ -119,19 +120,15 @@ public class Cell {
         return unitSlot.hasUnit();
     }
 
-    public boolean hasUnit(Team unitTeam) {
-        return unitSlot.hasUnit((u) -> u.isInTeam(unitTeam));
+    public boolean hasUnit(Predicate<Unit> condition) {
+        return unitSlot.hasUnit(condition);
     }
 
     public boolean isVekTarget() {
         return false;
     }
 
-    public boolean isWater() {
-        return false;
-    }
-
-    public boolean isObstacle() {
+    public boolean hasUnitThatCanAttack() {
         return hasUnit();
     }
 }

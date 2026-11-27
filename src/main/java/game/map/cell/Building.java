@@ -68,12 +68,7 @@ public class Building extends Cell {
             return false;
         }
 
-        return !super.isFull();
-    }
-
-    @Override
-    public boolean isObstacle() {
-        return !isDestroyed || hasUnit();
+        return super.canPlaceUnit(unit, pushed);
     }
 
 }

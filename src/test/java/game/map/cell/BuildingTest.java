@@ -13,11 +13,17 @@ public class BuildingTest {
         return Mockito.mock(ElectricalNetwork.class);
     }
 
+    private Unit getGroundedUnit() {
+        Unit unit = Mockito.mock(Unit.class);
+        Mockito.when(unit.canMove(Mockito.anyBoolean(), Mockito.anyDouble())).thenReturn(true);
+        return unit;
+    }
+
     @Test
-    public void testCannotPlaceOneUnitInBuildingCell() {
+    public void testCannotPlaceOneUnitInBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
 
         // Act
         boolean result = building.tryPlaceUnit(unit, false);
@@ -27,10 +33,10 @@ public class BuildingTest {
     }
 
     @Test
-    public void testCannotPushOneUnitInIntactBuildingCell() {
+    public void testCannotPushUnitInIntactBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
 
         // Act
         boolean result = building.tryPlaceUnit(unit, true);
@@ -43,7 +49,7 @@ public class BuildingTest {
     public void testCanPushUnitIntoDestroyedBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
         building.tryDamage(1);
 
         // Act
@@ -54,7 +60,7 @@ public class BuildingTest {
     }
 
     @Test
-    public void testCannotPushMultipleUnitsIntoDestroyedBuildingCell() {
+    public void testCannotPushMultipleUnitsIntoDestroyedBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
         Unit mainUnit = Mockito.mock(Unit.class);
@@ -74,7 +80,7 @@ public class BuildingTest {
     public void testPopUnitReturnsCorrectUnitFromDestroyedBuilding() {
         // Arrange
         Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
         building.tryDamage(1);
         building.tryPlaceUnit(unit, true);
 
@@ -130,7 +136,7 @@ public class BuildingTest {
     @Test
     public void testBuildingWithUnitCanBeDamaged() {
         // Arrange
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
         Cell building = new Building(new Position(0, 0), mockNetwork());
 
         // Act
@@ -144,7 +150,7 @@ public class BuildingTest {
     @Test
     public void testBuildingDamagesUnitWhenDamaged() {
         // Arrange
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
         Building building = new Building(new Position(0, 0), mockNetwork());
         building.tryDamage(1); // Destruye el edificio para que permita alojar la unidad empujada
         building.tryPlaceUnit(unit, true);
@@ -236,7 +242,7 @@ public class BuildingTest {
     @Test
     public void testBuildingHasUnitAfterPushing() {
         // Arrange
-        Unit unit = Mockito.mock(Unit.class);
+        Unit unit = getGroundedUnit();
         Building building = new Building(new Position(0, 0), mockNetwork());
         building.tryDamage(1);
 

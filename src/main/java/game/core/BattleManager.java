@@ -4,6 +4,7 @@ import game.electricalNetwork.ElectricalNetwork;
 import game.map.GameMap;
 import game.map.creation.CellFactory;
 import game.map.creation.MapImporter;
+import game.units.UnitFactory;
 import game.utils.FileHandler;
 
 // Nota para el profesor: Debería simplemente dar acceso publico a GameManager/ElectricalNetwork?
@@ -39,7 +40,8 @@ public class BattleManager {
 
     private void initializeMap() {
         CellFactory cellFactory = new CellFactory(electricalNetwork);
-        MapImporter importer = new MapImporter(fileHandler, cellFactory);
+        UnitFactory unitFactory = new UnitFactory();
+        MapImporter importer = new MapImporter(fileHandler, cellFactory, unitFactory);
         battleMap = new GameMap(importer, MAP_FILE_PATH);
     }
 

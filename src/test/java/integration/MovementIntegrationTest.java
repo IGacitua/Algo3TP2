@@ -7,6 +7,7 @@ import game.map.creation.MapImporter;
 import game.position.Position;
 import game.units.Team;
 import game.units.Unit;
+import game.units.UnitFactory;
 import game.units.actions.UnitAction;
 import game.units.movement.Grounded;
 import game.utils.FileHandler;
@@ -28,7 +29,7 @@ public class MovementIntegrationTest {
         FileHandler fileHandler = FileHandler.getInstance();
 
         CellFactory cellFactory = new CellFactory(dummyNetwork);
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, Mockito.mock(UnitFactory.class));
 
         String mapPath = "src/test/resources/testMap1.txt";
         map = new GameMap(mapImporter, mapPath);

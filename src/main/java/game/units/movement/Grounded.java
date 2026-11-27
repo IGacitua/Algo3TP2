@@ -1,16 +1,10 @@
 package game.units.movement;
 
-import game.map.cell.Cell;
-
+// Usado por: Vek Saltador, Vek Luciernaga
 public class Grounded extends Movement {
 
-    public Grounded(int movementDistance) {
-        super(movementDistance);
-    }
-
-    @Override
-    protected boolean canMoveTo(Cell destinationCell, boolean forced) {
-        return forced || !destinationCell.isWater();
+    public Grounded(int maxDistance) {
+        super(maxDistance);
     }
 
     @Override
@@ -19,7 +13,17 @@ public class Grounded extends Movement {
     }
 
     @Override
-    public boolean canMoveToWater() {
+    public boolean canMoveToWater(boolean pushed) {
+        return pushed;
+    }
+
+    @Override
+    public boolean diesOnWater() {
+        return true;
+    }
+
+    @Override
+    public boolean canAttackFromWater() {
         return false;
     }
 }

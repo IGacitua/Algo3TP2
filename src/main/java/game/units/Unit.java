@@ -1,6 +1,5 @@
 package game.units;
 
-import game.map.cell.Cell;
 import game.position.Position;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
@@ -18,10 +17,6 @@ public class Unit {
     private boolean contaminated = false;
 
     public Unit(Team team, Weapon weapon, int maximumHealth, Movement movement) {
-        if (movement == null) {
-            throw new IllegalArgumentException("Movement type cannot be null");
-        }
-
         this.team = team;
         this.health = new Health(maximumHealth);
         this.movement = movement;
@@ -92,20 +87,28 @@ public class Unit {
 
     // Movement
 
-    public boolean canMoveToWater() {
-        return movement.canMoveToWater();
-    }
-
     // TODO: Call on turn start!
     public void resetMovementDistance() {
-        this.movement.resetMovementDistance();
+        this.movement.resetRemainingMovement();
     }
 
-    public void consumeMovement(double multiplier) {
-        this.movement.consumeMovement(multiplier);
+    public boolean canMoveToWater(boolean forced) {
+        return movement.canMoveToWater(forced);
     }
 
-    public boolean canMoveTo(Cell destinationCell, boolean forced, double consumptionMultiplier) {
-        return this.movement.isMovementAllowed(destinationCell, forced, consumptionMultiplier);
+    public void reduceMovement(double value) {
+        this.movement.reduceMovement(value);
+    }
+
+    public boolean canMove(boolean forced, double movementCost) {
+        return this.movement.canMove(forced, movementCost);
+    }
+
+    public boolean diesOnWater() {
+        return this.movement.diesOnWater();
+    }
+
+    public boolean canAttackFromWater() {
+        return this.movement.canAttackFromWater();
     }
 }

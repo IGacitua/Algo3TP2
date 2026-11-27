@@ -37,7 +37,7 @@ public class AcidIntegrationTest {
         }
         cells[0][0] = new Acid(new Position(0, 0));
 
-        Mockito.when(importer.importMap(Mockito.anyString()))
+        Mockito.when(importer.importMap(Mockito.any(GameMap.class), Mockito.anyString()))
                 .thenReturn(cells);
 
         gameMap = new GameMap(importer, "");

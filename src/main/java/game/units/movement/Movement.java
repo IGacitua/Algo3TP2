@@ -1,35 +1,36 @@
 package game.units.movement;
 
-import game.map.cell.Cell;
-
 public abstract class Movement {
 
-    protected final double originalMovementDistance;
-    protected double movementDistance;
+    protected final double maximum;
+    protected double current;
 
-    public Movement(int movementDistance) {
-        this.originalMovementDistance = movementDistance;
-        this.movementDistance = movementDistance;
+    public Movement(int maxDistance) {
+        this.maximum = maxDistance;
+        this.current = maxDistance;
     }
 
-    public void resetMovementDistance() {
-        this.movementDistance = originalMovementDistance;
+    public void resetRemainingMovement() {
+        this.current = maximum;
     }
 
-    public boolean isMovementAllowed(Cell destinationCell, boolean forced, double consumptionMultiplier) {
-        if (!forced && (movementDistance - consumptionMultiplier) < 0) {
-            return false; // No movement left for another step.
+    public boolean canMove(boolean forced, double movementCost) {
+        if (forced) {
+            return true;
         }
-        return canMoveTo(destinationCell, forced);
-    }
-    
-    protected abstract boolean canMoveTo(Cell destinationCell, boolean forced);
 
-    public void consumeMovement(double multiplier) {
-        movementDistance -= multiplier;
+        return (current - movementCost) >= 0;
+    }
+
+    public void reduceMovement(double value) {
+        current -= value;
     }
 
     public abstract boolean canBeContaminated();
 
-    public abstract boolean canMoveToWater();
+    public abstract boolean canMoveToWater(boolean pushed);
+
+    public abstract boolean diesOnWater();
+
+    public abstract boolean canAttackFromWater();
 }

@@ -21,21 +21,23 @@ public class Water extends Cell {
 
     @Override
     public boolean canPlaceUnit(Unit unit, boolean pushed) {
-        if (!unit.canMoveToWater() && !pushed) {
+        if (!unit.canMoveToWater(pushed)) {
             return false;
         }
+
         return super.canPlaceUnit(unit, pushed);
     }
 
     @Override
     protected void onUnitPlaced(Unit unit, boolean pushed) {
-        if (pushed && !unit.canMoveToWater()) {
+        if (unit.diesOnWater()) {
             unit.kill();
         }
     }
 
     @Override
-    public boolean isWater() {
-        return true;
+    public boolean hasUnitThatCanAttack() {
+        return hasUnit(Unit::canAttackFromWater);
     }
+
 }

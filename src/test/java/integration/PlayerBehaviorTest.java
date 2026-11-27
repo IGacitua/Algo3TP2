@@ -35,7 +35,7 @@ public class PlayerBehaviorTest {
                 mockCells[x][y] = new Cell(new Position(x, y));
             }
         }
-        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
+        Mockito.when(mockMapImporter.importMap(Mockito.any(GameMap.class), Mockito.any(String.class))).thenReturn(mockCells);
 
         this.gameMap = new GameMap(mockMapImporter, "");
         this.undoTracker = new TurnUndoTracker();
@@ -45,7 +45,9 @@ public class PlayerBehaviorTest {
 
         this.origin = new Position(0, 0);
         this.combatMech = new Unit(Team.Player, mockPunch, 5, new Grounded(1));
-        this.gameMap.tryPlaceUnit(this.combatMech, this.origin);
+        if (!this.gameMap.tryPlaceUnit(this.combatMech, this.origin)) {
+            fail("Failed to place combat mech on the map");
+        }
 
         this.player = new PlayerBehavior(this.combatMech, this.undoTracker);
     }
@@ -113,7 +115,7 @@ public class PlayerBehaviorTest {
         UnitAction moveAction = this.combatMech.getMovementAction(this.origin, moveDestination);
         this.player.executeAction(moveAction, gameMap);
 
-        UnitAction attackAction = this.combatMech.getAttackAction(this.origin, attackedPosition);
+        UnitAction attackAction = this.combatMech.getAttackAction(moveDestination, attackedPosition);
         this.player.executeAction(attackAction, gameMap);
 
         // Assert

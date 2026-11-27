@@ -1,6 +1,8 @@
 package game.map.creation;
 
+import game.map.GameMap;
 import game.position.Position;
+import game.units.UnitFactory;
 import game.utils.FileHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,12 +19,13 @@ public class MapImporterTest {
         Mockito.when(fileHandler.readFile(Mockito.anyString())) // Esa "llamada" hace necesario el 'throws IOException' del test.
                 .thenThrow(new IOException("File not found"));
         CellFactory cellFactory = Mockito.mock(CellFactory.class);
+        UnitFactory unitFactory = Mockito.mock(UnitFactory.class);
 
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, unitFactory);
 
         // Act & Assert
 
-        Assertions.assertThrows(NoMapFileException.class, () -> mapImporter.importMap("nonexistent_file.txt"));
+        Assertions.assertThrows(NoMapFileException.class, () -> mapImporter.importMap(Mockito.mock(GameMap.class), "nonexistent_file.txt"));
     }
 
     @Test
@@ -33,11 +36,12 @@ public class MapImporterTest {
         Mockito.when(fileHandler.readFile(Mockito.anyString()))
                 .thenReturn(map);
         CellFactory cellFactory = Mockito.mock(CellFactory.class);
+        UnitFactory unitFactory = Mockito.mock(UnitFactory.class);
 
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, unitFactory);
 
         // Act & Assert
-        Assertions.assertThrows(InvalidMapFileException.class, () -> mapImporter.importMap("invalid_map.txt"));
+        Assertions.assertThrows(InvalidMapFileException.class, () -> mapImporter.importMap(Mockito.mock(GameMap.class), "invalid_map.txt"));
     }
 
     @Test
@@ -48,11 +52,12 @@ public class MapImporterTest {
         Mockito.when(fileHandler.readFile(Mockito.anyString()))
                 .thenReturn(map);
         CellFactory cellFactory = Mockito.mock(CellFactory.class);
+        UnitFactory unitFactory = Mockito.mock(UnitFactory.class);
 
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, unitFactory);
 
         // Act & Assert
-        Assertions.assertThrows(InvalidMapFileException.class, () -> mapImporter.importMap("empty_map.txt"));
+        Assertions.assertThrows(InvalidMapFileException.class, () -> mapImporter.importMap(Mockito.mock(GameMap.class), "empty_map.txt"));
     }
 
     @Test
@@ -63,10 +68,12 @@ public class MapImporterTest {
         Mockito.when(fileHandler.readFile(Mockito.anyString()))
                 .thenReturn(map);
         CellFactory cellFactory = Mockito.mock(CellFactory.class);
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        UnitFactory unitFactory = Mockito.mock(UnitFactory.class);
+
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, unitFactory);
 
         // Act
-        Assertions.assertDoesNotThrow(() -> mapImporter.importMap("valid_map.txt"));
+        Assertions.assertDoesNotThrow(() -> mapImporter.importMap(Mockito.mock(GameMap.class), "valid_map.txt"));
 
         // Assert
         Mockito.verify(cellFactory).createFromId("A", new Position(0, 0));
@@ -82,10 +89,11 @@ public class MapImporterTest {
         Mockito.when(fileHandler.readFile(Mockito.anyString()))
                 .thenReturn(map);
         CellFactory cellFactory = Mockito.mock(CellFactory.class);
-        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory);
+        UnitFactory unitFactory = Mockito.mock(UnitFactory.class);
 
+        MapImporter mapImporter = new MapImporter(fileHandler, cellFactory, unitFactory);
         // Act
-        Assertions.assertDoesNotThrow(() -> mapImporter.importMap("valid_map.txt"));
+        Assertions.assertDoesNotThrow(() -> mapImporter.importMap(Mockito.mock(GameMap.class), "valid_map.txt"));
 
         // Assert
         Mockito.verify(cellFactory).createFromId("A", new Position(0, 0));
