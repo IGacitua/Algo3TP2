@@ -13,7 +13,7 @@ import game.units.actions.UnitAction;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
 import game.units.movement.Hover;
-import game.units.weapons.Punch;
+import game.units.weapons.mekWeapons.Punch;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,8 @@
-package game.units.weapons;
+package game.units.weapons.mekWeapons;
 
 import game.map.GameMap;
 import game.position.Position;
+import game.units.weapons.Weapon;
 
 public class Artillery extends Weapon {
 

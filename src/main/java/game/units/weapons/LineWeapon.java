@@ -4,12 +4,10 @@ import game.map.GameMap;
 import game.position.Position;
 import game.position.direction.OrthogonalDirection;
 
-public class Cannon extends Weapon {
+public abstract class LineWeapon extends Weapon {
 
-    private static final int DAMAGE = 1;
-
-    public Cannon(GameMap map) {
-        super(map, DAMAGE);
+    protected LineWeapon(GameMap map, int damage) {
+        super(map, damage);
     }
 
     @Override
@@ -20,10 +18,11 @@ public class Cannon extends Weapon {
 
     @Override
     public boolean attack(Position target) {
-        throw new UnsupportedOperationException("Cannon requires an origin position to determine the firing direction.");
+        throw new UnsupportedOperationException(
+                getClass().getSimpleName() + " requires an origin position to determine the firing direction.");
     }
 
-    private boolean fireAlongLine(Position origin, OrthogonalDirection fireDirection) {
+    protected boolean fireAlongLine(Position origin, OrthogonalDirection fireDirection) {
         Position current = origin.getAdjacent(fireDirection);
         Position found = map.findFirstObstacle(current, fireDirection);
 
@@ -31,10 +30,11 @@ public class Cannon extends Weapon {
             return false; // TODO: Cambiar a que devuelva una excepción y hacer try/catch
         }
 
-        map.attackCell(found, DAMAGE);
-        map.pushUnit(found, fireDirection);
+        map.attackCell(found, damage);
+        onHit(found, fireDirection);
 
         return true;
     }
 
+    protected abstract void onHit(Position hit, OrthogonalDirection fireDirection);
 }

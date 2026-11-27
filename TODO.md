@@ -4,8 +4,6 @@
     - [Grave] Herencia sin “es un” ç
         - Weapon.attack (target): Punch, Cannon y AcidShot lanzan UnsupportedOperationException. Dejar solo attack
           (origin, target)
-    - [Grave] Codigo replicado
-        - Cannon.fireAlongLine y AcidShot.attack hacen el mismo recorrido
     - [Medio] Clase anemica
         - No existen los tipos de Mech ni de Vek (ni Mordida/Picadura): todo es new Unit (...) con los numeros en los
           tests

@@ -6,7 +6,11 @@ import game.position.Position;
 import game.units.movement.Flying;
 import game.units.movement.Grounded;
 import game.units.movement.Hover;
-import game.units.weapons.*;
+import game.units.weapons.Weapon;
+import game.units.weapons.mekWeapons.Artillery;
+import game.units.weapons.mekWeapons.Cannon;
+import game.units.weapons.mekWeapons.Punch;
+import game.units.weapons.vekWeapons.AcidShot;
 
 public class UnitFactory {
 
