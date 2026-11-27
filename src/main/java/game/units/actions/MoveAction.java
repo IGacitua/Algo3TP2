@@ -1,9 +1,11 @@
 package game.units.actions;
 
+import game.core.AttackPlanner;
 import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
+import game.units.behavior.enemy.EnemyBehavior;
 import game.units.behavior.player.PlayerBehavior;
 
 
@@ -36,11 +38,11 @@ public class MoveAction implements UnitAction {
         behavior.executeMove(this, map);
     }
 
-    /**
-     * Undo the move action by placing the unit back at its original position.
-     *
-     * @param map The game map where the action is undone.
-     */
+    @Override
+    public void executeWith(EnemyBehavior behavior, GameMap map, AttackPlanner planner) throws PositionOutOfBoundsException {
+        tryExecute(map);
+    }
+
     public void undoExecution(GameMap map) throws PositionOutOfBoundsException {
         // Mover de destino a origen, devolviendo consumo de movimiento.
         map.moveUnit(this.destination, this.origin, -1.0);
@@ -50,10 +52,6 @@ public class MoveAction implements UnitAction {
         }
     }
 
-    /**
-     *
-     * @return The destination position of the move action.
-     */
     public Position getDestination() {
         return this.destination;
     }

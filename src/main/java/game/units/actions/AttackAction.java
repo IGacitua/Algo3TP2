@@ -1,9 +1,11 @@
 package game.units.actions;
 
+import game.core.AttackPlanner;
 import game.map.GameMap;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Team;
+import game.units.behavior.enemy.EnemyBehavior;
 import game.units.behavior.player.PlayerBehavior;
 import game.units.weapons.Weapon;
 import game.map.cell.Cell;
@@ -32,5 +34,9 @@ public class AttackAction implements UnitAction {
     @Override
     public void executeWith(PlayerBehavior behavior, GameMap map) throws PositionOutOfBoundsException {
         behavior.executeAttack(this, map);
+    }
+
+    public void executeWith(EnemyBehavior behavior, GameMap map, AttackPlanner planner) throws PositionOutOfBoundsException {
+        behavior.announceAttack(origin, target, planner);
     }
 }
