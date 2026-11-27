@@ -1,10 +1,14 @@
 package game.units;
 
+import game.core.AttackPlanner;
+import game.map.GameMap;
 import game.map.cell.Cell;
 import game.position.Position;
+import game.position.PositionOutOfBoundsException;
 import game.units.actions.AttackAction;
 import game.units.actions.MoveAction;
 import game.units.actions.UnitAction;
+import game.units.behavior.Behavior;
 import game.units.movement.Movement;
 import game.units.weapons.Weapon;
 
@@ -12,12 +16,16 @@ public class Unit {
     private final Health health;
     private final Movement movement;
     private final Weapon weapon;
-
     private final Team team;
 
+    private Behavior behavior;
     private boolean contaminated = false;
 
     public Unit(Team team, Weapon weapon, int maximumHealth, Movement movement) {
+        this(team, weapon, maximumHealth, movement, null);
+    }
+    
+    public Unit(Team team, Weapon weapon, int maximumHealth, Movement movement, Behavior behavior) {
         if (movement == null) {
             throw new IllegalArgumentException("Movement type cannot be null");
         }
@@ -26,6 +34,17 @@ public class Unit {
         this.health = new Health(maximumHealth);
         this.movement = movement;
         this.weapon = weapon;
+        this.behavior = behavior;
+    }
+
+    public void executePhase(Position origin, GameMap map, AttackPlanner planner) throws PositionOutOfBoundsException {
+        if (behavior != null) {
+            behavior.executePhase(origin, map, planner);
+        }
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 
     // Team
@@ -96,7 +115,6 @@ public class Unit {
         return movement.canMoveToWater();
     }
 
-    // TODO: Call on turn start!
     public void resetMovementDistance() {
         this.movement.resetMovementDistance();
     }
