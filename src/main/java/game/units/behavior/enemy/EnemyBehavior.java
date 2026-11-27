@@ -1,6 +1,9 @@
 package game.units.behavior.enemy;
 
+import game.core.AttackPlanner;
+import game.core.PlannedAttack;
 import game.map.GameMap;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
 import game.units.actions.UnitAction;
@@ -22,19 +25,22 @@ public class EnemyBehavior implements Behavior {
     }
 
     @Override
-    public void executePhase(GameMap map) throws PositionOutOfBoundsException {
-        List<UnitAction> actionsToExecute = evaluatePriorityRules(map);
+    public void executePhase(Position origin, GameMap map, AttackPlanner planner) throws PositionOutOfBoundsException {
+        List<UnitAction> actionsToExecute = evaluatePriorityRules(origin, map);
         if (actionsToExecute != null) {
-            // VekBehavior asume la responsabilidad de ejecutar la secuencia
             for (UnitAction action : actionsToExecute) {
-                action.tryExecute(map);
+                action.executeWith(this, map, planner);
             }
         }
     }
 
-    private List<UnitAction> evaluatePriorityRules(GameMap map) {
+    public void announceAttack(Position origin, Position target, AttackPlanner planner) {
+        planner.announceAttack(new PlannedAttack(unit, origin, target));
+    }
+
+    private List<UnitAction> evaluatePriorityRules(Position origin, GameMap map) {
         for (BehaviorRules rule : rules) {
-            List<UnitAction> actions = rule.evaluate(unit, map);
+            List<UnitAction> actions = rule.evaluate(unit, origin, map);
             if (actions != null) {
                 return actions;
             }

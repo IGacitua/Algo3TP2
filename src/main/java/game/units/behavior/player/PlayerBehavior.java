@@ -1,6 +1,8 @@
 package game.units.behavior.player;
 
+import game.core.AttackPlanner;
 import game.map.GameMap;
+import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.units.Unit;
 import game.units.actions.AttackAction;
@@ -33,7 +35,7 @@ public class PlayerBehavior implements Behavior {
     }
 
     @Override
-    public void executePhase(GameMap map) {
+    public void executePhase(Position origin, GameMap map, AttackPlanner planner) throws PositionOutOfBoundsException {
         // Resetea el estado al inicio del turno
         this.state = new ReadyState();
         this.undoTracker.reset();

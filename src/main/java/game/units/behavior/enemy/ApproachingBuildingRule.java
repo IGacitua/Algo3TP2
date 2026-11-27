@@ -36,7 +36,7 @@ public class ApproachingBuildingRule implements BehaviorRules {
     }
 
     @Override
-    public List<UnitAction> evaluate(Unit unit, GameMap map) {
+    public List<UnitAction> evaluate(Unit unit, Position origin, GameMap map) {
         List<UnitAction> bestPlan = new ArrayList<>();
         Position bestPos = null;
         double minDistance = Integer.MAX_VALUE;
