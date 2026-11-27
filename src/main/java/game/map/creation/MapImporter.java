@@ -1,6 +1,5 @@
 package game.map.creation;
 
-import game.map.GameMap;
 import game.map.cell.Cell;
 import game.position.Position;
 import game.units.UnitFactory;
@@ -19,7 +18,7 @@ public class MapImporter {
         this.unitFactory = unitFactory;
     }
 
-    public Cell[][] importMap(GameMap map, String filePath) throws NoMapFileException, InvalidMapFileException {
+    public Cell[][] importMap(String filePath) throws NoMapFileException, InvalidMapFileException {
         try {
             String mapData = fileHandler.readFile(filePath);
             return parseData(mapData);

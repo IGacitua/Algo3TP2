@@ -36,22 +36,22 @@ public class UnitFactory {
         Unit unit = null;
 
         if (unitID.equals(MEK_COMBAT)) {
-            unit = createCombatMek(map);
+            unit = createCombatMek();
         }
         if (unitID.equals(MEK_CANNON)) {
-            unit = createCannonMek(map);
+            unit = createCannonMek();
         }
         if (unitID.equals(MEK_ARTILLERY)) {
-            unit = createArtilleryMek(map);
+            unit = createArtilleryMek();
         }
         if (unitID.equals(VEK_HOPPER)) {
-            unit = createHopperVek(map);
+            unit = createHopperVek();
         }
         if (unitID.equals(VEK_FIREFLY)) {
-            unit = createFireflyVek(map);
+            unit = createFireflyVek();
         }
         if (unitID.equals(VEK_STINGER)) {
-            unit = createStingerVek(map);
+            unit = createStingerVek();
         }
 
         if (unit == null) {
@@ -64,34 +64,34 @@ public class UnitFactory {
 
     // Mek
 
-    private Unit createCombatMek(GameMap map) {
-        Weapon weapon = new Punch(map);
+    private Unit createCombatMek() {
+        Weapon weapon = new Punch();
         return new Unit(Team.Player, weapon, 3, new Hover(3));
     }
 
-    private Unit createCannonMek(GameMap map) {
-        Weapon weapon = new Cannon(map);
+    private Unit createCannonMek() {
+        Weapon weapon = new Cannon();
         return new Unit(Team.Player, weapon, 3, new Hover(3));
     }
 
-    private Unit createArtilleryMek(GameMap map) {
-        Weapon weapon = new Artillery(map);
+    private Unit createArtilleryMek() {
+        Weapon weapon = new Artillery();
         return new Unit(Team.Player, weapon, 2, new Hover(3));
     }
 
     // Vek
 
-    private Unit createHopperVek(GameMap map) {
+    private Unit createHopperVek() {
         Weapon weapon = null; // TODO: Bite Weapon!
         return new Unit(Team.Enemy, weapon, 2, new Grounded(3));
     }
 
-    private Unit createFireflyVek(GameMap map) {
-        Weapon weapon = new AcidShot(map);
+    private Unit createFireflyVek() {
+        Weapon weapon = new AcidShot();
         return new Unit(Team.Enemy, weapon, 3, new Grounded(2));
     }
 
-    private Unit createStingerVek(GameMap map) {
+    private Unit createStingerVek() {
         Weapon weapon = null; // TODO: Sting Weapon!
         return new Unit(Team.Enemy, weapon, 2, new Flying(4));
     }

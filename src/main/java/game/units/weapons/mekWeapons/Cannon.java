@@ -9,12 +9,9 @@ public class Cannon extends LineWeapon {
 
     private static final int DAMAGE = 1;
 
-    public Cannon(GameMap map) {
-        super(map, DAMAGE);
-    }
-
     @Override
-    protected void onHit(Position hit, OrthogonalDirection fireDirection) {
+    protected void onHit(GameMap map, Position hit, OrthogonalDirection fireDirection) {
+        map.attackCell(hit, DAMAGE);
         map.pushUnit(hit, fireDirection);
     }
 }

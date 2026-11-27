@@ -37,7 +37,7 @@ public class SquadWeaponsIntegrationTest {
         mockCells[1][3] = new Building(new Position(1, 3), Mockito.mock(ElectricalNetwork.class)); // Adjacent obstacle for artillery test
 
         MapImporter mockMapImporter = Mockito.mock(MapImporter.class);
-        Mockito.when(mockMapImporter.importMap(Mockito.any(GameMap.class), Mockito.any(String.class))).thenReturn(mockCells);
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
         gameMap = new GameMap(mockMapImporter, "");
     }
@@ -49,7 +49,7 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void punchDealsTwoDamageToAdjacentUnitAndPushesItOneTileInHitDirection() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon punch = new Punch(gameMap);
+        Weapon punch = new Punch();
         Position mechPosition = new Position(2, 2);
         Position targetPosition = new Position(2, 3);
         Position pushedPosition = new Position(2, 4);
@@ -79,7 +79,7 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void cannonHitsFirstUnitOrObstacleInStraightLineAndDoesNotHitBehind() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon cannon = new Cannon(gameMap);
+        Weapon cannon = new Cannon();
 
         Position mechPosition = new Position(2, 1);
         Position firstVekPosition = new Position(2, 3);
@@ -115,7 +115,7 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void cannonReturnsFalseWhenNoObstacleOrUnitIsHitBeforeMapEdge() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon cannon = new Cannon(gameMap);
+        Weapon cannon = new Cannon();
         Position mechPosition = new Position(4, 4);
         Position aimPosition = new Position(4, 5);
 
@@ -139,7 +139,7 @@ public class SquadWeaponsIntegrationTest {
     @Test
     public void artilleryAttacksOverObstaclesCannotTargetAdjacentTilesAndPushesFourAdjacentUnits() throws PositionOutOfBoundsException {
         // Arrange
-        Weapon artillery = new Artillery(gameMap);
+        Weapon artillery = new Artillery();
         Position mechPosition = new Position(0, 3);
         Position adjacentObstaclePosition = new Position(1, 3);
         Position targetPosition = new Position(4, 3);

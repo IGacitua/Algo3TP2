@@ -21,12 +21,12 @@ public class AttackAction implements UnitAction {
     @Override
     public boolean tryExecute(GameMap map) throws PositionOutOfBoundsException {
         Cell originCell = map.getCellAt(origin);
-        
+
         if (!originCell.hasUnitThatCanAttack()) {
             return false;
         }
 
-        return weapon.attack(origin, target);
+        return weapon.attack(map, origin, target);
     }
 
     @Override

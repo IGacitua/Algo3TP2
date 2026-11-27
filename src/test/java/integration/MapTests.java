@@ -8,7 +8,7 @@ import game.map.creation.MapImporter;
 import game.position.Position;
 import game.position.PositionOutOfBoundsException;
 import game.utils.FileHandler;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -71,9 +71,9 @@ public class MapTests {
             for (int x = 0; x < expected[y].length; x++) {
                 try {
                     Cell actual = map.getCellAt(new Position(x, y));
-                    Assert.assertEquals("Unexpected cell type at " + x + ", " + y + ".", expected[y][x].cellTypeId(), actual.cellTypeId());
+                    Assertions.assertEquals(expected[y][x].cellTypeId(), actual.cellTypeId(), "Unexpected cell type at " + x + ", " + y + ".");
                 } catch (PositionOutOfBoundsException e) {
-                    Assert.fail("Position out of bounds at " + x + ", " + y + ": " + e.getMessage());
+                    Assertions.fail("Position out of bounds at " + x + ", " + y + ": " + e.getMessage());
                 }
             }
         }

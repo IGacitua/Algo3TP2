@@ -38,7 +38,7 @@ public class AcidShotIntegrationTest {
             }
         }
 
-        Mockito.when(importer.importMap(Mockito.any(GameMap.class), Mockito.anyString()))
+        Mockito.when(importer.importMap(Mockito.anyString()))
                 .thenReturn(cells);
 
         gameMap = new GameMap(importer, "");
@@ -49,13 +49,8 @@ public class AcidShotIntegrationTest {
             throws PositionOutOfBoundsException {
 
         // Arrange
-        Weapon acidShot = new AcidShot(gameMap);
-
-        Unit firefly = new Unit(
-                Team.Enemy, acidShot, 3, new Grounded(2));
-
-        Unit mech = new Unit(
-                Team.Player, new Punch(gameMap), 3, new Grounded(3));
+        Unit firefly = new Unit(Team.Enemy, new AcidShot(), 3, new Grounded(2));
+        Unit mech = new Unit(Team.Player, new Punch(), 3, new Grounded(3));
 
         Position fireflyPosition = new Position(1, 1);
         Position mechPosition = new Position(1, 4);
@@ -63,8 +58,7 @@ public class AcidShotIntegrationTest {
         assertTrue(gameMap.tryPlaceUnit(firefly, fireflyPosition));
         assertTrue(gameMap.tryPlaceUnit(mech, mechPosition));
 
-        UnitAction attack = firefly.getAttackAction(
-                fireflyPosition, mechPosition);
+        UnitAction attack = firefly.getAttackAction(fireflyPosition, mechPosition);
 
         // Act
         boolean hit = attack.tryExecute(gameMap);
@@ -80,13 +74,8 @@ public class AcidShotIntegrationTest {
             throws PositionOutOfBoundsException {
 
         // Arrange
-        Weapon acidShot = new AcidShot(gameMap);
-
-        Unit firefly = new Unit(
-                Team.Enemy, acidShot, 3, new Grounded(2));
-
-        Unit mech = new Unit(
-                Team.Player, new Punch(gameMap), 3, new Grounded(3));
+        Unit firefly = new Unit(Team.Enemy, new AcidShot(), 3, new Grounded(2));
+        Unit mech = new Unit(Team.Player, new Punch(), 3, new Grounded(3));
 
         Position fireflyPosition = new Position(1, 1);
         Position mechPosition = new Position(1, 4);
@@ -96,8 +85,7 @@ public class AcidShotIntegrationTest {
 
         mech.contaminate();
 
-        UnitAction attack = firefly.getAttackAction(
-                fireflyPosition, mechPosition);
+        UnitAction attack = firefly.getAttackAction(fireflyPosition, mechPosition);
 
         // Act
         boolean hit = attack.tryExecute(gameMap);
@@ -114,13 +102,9 @@ public class AcidShotIntegrationTest {
             throws PositionOutOfBoundsException {
 
         // Arrange
-        Weapon acidShot = new AcidShot(gameMap);
 
-        Unit firefly = new Unit(
-                Team.Enemy, acidShot, 3, new Grounded(2));
-
-        Unit hornet = new Unit(
-                Team.Enemy, Mockito.mock(Weapon.class), 2, new Flying(4));
+        Unit firefly = new Unit(Team.Enemy, new AcidShot(), 3, new Grounded(2));
+        Unit hornet = new Unit(Team.Enemy, Mockito.mock(Weapon.class), 2, new Flying(4));
 
         Position fireflyPosition = new Position(1, 1);
         Position hornetPosition = new Position(1, 4);
@@ -128,8 +112,7 @@ public class AcidShotIntegrationTest {
         assertTrue(gameMap.tryPlaceUnit(firefly, fireflyPosition));
         assertTrue(gameMap.tryPlaceUnit(hornet, hornetPosition));
 
-        UnitAction attack = firefly.getAttackAction(
-                fireflyPosition, hornetPosition);
+        UnitAction attack = firefly.getAttackAction(fireflyPosition, hornetPosition);
 
         // Act
         boolean hit = attack.tryExecute(gameMap);
@@ -145,14 +128,9 @@ public class AcidShotIntegrationTest {
             throws PositionOutOfBoundsException {
 
         // Arrange
-        Unit firefly = new Unit(
-                Team.Enemy, new AcidShot(gameMap), 3, new Grounded(2));
-
-        Unit firstMech = new Unit(
-                Team.Player, new Punch(gameMap), 3, new Grounded(3));
-
-        Unit secondMech = new Unit(
-                Team.Player, new Punch(gameMap), 3, new Grounded(3));
+        Unit firefly = new Unit(Team.Enemy, new AcidShot(), 3, new Grounded(2));
+        Unit firstMech = new Unit(Team.Player, new Punch(), 3, new Grounded(3));
+        Unit secondMech = new Unit(Team.Player, new Punch(), 3, new Grounded(3));
 
         Position fireflyPosition = new Position(1, 1);
         Position firstMechPosition = new Position(1, 4);
@@ -179,15 +157,11 @@ public class AcidShotIntegrationTest {
     }
 
     @Test
-    public void acidShotDoesNotPushTarget()
-            throws PositionOutOfBoundsException {
+    public void acidShotDoesNotPushTarget() {
 
         // Arrange
-        Unit firefly = new Unit(
-                Team.Enemy, new AcidShot(gameMap), 3, new Grounded(2));
-
-        Unit mech = new Unit(
-                Team.Player, new Punch(gameMap), 3, new Grounded(3));
+        Unit firefly = new Unit(Team.Enemy, new AcidShot(), 3, new Grounded(2));
+        Unit mech = new Unit(Team.Player, new Punch(), 3, new Grounded(3));
 
         Position fireflyPosition = new Position(1, 1);
         Position mechPosition = new Position(1, 4);
@@ -196,8 +170,7 @@ public class AcidShotIntegrationTest {
         assertTrue(gameMap.tryPlaceUnit(firefly, fireflyPosition));
         assertTrue(gameMap.tryPlaceUnit(mech, mechPosition));
 
-        UnitAction attack = firefly.getAttackAction(
-                fireflyPosition, mechPosition);
+        UnitAction attack = firefly.getAttackAction(fireflyPosition, mechPosition);
 
         // Act
         boolean hit = attack.tryExecute(gameMap);
@@ -215,11 +188,8 @@ public class AcidShotIntegrationTest {
             throws PositionOutOfBoundsException {
 
         // Arrange
-        Unit firefly = new Unit(
-                Team.Enemy, new AcidShot(gameMap), 3, new Grounded(2));
-
-        Unit mech = new Unit(
-                Team.Player, new Punch(gameMap), 3, new Grounded(3));
+        Unit firefly = new Unit(Team.Enemy, new AcidShot(), 3, new Grounded(2));
+        Unit mech = new Unit(Team.Player, new Punch(), 3, new Grounded(3));
 
         Position fireflyPosition = new Position(2, 1);
         Position mechPosition = new Position(2, 5);
@@ -227,8 +197,7 @@ public class AcidShotIntegrationTest {
         assertTrue(gameMap.tryPlaceUnit(firefly, fireflyPosition));
         assertTrue(gameMap.tryPlaceUnit(mech, mechPosition));
 
-        UnitAction attack = firefly.getAttackAction(
-                fireflyPosition, mechPosition);
+        UnitAction attack = firefly.getAttackAction(fireflyPosition, mechPosition);
 
         // Act
         boolean hit = attack.tryExecute(gameMap);

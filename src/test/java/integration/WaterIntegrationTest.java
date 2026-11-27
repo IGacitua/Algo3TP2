@@ -40,8 +40,7 @@ public class WaterIntegrationTest {
         }
         cells[1][0] = new Water(waterPosition);
 
-        Mockito.when(importer.importMap(Mockito.any(GameMap.class), Mockito.anyString()))
-                .thenReturn(cells);
+        Mockito.when(importer.importMap(Mockito.anyString())).thenReturn(cells);
 
         gameMap = new GameMap(importer, "");
     }
@@ -94,7 +93,7 @@ public class WaterIntegrationTest {
     @Test
     public void testMechInWaterCannotAttack() throws PositionOutOfBoundsException {
         // Arrange
-        Unit mech = new Unit(Team.Player, new Punch(gameMap), 3, new Hover(1));
+        Unit mech = new Unit(Team.Player, new Punch(), 3, new Hover(1));
         Position targetPos = new Position(2, 0);
         Unit enemy = new Unit(Team.Enemy, null, 2, new Grounded(1));
 

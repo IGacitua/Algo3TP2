@@ -20,7 +20,7 @@ public class GameMap {
     private final CellGrid grid;
 
     public GameMap(MapImporter importer, String mapFilePath) throws InvalidMapFileException {
-        this.grid = new CellGrid(importer.importMap(this, mapFilePath));
+        this.grid = new CellGrid(importer.importMap(mapFilePath));
     }
 
     // Cell Access

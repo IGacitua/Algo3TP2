@@ -43,7 +43,7 @@ public class PushCollisionIntegrationTest {
         mockCells[3][2] = building;
         mockCells[5][2] = new Mountain(new Position(5, 2));
 
-        Mockito.when(mockMapImporter.importMap(Mockito.any(GameMap.class), Mockito.any(String.class))).thenReturn(mockCells);
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
         gameMap = new GameMap(mockMapImporter, "");
     }
 
@@ -154,7 +154,7 @@ public class PushCollisionIntegrationTest {
             }
         }
         cells[4][2] = targetBuilding;
-        Mockito.when(mockMapImporter.importMap(Mockito.any(GameMap.class), Mockito.any(String.class))).thenReturn(cells);
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(cells);
 
         GameMap mapWithRealNetwork = new GameMap(mockMapImporter, "");
         int initialPower = realNetwork.getPower();

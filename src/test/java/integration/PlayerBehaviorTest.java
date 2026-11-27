@@ -35,13 +35,13 @@ public class PlayerBehaviorTest {
                 mockCells[x][y] = new Cell(new Position(x, y));
             }
         }
-        Mockito.when(mockMapImporter.importMap(Mockito.any(GameMap.class), Mockito.any(String.class))).thenReturn(mockCells);
+        Mockito.when(mockMapImporter.importMap(Mockito.any(String.class))).thenReturn(mockCells);
 
         this.gameMap = new GameMap(mockMapImporter, "");
         this.undoTracker = new TurnUndoTracker();
 
         Weapon mockPunch = Mockito.mock(Weapon.class);
-        Mockito.when(mockPunch.attack(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(mockPunch.attack(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
 
         this.origin = new Position(0, 0);
         this.combatMech = new Unit(Team.Player, mockPunch, 5, new Grounded(1));

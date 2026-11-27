@@ -1,14 +1,12 @@
 - Modelo y Codigo
-    - [Grave] Herencia sin “es un” ç
-        - Weapon.attack (target): Punch, Cannon y AcidShot lanzan UnsupportedOperationException. Dejar solo attack
-          (origin, target)
     - [Medio] Clase anemica
         - No existen los tipos de Mech ni de Vek (ni Mordida/Picadura): todo es new Unit (...) con los numeros en los
           tests
-        - [Medio] Inicializa objetos en estado inconsistente MoveAction (origin, dest) y PlayerBehavior () con unit null
-          (deshacer no descontamina) resetMovementDistance nunca se llama
-        - [Medio] Tell don’t ask / If en lugar de polimorfismo
-            - AttackAction: if (cell.isWater () && hasUnit (Team.Player))
+    - [Medio] Inicializa objetos en estado inconsistente
+        - MoveAction (origin, dest) y PlayerBehavior () con unit null (deshacer no descontamina) resetMovementDistance
+          nunca se llama
+    - [Medio] Tell don’t ask / If en lugar de polimorfismo
+        - AttackAction: if (cell.isWater () && hasUnit (Team.Player))
 
 - Pruebas:
     - [Grave] Tests que no prueban lo que dicen

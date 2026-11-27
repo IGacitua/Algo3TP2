@@ -34,7 +34,7 @@ public class ArtilleryMapIntegrationTest {
         electricalNetwork = new ElectricalNetwork(5);
         MapImporter importer = new MapImporter(FileHandler.getInstance(), new CellFactory(electricalNetwork), Mockito.mock(UnitFactory.class));
         map = new GameMap(importer, TEST_MAP_PATH);
-        artillery = new Artillery(map);
+        artillery = new Artillery();
     }
 
     @Test
