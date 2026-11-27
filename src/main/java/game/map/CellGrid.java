@@ -67,20 +67,21 @@ public class CellGrid {
         matrix[position.getX()][position.getY()] = newCell;
     }
 
-    // Graph Access
-
-    public List<Position> getCells(Predicate<Cell> requirement) {
-        List<Position> result = new ArrayList<>();
+    public List<OccupiedCell> getOccupiedCells() {
+        List<OccupiedCell> result = new ArrayList<>();
         for (int x = 0; x < matrix.length; x++) {
             for (int y = 0; y < matrix[x].length; y++) {
-                if (requirement.test(matrix[x][y])) {
-                    result.add(new Position(x, y));
+                Cell cell = matrix[x][y];
+                if (cell.hasUnit()) {
+                    result.add(new OccupiedCell(new Position(x, y), cell.peekUnit()));
                 }
             }
         }
         return result;
     }
-
+    
+    // Graph Access
+    
     public List<Position> getCellsInRadius(Position center, double radius, Predicate<Cell> requirement) {
         if (!graph.contains(center)) {
             return new ArrayList<>();
