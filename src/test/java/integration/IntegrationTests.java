@@ -12,13 +12,11 @@ import game.units.Team;
 import game.units.Unit;
 import game.units.actions.UnitAction;
 import game.units.movement.Grounded;
-import game.units.movement.Movement;
 import game.units.weapons.Artillery;
 import game.units.weapons.Weapon;
 import game.utils.FileHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 // Probablemente lo separemos en varias clases de tests de integración, pero por ahora le dejamos el nombre.
 public class IntegrationTests {
