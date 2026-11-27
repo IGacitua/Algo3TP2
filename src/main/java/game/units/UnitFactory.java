@@ -32,6 +32,42 @@ public class UnitFactory {
         VEK_STINGER = "V_ST";
     }
 
+    // Mek
+
+    public static Unit createCombatMek() {
+        Weapon weapon = new Punch();
+        return new Unit(Team.Player, weapon, 3, new Hover(3));
+    }
+
+    public static Unit createCannonMek() {
+        Weapon weapon = new Cannon();
+        return new Unit(Team.Player, weapon, 3, new Hover(3));
+    }
+
+    public static Unit createArtilleryMek() {
+        Weapon weapon = new Artillery();
+        return new Unit(Team.Player, weapon, 2, new Hover(3));
+    }
+
+    // Vek
+
+    public static Unit createHopperVek() {
+        Weapon weapon = null; // TODO: Bite Weapon!
+        return new Unit(Team.Enemy, weapon, 2, new Grounded(3));
+    }
+
+    public static Unit createFireflyVek() {
+        Weapon weapon = new AcidShot();
+        return new Unit(Team.Enemy, weapon, 3, new Grounded(2));
+    }
+
+    public static Unit createStingerVek() {
+        Weapon weapon = null; // TODO: Sting Weapon!
+        return new Unit(Team.Enemy, weapon, 2, new Flying(4));
+    }
+
+    // Creation
+
     public Unit createUnitAt(String unitID, GameMap map, Position position) {
         Unit unit = null;
 
@@ -60,39 +96,5 @@ public class UnitFactory {
 
         map.tryPlaceUnit(unit, position);
         return unit;
-    }
-
-    // Mek
-
-    private Unit createCombatMek() {
-        Weapon weapon = new Punch();
-        return new Unit(Team.Player, weapon, 3, new Hover(3));
-    }
-
-    private Unit createCannonMek() {
-        Weapon weapon = new Cannon();
-        return new Unit(Team.Player, weapon, 3, new Hover(3));
-    }
-
-    private Unit createArtilleryMek() {
-        Weapon weapon = new Artillery();
-        return new Unit(Team.Player, weapon, 2, new Hover(3));
-    }
-
-    // Vek
-
-    private Unit createHopperVek() {
-        Weapon weapon = null; // TODO: Bite Weapon!
-        return new Unit(Team.Enemy, weapon, 2, new Grounded(3));
-    }
-
-    private Unit createFireflyVek() {
-        Weapon weapon = new AcidShot();
-        return new Unit(Team.Enemy, weapon, 3, new Grounded(2));
-    }
-
-    private Unit createStingerVek() {
-        Weapon weapon = null; // TODO: Sting Weapon!
-        return new Unit(Team.Enemy, weapon, 2, new Flying(4));
     }
 }
