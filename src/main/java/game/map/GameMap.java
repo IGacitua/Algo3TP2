@@ -138,4 +138,8 @@ public class GameMap {
         // isFull() es necesario por celdas que 'bloquean' sin tener unidades.
         return grid.firstCellInLine(origin, direction, GameMap::isObstacle);
     }
+
+    public List<OccupiedCell> getOccupiedCells() {
+        return grid.getOccupiedCells();
+    }
 }
