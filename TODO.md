@@ -1,6 +1,4 @@
 - Modelo y Codigo
-    - [Grave] Viola el ocultamiento de la informacion
-        - BattleManager: apunta a un mapa que no existe.
     - [Grave] Herencia sin “es un” ç
         - Weapon.attack (target): Punch, Cannon y AcidShot lanzan UnsupportedOperationException. Dejar solo attack
           (origin, target)

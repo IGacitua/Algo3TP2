@@ -7,9 +7,6 @@ import game.map.creation.MapImporter;
 import game.units.UnitFactory;
 import game.utils.FileHandler;
 
-// Nota para el profesor: Debería simplemente dar acceso publico a GameManager/ElectricalNetwork?
-// O debería hacer passthrough para todos los accesos y dejar los accesos privados?
-// En el primer caso rompe ley de demeter, pero el segundo da demasiada responsabilidad a BattleManager.
 public class BattleManager {
     private final static String MAP_FILE_PATH = "src/main/resources/maps/defaultMap.txt"; // TODO: File does NOT exist.
     private final static BattleManager instance = new BattleManager();
@@ -28,14 +25,6 @@ public class BattleManager {
 
     public static BattleManager getInstance() {
         return instance;
-    }
-
-    public static GameMap getMap() {
-        return instance.battleMap;
-    }
-
-    public static ElectricalNetwork getNetwork() {
-        return instance.electricalNetwork;
     }
 
     private void initializeMap() {
