@@ -1,9 +1,27 @@
-Correciones (Eliminar al completar):
+- Modelo y Codigo
+    - [Grave] Viola el ocultamiento de la informacion
+        - BattleManager: apunta a un mapa que no existe.
+    - [Grave] Herencia sin “es un” ç
+        - Weapon.attack (target): Punch, Cannon y AcidShot lanzan UnsupportedOperationException. Dejar solo attack
+          (origin, target)
+    - [Grave] Codigo replicado
+        - Cannon.fireAlongLine y AcidShot.attack hacen el mismo recorrido
+    - [Medio] Clase anemica
+        - No existen los tipos de Mech ni de Vek (ni Mordida/Picadura): todo es new Unit (...) con los numeros en los
+          tests
+        - [Medio] Inicializa objetos en estado inconsistente MoveAction (origin, dest) y PlayerBehavior () con unit null
+          (deshacer no descontamina) resetMovementDistance nunca se llama
+        - [Medio] Tell don’t ask / If en lugar de polimorfismo
+            - AttackAction: if (cell.isWater () && hasUnit (Team.Player))
 
-- IMPORTANTE! (ESCRITO POR EZEQUIEL)
-    - Unit no tiene Behavior! Debería recibirlo por constructor.
-        - O escribir un Wrapper que contenga Unit + Behavior y que el juego use eso? No me encanta.
-    - Todas las BehaviorRules están vacías!
+- Pruebas:
+    - [Grave] Tests que no prueban lo que dicen
+        - Choques con Movement mockeado (con Grounded real entra al edificio)
+        - “DestroyedBuilding” empuja a un Suelo
+        - Mech en Agua construido con Flying
+        - Avispon “en acido” nunca se pone sobre el acido
+    - [Medio] Testea getters y setters unicamente
+        - BuildingTest (hasPosition, isVekTarget), PositionTest
 
 Entrega 2:
 
