@@ -8,57 +8,74 @@ import org.mockito.Mockito;
 
 public class MountainTest {
 
+    // Placement
+
     @Test
-    public void testCannotPlaceUnitInMountainCell() {
+    public void testCannotPlaceUnit() {
         // Arrange
         Cell mountain = new Mountain(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
 
         // Act
         boolean result = mountain.tryPlaceUnit(unit, false);
+        boolean hasUnit = mountain.hasUnit();
 
         // Assert
         Assertions.assertFalse(result, "Unit should not be able to be placed.");
+        Assertions.assertFalse(hasUnit, "Mountain should remain empty.");
     }
 
-    @Test // Just in case first placement has unexpected consequences.
-    public void testCannotPlaceMultipleUnitsInMountainCell() {
+    @Test
+    public void testCannotPlacePushedUnit() {
         // Arrange
         Cell mountain = new Mountain(new Position(0, 0));
-        Unit mainUnit = Mockito.mock(Unit.class);
-        Unit secondaryUnit = Mockito.mock(Unit.class);
+        Unit unit = Mockito.mock(Unit.class);
 
         // Act
-        boolean mainResult = mountain.tryPlaceUnit(mainUnit, false);
-        boolean secondaryResult = mountain.tryPlaceUnit(secondaryUnit, false);
+        boolean result = mountain.tryPlaceUnit(unit, true);
+        boolean hasUnit = mountain.hasUnit();
 
         // Assert
-        Assertions.assertFalse(mainResult, "Main unit should not be placed successfully.");
-        Assertions.assertFalse(secondaryResult, "Secondary unit should not be placed successfully.");
+        Assertions.assertFalse(result, "Pushed unit should not be able to be placed.");
+        Assertions.assertFalse(hasUnit, "Mountain should remain empty.");
     }
 
     @Test
-    public void testMountainCannotBeDamaged() {
+    public void testCanPlaceUnitIsFalse() {
         // Arrange
-        Cell mountain = new Mountain(null);
+        Cell mountain = new Mountain(new Position(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
 
         // Act
-        boolean canDamage = mountain.canDamage();
+        boolean result = mountain.canPlaceUnit(unit, false);
 
         // Assert
-        Assertions.assertFalse(canDamage, "Mountain cell should not be able to be damaged.");
+        Assertions.assertFalse(result, "Mountain should never accept units.");
     }
 
     @Test
-    public void testHasPositionReturnsTrueForMatchingPosition() {
+    public void testIsAlwaysFull() {
         // Arrange
-        Position position = new Position(1, 1);
-        Cell cell = new Mountain(position);
+        Cell mountain = new Mountain(new Position(0, 0));
 
         // Act
-        boolean hasPosition = cell.hasPosition(new Position(1, 1));
+        boolean result = mountain.isFull();
 
         // Assert
-        Assertions.assertTrue(hasPosition, "Mountain should return true for matching position.");
+        Assertions.assertTrue(result, "Mountain blocks movement, so it should always be full.");
+    }
+
+    // Damage
+
+    @Test
+    public void testCannotBeDamaged() {
+        // Arrange
+        Cell mountain = new Mountain(new Position(0, 0));
+
+        // Act
+        boolean result = mountain.canDamage();
+
+        // Assert
+        Assertions.assertFalse(result, "Mountain is indestructible.");
     }
 }

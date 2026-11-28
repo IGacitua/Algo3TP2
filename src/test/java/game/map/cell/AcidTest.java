@@ -8,8 +8,10 @@ import org.mockito.Mockito;
 
 public class AcidTest {
 
+    // Placement
+
     @Test
-    public void testCanPlaceOneUnitInAcidCell() {
+    public void testCanPlaceOneUnit() {
         // Arrange
         Cell acid = new Acid(new Position(0, 0));
         Unit unit = Mockito.mock(Unit.class);
@@ -22,7 +24,20 @@ public class AcidTest {
     }
 
     @Test
-    public void testCannotPlaceMultipleUnitsInAcidCell() {
+    public void testCanPushOneUnit() {
+        // Arrange
+        Cell acid = new Acid(new Position(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
+
+        // Act
+        boolean result = acid.tryPlaceUnit(unit, true);
+
+        // Assert
+        Assertions.assertTrue(result, "Pushed unit should be able to be placed.");
+    }
+
+    @Test
+    public void testCannotPlaceMultipleUnits() {
         // Arrange
         Cell acid = new Acid(new Position(0, 0));
         Unit mainUnit = Mockito.mock(Unit.class);
@@ -33,8 +48,10 @@ public class AcidTest {
         boolean secondaryResult = acid.tryPlaceUnit(secondaryUnit, false);
 
         // Assert
+        Unit remainingUnit = acid.peekUnit();
         Assertions.assertTrue(mainResult, "Main unit should be placed successfully.");
         Assertions.assertFalse(secondaryResult, "Secondary unit should not be placed successfully.");
+        Assertions.assertSame(mainUnit, remainingUnit, "Main unit should remain in the cell.");
     }
 
     @Test
@@ -48,70 +65,45 @@ public class AcidTest {
         Unit poppedUnit = acid.popUnit();
 
         // Assert
-        Assertions.assertEquals(unit, poppedUnit, "Popped unit should be the same as the placed unit.");
+        Assertions.assertSame(unit, poppedUnit, "Popped unit should be the same as the placed unit.");
+        Assertions.assertFalse(acid.hasUnit(), "Acid should be empty after popping.");
     }
 
     @Test
     public void testPopUnitAllowsNewUnitPlacement() {
         // Arrange
         Cell acid = new Acid(new Position(0, 0));
-        Unit firstUnit = Mockito.mock(Unit.class);
-        Unit secondUnit = Mockito.mock(Unit.class);
+        Unit unit = Mockito.mock(Unit.class);
+        acid.tryPlaceUnit(unit, false);
 
         // Act
-        acid.tryPlaceUnit(firstUnit, false);
         acid.popUnit();
-        boolean canPlaceSecondUnit = acid.tryPlaceUnit(secondUnit, false);
+        boolean result = acid.tryPlaceUnit(Mockito.mock(Unit.class), false);
 
         // Assert
-        Assertions.assertTrue(canPlaceSecondUnit, "Should be able to place a new unit after popping the first one.");
+        Assertions.assertTrue(result, "Should be able to place a new unit after popping the first one.");
     }
 
     @Test
-    public void testAcidWithoutUnitCannotBeDamaged() {
+    public void testHasUnitAfterPlacement() {
         // Arrange
-        Cell acid = new Acid(null);
-
-        // Act
-        boolean canDamage = acid.canDamage();
-
-        // Assert
-        Assertions.assertFalse(canDamage, "Acid cell should not be able to be damaged.");
-    }
-
-    @Test
-    public void testAcidWithUnitCanBeDamaged() {
-        // Arrange
-        Unit unit = Mockito.mock(Unit.class);
         Cell acid = new Acid(new Position(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
 
         // Act
         acid.tryPlaceUnit(unit, false);
-        boolean canDamage = acid.canDamage();
+        boolean result = acid.hasUnit();
 
         // Assert
-        Assertions.assertTrue(canDamage, "Acid cell should be able to be damaged when a unit is present.");
+        Assertions.assertTrue(result, "Acid should report having a unit after placement.");
     }
 
+    // Contamination
     @Test
-    public void testAcidDamagesUnitWhenDamaged() {
+    public void testContaminatesUnitOnPlacement() {
         // Arrange
-        Unit unit = Mockito.mock(Unit.class);
         Cell acid = new Acid(new Position(0, 0));
-        acid.tryPlaceUnit(unit, false);
-
-        // Act
-        acid.tryDamage(1);
-
-        // Assert
-        Mockito.verify(unit).dealDamage(1);
-    }
-
-    @Test
-    public void testAcidContaminatesUnitOnPlacement() {
-        // Arrange
         Unit unit = Mockito.mock(Unit.class);
-        Cell acid = new Acid(new Position(0, 0));
 
         // Act
         acid.tryPlaceUnit(unit, false);
@@ -121,30 +113,95 @@ public class AcidTest {
     }
 
     @Test
-    public void testHasPositionReturnsTrueForMatchingPosition() {
+    public void testContaminatesUnitWhenPushedIn() {
         // Arrange
-        Position position = new Position(1, 1);
-        Cell cell = new Acid(position);
+        Cell acid = new Acid(new Position(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
 
         // Act
-        boolean hasPosition = cell.hasPosition(new Position(1, 1));
+        acid.tryPlaceUnit(unit, true);
 
         // Assert
-        Assertions.assertTrue(hasPosition, "Acid should return true for matching position.");
+        Mockito.verify(unit).contaminate();
     }
 
     @Test
-    public void testAcidHasUnitAfterPlacement() {
+    public void testContaminatesUnitWhenMovingIn() {
         // Arrange
+        Cell source = new Cell(new Position(0, 0));
+        Cell acid = new Acid(new Position(0, 0));
+
         Unit unit = Mockito.mock(Unit.class);
+        Mockito.when(unit.canMove(Mockito.anyBoolean(), Mockito.anyDouble())).thenReturn(true);
+
+        source.tryPlaceUnit(unit, false);
+
+        // Act
+        boolean result = source.moveUnit(acid, false, 1.0);
+
+        // Assert
+        Assertions.assertTrue(result, "Unit should be able to move into acid.");
+        Mockito.verify(unit).contaminate();
+    }
+
+    @Test
+    public void testDoesNotContaminateRejectedUnit() {
+        // Arrange
+        Cell acid = new Acid(new Position(0, 0));
+        Unit mainUnit = Mockito.mock(Unit.class);
+        Unit rejectedUnit = Mockito.mock(Unit.class);
+        acid.tryPlaceUnit(mainUnit, false);
+
+        // Act
+        boolean result = acid.tryPlaceUnit(rejectedUnit, false);
+
+        // Assert
+        Assertions.assertFalse(result, "Second unit should be rejected.");
+        Mockito.verify(rejectedUnit, Mockito.never()).contaminate();
+    }
+
+
+    // Damage
+
+    @Test
+    public void testAcidWithoutUnitCannotBeDamaged() {
+        // Arrange
         Cell acid = new Acid(new Position(0, 0));
 
         // Act
+        boolean result = acid.canDamage();
+
+        // Act & Assert
+        Assertions.assertFalse(result, "Acid without a unit should not be damageable.");
+    }
+
+    @Test
+    public void testAcidWithUnitCanBeDamaged() {
+        // Arrange
+        Cell acid = new Acid(new Position(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
+
         acid.tryPlaceUnit(unit, false);
-        boolean hasUnit = acid.hasUnit();
+
+        // Act
+        boolean result = acid.canDamage();
 
         // Assert
-        Assertions.assertTrue(hasUnit, "Acid should report having a unit after placement.");
+        Assertions.assertTrue(result, "Acid with a unit should be damageable.");
     }
-    
+
+    @Test
+    public void testAcidDamagesUnitWhenDamaged() {
+        // Arrange
+        Cell acid = new Acid(new Position(0, 0));
+        Unit unit = Mockito.mock(Unit.class);
+        acid.tryPlaceUnit(unit, false);
+
+        // Act
+        acid.tryDamage(1);
+
+        // Assert
+        Mockito.verify(unit).dealDamage(1);
+    }
+
 }

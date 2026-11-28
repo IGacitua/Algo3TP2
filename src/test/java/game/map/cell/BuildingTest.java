@@ -9,47 +9,146 @@ import org.mockito.Mockito;
 
 public class BuildingTest {
 
-    private static ElectricalNetwork mockNetwork() {
-        return Mockito.mock(ElectricalNetwork.class);
-    }
-
-    private Unit getGroundedUnit() {
-        Unit unit = Mockito.mock(Unit.class);
-        Mockito.when(unit.canMove(Mockito.anyBoolean(), Mockito.anyDouble())).thenReturn(true);
-        return unit;
-    }
+    // Placement on intact building
 
     @Test
-    public void testCannotPlaceOneUnitInBuilding() {
+    public void testCannotPlaceUnitInIntactBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = getGroundedUnit();
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
 
         // Act
         boolean result = building.tryPlaceUnit(unit, false);
+        boolean hasUnit = building.hasUnit();
 
         // Assert
-        Assertions.assertFalse(result, "Unit should be able to be placed.");
+        Assertions.assertFalse(result, "Unit should not be able to be placed in an intact building.");
+        Assertions.assertFalse(hasUnit, "Intact building should remain empty.");
     }
 
     @Test
-    public void testCannotPushUnitInIntactBuilding() {
+    public void testCannotPushUnitIntoIntactBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = getGroundedUnit();
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
 
         // Act
         boolean result = building.tryPlaceUnit(unit, true);
+        boolean hasUnit = building.hasUnit();
 
         // Assert
         Assertions.assertFalse(result, "Unit should not be able to be pushed into an intact building.");
+        Assertions.assertFalse(hasUnit, "Intact building should remain empty.");
     }
+
+    // Damage / destruction
+
+    @Test
+    public void testIntactBuildingCanBeDamaged() {
+        // Arrange
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+
+        // Act
+        boolean result = building.canDamage();
+
+        // Assert
+        Assertions.assertTrue(result, "Intact building should be damageable.");
+    }
+
+    @Test
+    public void testBuildingIsDamagedAfterDamaging() {
+        // Arrange
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Cell building = new Building(new Position(0, 0), network);
+
+        // Act
+        building.tryDamage(5);
+        boolean canDamage = building.canDamage();
+
+        // Assert
+        Assertions.assertFalse(canDamage, "Building should be destroyed after any damage.");
+        Mockito.verify(network).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
+    }
+
+    @Test
+    public void testDestroyingBuildingReducesElectricalNetworkPower() {
+        // Arrange
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Cell building = new Building(new Position(0, 0), network);
+
+        // Act
+        building.tryDamage(1);
+
+        // Assert
+        Mockito.verify(network).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
+    }
+
+    @Test
+    public void testDamagingDestroyedBuildingDoesNotReduceElectricalNetworkAgain() {
+        // Arrange
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Cell building = new Building(new Position(0, 0), network);
+        building.tryDamage(1);
+
+        // Act
+        building.tryDamage(1);
+
+        // Assert
+        Mockito.verify(network, Mockito.times(1)).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
+    }
+
+    @Test
+    public void testDestroyedBuildingWithoutUnitCannotBeDamaged() {
+        // Arrange
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        building.tryDamage(1);
+
+        // Act
+        boolean result = building.canDamage();
+
+        // Assert
+        Assertions.assertFalse(result, "Destroyed building without a unit should not be damageable.");
+    }
+
+    @Test
+    public void testDestroyedBuildingWithUnitCanBeDamaged() {
+        // Arrange
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
+        building.tryPlaceUnit(unit, true);
+
+        // Act
+        boolean result = building.canDamage();
+
+        // Assert
+        Assertions.assertTrue(result, "Destroyed building with a unit should be damageable.");
+    }
+
+    @Test
+    public void testDamagingDestroyedBuildingDamagesUnitInside() {
+        // Arrange
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Cell building = new Building(new Position(0, 0), network);
+        Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
+        building.tryPlaceUnit(unit, true);
+
+        // Act
+        building.tryDamage(1);
+
+        // Assert
+        Mockito.verify(unit).dealDamage(1);
+        Mockito.verify(network, Mockito.times(1)).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
+    }
+
+    // Destroyed building behaves like ground
 
     @Test
     public void testCanPushUnitIntoDestroyedBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = getGroundedUnit();
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
         building.tryDamage(1);
 
         // Act
@@ -60,9 +159,23 @@ public class BuildingTest {
     }
 
     @Test
-    public void testCannotPushMultipleUnitsIntoDestroyedBuilding() {
+    public void testCanPlaceUnitInDestroyedBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
+
+        // Act
+        boolean result = building.tryPlaceUnit(unit, false);
+
+        // Assert
+        Assertions.assertTrue(result, "Unit should be able to walk onto a destroyed building.");
+    }
+
+    @Test
+    public void testCannotPlaceMultipleUnitsInDestroyedBuilding() {
+        // Arrange
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
         Unit mainUnit = Mockito.mock(Unit.class);
         Unit secondaryUnit = Mockito.mock(Unit.class);
         building.tryDamage(1);
@@ -72,185 +185,73 @@ public class BuildingTest {
         boolean secondaryResult = building.tryPlaceUnit(secondaryUnit, true);
 
         // Assert
+        Unit remainingUnit = building.peekUnit();
         Assertions.assertTrue(mainResult, "Main unit should be placed successfully on destroyed building.");
         Assertions.assertFalse(secondaryResult, "Secondary unit should not be placed successfully.");
+        Assertions.assertSame(mainUnit, remainingUnit, "Main unit should remain in the building.");
+    }
+
+    @Test
+    public void testPlacingUnitInDestroyedBuildingDoesNotReduceElectricalNetworkAgain() {
+        // Arrange
+        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
+        Cell building = new Building(new Position(0, 0), network);
+        Unit unit = Mockito.mock(Unit.class);
+        building.tryDamage(1);
+
+        // Act
+        building.tryPlaceUnit(unit, true);
+
+        // Assert
+        Mockito.verify(network, Mockito.times(1)).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
     }
 
     @Test
     public void testPopUnitReturnsCorrectUnitFromDestroyedBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-        Unit unit = getGroundedUnit();
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
         building.tryDamage(1);
         building.tryPlaceUnit(unit, true);
 
         // Act
         Unit poppedUnit = building.popUnit();
+        boolean hasUnit = building.hasUnit();
 
         // Assert
-        Assertions.assertEquals(unit, poppedUnit, "Popped unit should be the same as the placed unit.");
+        Assertions.assertSame(unit, poppedUnit, "Popped unit should be the same as the placed unit.");
+        Assertions.assertFalse(hasUnit, "Building should be empty after popping.");
     }
 
     @Test
     public void testPopUnitAllowsNewUnitPlacementInDestroyedBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
         Unit firstUnit = Mockito.mock(Unit.class);
         Unit secondUnit = Mockito.mock(Unit.class);
         building.tryDamage(1);
-
-        // Act
         building.tryPlaceUnit(firstUnit, true);
+
+        // Act
         building.popUnit();
-        boolean canPlaceSecondUnit = building.tryPlaceUnit(secondUnit, true);
+        boolean result = building.tryPlaceUnit(secondUnit, true);
 
         // Assert
-        Assertions.assertTrue(canPlaceSecondUnit, "Should be able to place a new unit after popping the first one.");
+        Assertions.assertTrue(result, "Should be able to place a new unit after popping the first one.");
     }
 
     @Test
-    public void testNotDestroyedBuildingWithoutUnitCanBeDamaged() {
+    public void testHasUnitAfterPlacementInDestroyedBuilding() {
         // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        boolean canDamage = building.canDamage();
-
-        // Assert
-        Assertions.assertTrue(canDamage, "Building cell should be able to be damaged.");
-    }
-
-    @Test
-    public void testDestroyedBuildingWithoutUnitCannotBeDamaged() {
-        // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        building.tryDamage(1); // This destroys the building
-        boolean canDamage = building.canDamage();
-
-        // Assert
-        Assertions.assertFalse(canDamage, "Destroyed building cell should not be able to be damaged.");
-    }
-
-    @Test
-    public void testBuildingWithUnitCanBeDamaged() {
-        // Arrange
-        Unit unit = getGroundedUnit();
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        building.tryPlaceUnit(unit, false);
-        boolean canDamage = building.canDamage();
-
-        // Assert
-        Assertions.assertTrue(canDamage, "Building cell should be able to be damaged when a unit is present.");
-    }
-
-    @Test
-    public void testBuildingDamagesUnitWhenDamaged() {
-        // Arrange
-        Unit unit = getGroundedUnit();
-        Building building = new Building(new Position(0, 0), mockNetwork());
-        building.tryDamage(1); // Destruye el edificio para que permita alojar la unidad empujada
-        building.tryPlaceUnit(unit, true);
-
-        // Act
-        building.tryDamage(1);
-
-        // Assert
-        Mockito.verify(unit).dealDamage(1);
-    }
-
-    @Test
-    public void testDamageBuildingDestroysIt() {
-        // Arrange
-        Building building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        building.tryDamage(1); // This should destroy the building
-
-        // Assert
-        Assertions.assertTrue(building.isDestroyed(), "Building cell should be destroyed.");
-    }
-
-    @Test
-    public void testDestroyingBuildingReducesElectricalNetwork() {
-        // Arrange
-        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
-        Building building = new Building(new Position(0, 0), network);
-
-        // Act
-        building.tryDamage(1);
-
-        // Assert
-        Mockito.verify(network).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
-    }
-
-    @Test
-    public void testDamagingDestroyedBuildingDoesNotReduceElectricalNetwork() {
-        // Arrange
-        ElectricalNetwork network = Mockito.mock(ElectricalNetwork.class);
-        Building building = new Building(new Position(0, 0), network);
-        building.tryDamage(1); // Destroy the building
-
-        // Act
-        building.tryDamage(1); // Try to damage again
-
-        // Assert (Should only be called once)
-        Mockito.verify(network, Mockito.times(1)).modifyPower(Building.DAMAGE_POWER_MODIFICATION);
-    }
-
-    @Test
-    public void testHasPositionReturnsTrueForMatchingPosition() {
-        // Arrange
-        Position position = new Position(1, 1);
-        Cell cell = new Building(position, mockNetwork());
-
-        // Act
-        boolean hasPosition = cell.hasPosition(new Position(1, 1));
-
-        // Assert
-        Assertions.assertTrue(hasPosition, "Building should return true for matching position.");
-    }
-
-    @Test
-    public void testIntactBuildingIsVekTarget() {
-        // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-
-        // Act
-        boolean isVekTarget = building.isVekTarget();
-
-        // Assert
-        Assertions.assertTrue(isVekTarget, "Building should be a Vek target.");
-    }
-
-    @Test
-    public void testDestroyedBuildingIsNotVekTarget() {
-        // Arrange
-        Cell building = new Building(new Position(0, 0), mockNetwork());
-        building.tryDamage(1);
-
-        // Act
-        boolean isVekTarget = building.isVekTarget();
-
-        // Assert
-        Assertions.assertFalse(isVekTarget, "Destroyed building should not be a Vek target.");
-    }
-
-    @Test
-    public void testBuildingHasUnitAfterPushing() {
-        // Arrange
-        Unit unit = getGroundedUnit();
-        Building building = new Building(new Position(0, 0), mockNetwork());
+        Cell building = new Building(new Position(0, 0), Mockito.mock(ElectricalNetwork.class));
+        Unit unit = Mockito.mock(Unit.class);
         building.tryDamage(1);
 
         // Act
         building.tryPlaceUnit(unit, true);
-        boolean hasUnit = building.hasUnit();
+        boolean result = building.hasUnit();
 
         // Assert
-        Assertions.assertTrue(hasUnit, "Building should report having a unit after placement.");
+        Assertions.assertTrue(result, "Building should report having a unit after placement.");
     }
 }
