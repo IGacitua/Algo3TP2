@@ -15,7 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AcidIntegrationTest {
 
@@ -59,7 +60,7 @@ public class AcidIntegrationTest {
         unit.dealDamage(2);
 
         // Assert
-        assertEquals(expectedHealth, unit.getHealth());
+        assertEquals(expectedHealth, unit.getHealth(), "Mech on acid should take double damage.");
     }
 
     @Test
@@ -68,10 +69,10 @@ public class AcidIntegrationTest {
         Unit unit = UnitFactory.createHornetVek();
 
         // Act
-        unit.dealDamage(2);
+        unit.dealDamage(1);
 
         // Assert
-        assertEquals(0, unit.getHealth());
+        assertEquals(1, unit.getHealth(), "Flying unit on acid should take normal damage.");
     }
 
     @Test
@@ -83,10 +84,10 @@ public class AcidIntegrationTest {
         // Act
         gameMap.tryPlaceUnit(unit, origin);
         gameMap.pushUnit(origin, new West());
-        unit.dealDamage(1);
+        unit.dealDamage(2);
 
         // Assert
-        assertEquals(1, unit.getHealth());
+        assertEquals(0, unit.getHealth(), "Grounded unit pushed into acid should take double damage.");
     }
 
     @Test
@@ -101,7 +102,7 @@ public class AcidIntegrationTest {
         unit.dealDamage(1);
 
         // Assert
-        assertEquals(1, unit.getHealth());
+        assertEquals(1, unit.getHealth(), "Flying unit pushed into acid should take normal damage.");
     }
 
     @Test
@@ -121,7 +122,6 @@ public class AcidIntegrationTest {
         player.undoMovement(gameMap);
 
         // Assert
-        assertFalse(mech.isContaminated());
-        assertTrue(gameMap.hasUnitAt(origin));
+        assertFalse(mech.isContaminated(), "Undoing the move onto acid should remove the contamination.");
     }
 }

@@ -61,9 +61,9 @@ public class AcidShotIntegrationTest {
         boolean hit = attack.tryExecute(gameMap);
 
         // Assert
-        assertTrue(hit);
-        assertEquals(2, mech.getHealth());
-        assertTrue(mech.isContaminated());
+        assertTrue(hit, "Acid shot should hit the mech.");
+        assertEquals(2, mech.getHealth(), "Mech should take 1 damage from the acid shot.");
+        assertTrue(mech.isContaminated(), "Mech should be contaminated by the acid shot.");
     }
 
     @Test
@@ -86,10 +86,10 @@ public class AcidShotIntegrationTest {
         boolean hit = attack.tryExecute(gameMap);
 
         // Assert
-        assertTrue(hit);
-        assertEquals(1, mech.getHealth());
-        assertTrue(mech.isContaminated());
-        assertTrue(mech.isAlive());
+        assertTrue(hit, "Acid shot should hit the already contaminated mech.");
+        assertEquals(1, mech.getHealth(), "Contaminated mech should take double damage.");
+        assertTrue(mech.isContaminated(), "Mech should remain contaminated.");
+        assertTrue(mech.isAlive(), "Mech should survive a single contaminated acid shot.");
     }
 
     @Test
@@ -110,9 +110,9 @@ public class AcidShotIntegrationTest {
         boolean hit = attack.tryExecute(gameMap);
 
         // Assert
-        assertTrue(hit);
-        assertEquals(1, hornet.getHealth());
-        assertFalse(hornet.isContaminated());
+        assertTrue(hit, "Acid shot should hit the flying unit.");
+        assertEquals(1, hornet.getHealth(), "Flying unit should still take normal damage from the acid shot.");
+        assertFalse(hornet.isContaminated(), "Flying unit should not be contaminated.");
     }
 
     @Test
@@ -136,13 +136,13 @@ public class AcidShotIntegrationTest {
         boolean hit = attack.tryExecute(gameMap);
 
         // Assert
-        assertTrue(hit);
+        assertTrue(hit, "Acid shot should hit the first unit in its path.");
 
-        assertEquals(2, firstMech.getHealth());
-        assertTrue(firstMech.isContaminated());
+        assertEquals(2, firstMech.getHealth(), "First mech should take 1 damage from the acid shot.");
+        assertTrue(firstMech.isContaminated(), "First mech should be contaminated by the acid shot.");
 
-        assertEquals(3, secondMech.getHealth());
-        assertFalse(secondMech.isContaminated());
+        assertEquals(3, secondMech.getHealth(), "Second mech should not be damaged.");
+        assertFalse(secondMech.isContaminated(), "Second mech should not be contaminated.");
     }
 
     @Test
@@ -164,11 +164,11 @@ public class AcidShotIntegrationTest {
         boolean hit = attack.tryExecute(gameMap);
 
         // Assert
-        assertTrue(hit);
-        assertTrue(gameMap.hasUnitAt(mechPosition));
-        assertFalse(gameMap.hasUnitAt(behindMech));
-        assertEquals(2, mech.getHealth());
-        assertTrue(mech.isContaminated());
+        assertTrue(hit, "Acid shot should hit the mech.");
+        assertTrue(gameMap.hasUnitAt(mechPosition), "Mech should stay in its original cell.");
+        assertFalse(gameMap.hasUnitAt(behindMech), "Mech should not be pushed to the cell behind it.");
+        assertEquals(2, mech.getHealth(), "Mech should take 1 damage from the acid shot.");
+        assertTrue(mech.isContaminated(), "Mech should be contaminated by the acid shot.");
     }
 
     @Test
@@ -189,9 +189,9 @@ public class AcidShotIntegrationTest {
         boolean hit = attack.tryExecute(gameMap);
 
         // Assert
-        assertTrue(hit);
-        assertEquals(3, mech.getHealth());
-        assertFalse(mech.isContaminated());
-        assertTrue(gameMap.hasUnitAt(mechPosition));
+        assertTrue(hit, "Attack should be executed.");
+        assertEquals(3, mech.getHealth(), "Mech behind the mountain should not be damaged.");
+        assertFalse(mech.isContaminated(), "Mech behind the mountain should not be contaminated.");
+        assertTrue(gameMap.hasUnitAt(mechPosition), "Mech should remain in its cell.");
     }
 }
