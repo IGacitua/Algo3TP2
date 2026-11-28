@@ -20,16 +20,16 @@ public class UnitFactory {
 
     private final String VEK_HOPPER;
     private final String VEK_FIREFLY;
-    private final String VEK_STINGER;
+    private final String VEK_HORNET;
 
     public UnitFactory() {
-        MEK_COMBAT = "M_CO";
-        MEK_CANNON = "M_CA";
-        MEK_ARTILLERY = "M_AR";
+        MEK_COMBAT = "M_COM";
+        MEK_CANNON = "M_CAN";
+        MEK_ARTILLERY = "M_ART";
 
-        VEK_HOPPER = "V_HO";
-        VEK_FIREFLY = "V_FI";
-        VEK_STINGER = "V_ST";
+        VEK_HOPPER = "V_HOP";
+        VEK_FIREFLY = "V_FIR";
+        VEK_HORNET = "V_HOR";
     }
 
     // Mek
@@ -61,7 +61,7 @@ public class UnitFactory {
         return new Unit(Team.Enemy, weapon, 3, new Grounded(2));
     }
 
-    public static Unit createStingerVek() {
+    public static Unit createHornetVek() {
         Weapon weapon = null; // TODO: Sting Weapon!
         return new Unit(Team.Enemy, weapon, 2, new Flying(4));
     }
@@ -86,8 +86,8 @@ public class UnitFactory {
         if (unitID.equals(VEK_FIREFLY)) {
             unit = createFireflyVek();
         }
-        if (unitID.equals(VEK_STINGER)) {
-            unit = createStingerVek();
+        if (unitID.equals(VEK_HORNET)) {
+            unit = createHornetVek();
         }
 
         if (unit == null) {
